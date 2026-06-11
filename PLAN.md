@@ -81,7 +81,7 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 - [x] 8. Continue button component: add, rename, click-through to next page
 - [x] 9. Text input component (text kind first), interactive in preview
 - [x] 10. Full journey feature spec mirroring the rough spec in the brief
-- [ ] 11. Run mode / share link (wizards#show walks the journey)
+- [x] 11. Run mode / share link (wizards#show walks the journey)
 
 ## Progress log
 
@@ -107,6 +107,12 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   update replaces preview only (typing focus never stolen). Preview's
   continue button POSTs to pages#create (find-or-create next page) in
   builder mode. Full journey spec from the brief passes. 14 specs green.
+* 2026-06-11 — Step 11 done, MVP complete. Run mode: wizards#show (the
+  share link, no sign-in required) redirects to the first page's
+  pages#show, which renders the same preview partial with mode: :run —
+  continue buttons link to the next page, disabled on the last page.
+  "Share this wizard" link on the builder. 16 specs green, rubocop and
+  brakeman clean. README rewritten.
 
 ## Decisions / open questions
 
@@ -117,4 +123,9 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   than an iframe. Simplest; revisit if CSS isolation becomes a problem.
 * Run-mode form submissions don't persist answers anywhere yet — share mode
   is for look/feel feedback. Capturing answers is a later feature.
-* Mobile/tablet builder layout deferred (desktop-only MVP per brief).
+* Mobile/tablet builder layout deferred (desktop-only MVP per brief); the
+  split pane does stack below 768px as a cheap fallback.
+* Share links use sequential integer ids, so they are guessable. Swap to
+  an unguessable token (e.g. `has_secure_token`) when accounts arrive.
+* "Add input" only offers "Text input" so far; radios, checkboxes, etc.
+  slot into the same disclosure + Component.kind pattern.

@@ -1,5 +1,12 @@
 class PagesController < ApplicationController
-  before_action :require_sign_in
+  before_action :require_sign_in, except: %i[show]
+
+  # Run mode: one page of a shared prototype, navigable via its continue
+  # button. No builder chrome.
+  def show
+    page = Page.find(params[:id])
+    render :show, locals: { page: page }
+  end
 
   # The continue button in the builder preview: find or create the page that
   # follows the given one, then take the user to its builder.
