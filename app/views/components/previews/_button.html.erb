@@ -1,10 +1,18 @@
-<% if mode == :builder %>
-  <%# While building, continue takes you to the next page's builder (creating it if needed) %>
-  <%= button_to component.text, wizard_pages_path(component.page.wizard),
-        params: { after_id: component.page.id },
-        class: "govuk-button" %>
-<% elsif component.page.next %>
-  <%= link_to component.text, page_path(component.page.next), class: "govuk-button" %>
-<% else %>
-  <button type="button" class="govuk-button" disabled><%= component.text %></button>
+<% dead_end = mode == :run && component.page.next.nil? && component.branch_rules.none?(&:complete?) %>
+<button type="submit"
+        name="button_id"
+        value="<%= component.id %>"
+        class="govuk-button"
+        data-module="govuk-button"
+        <%= "disabled" if dead_end %>>
+  <%= component.text %>
+</button>
+
+<% if mode == :builder && component.branch_rules.any?(&:complete?) %>
+  <p class="app-annotation">
+    <% component.branch_rules.select(&:complete?).each do |rule| %>
+      if <%= rule.input_name %> is “<%= rule.value %>” go to <%= rule.target_slug %><br>
+    <% end %>
+    otherwise continue to the next page
+  </p>
 <% end %>

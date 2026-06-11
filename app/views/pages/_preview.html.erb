@@ -6,8 +6,11 @@
           <% if page.title.present? %>
             <h1 class="govuk-heading-l"><%= page.title %></h1>
           <% end %>
-          <% page.components.each do |component| %>
-            <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
+          <%= form_with url: page_answers_path(page), method: :post do %>
+            <%= hidden_field_tag :mode, mode %>
+            <% page.components.each do |component| %>
+              <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
+            <% end %>
           <% end %>
         </div>
       </div>

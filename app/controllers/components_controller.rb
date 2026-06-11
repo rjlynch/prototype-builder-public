@@ -1,4 +1,6 @@
 class ComponentsController < ApplicationController
+  include RendersBuilderPanes
+
   before_action :require_sign_in
 
   def create
@@ -29,29 +31,6 @@ class ComponentsController < ApplicationController
   private
 
   def component_params
-    params.require(:component).permit(:text, :name, :label, :hint)
-  end
-
-  def respond_with_panes(page, builder:)
-    respond_to do |format|
-      format.turbo_stream do
-        streams = [
-          turbo_stream.replace(
-            helpers.dom_id(page, :preview),
-            partial: "pages/preview",
-            locals: { page: page, mode: :builder }
-          )
-        ]
-        if builder
-          streams << turbo_stream.replace(
-            helpers.dom_id(page, :builder),
-            partial: "pages/builder",
-            locals: { page: page }
-          )
-        end
-        render turbo_stream: streams
-      end
-      format.html { redirect_to edit_page_path(page) }
-    end
+    params.require(:component).permit(:text, :name, :label, :hint, :options)
   end
 end

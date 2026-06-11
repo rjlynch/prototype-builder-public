@@ -1,0 +1,13 @@
+<div class="govuk-!-margin-top-2">
+  <h4 class="govuk-heading-s">Branching</h4>
+  <p class="govuk-hint">
+    Send people to different pages depending on their answers. The first
+    matching rule wins; otherwise the button continues to the next page.
+  </p>
+
+  <% component.branch_rules.each do |branch_rule| %>
+    <%= render "branch_rules/editor", branch_rule: branch_rule %>
+  <% end %>
+
+  <%= button_to "Add rule", component_branch_rules_path(component), class: "govuk-button govuk-button--secondary" %>
+</div>

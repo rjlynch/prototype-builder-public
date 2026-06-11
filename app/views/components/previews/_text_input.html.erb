@@ -9,7 +9,7 @@
   <% end %>
   <input class="govuk-input"
          id="<%= dom_id(component, :preview_input) %>"
-         name="<%= component.name.parameterize.presence || dom_id(component) %>"
+         name="answers[<%= component.input_key.presence || dom_id(component) %>]"
          type="text"
          <%= "aria-describedby=#{dom_id(component, :preview_hint)}".html_safe if component.hint.present? %>>
 </div>

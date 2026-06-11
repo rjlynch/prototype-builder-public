@@ -56,6 +56,20 @@
   margin-bottom: 10px;
 }
 
+/* An indented condition row within a card (e.g. one rule of several). */
+.app-condition {
+  border-left: 4px solid #b1b4b6;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+/* A small annotation shown alongside previewed content, not part of it. */
+.app-annotation {
+  color: #505a5f;
+  font-size: 1rem;
+  font-style: italic;
+}
+
 /* Render a form button as if it were an inline link (e.g. "Sign out" in navigation). */
 .app-button-as-link {
   background: none;

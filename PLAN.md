@@ -28,22 +28,39 @@ Page              one screen in the journey, ordered
   wizard_id
   position        integer, 1-based, unique within wizard
   title           string  (the page H1 — always present in the builder)
+  slug            string, unique within wizard; tracks the title
+                  ("What is your name" -> what-is-your-name) until the user
+                  customises it; defaults to page-N while untitled
 
 Component         one element on a page, ordered
   page_id
   position        integer, 1-based, unique within page
-  kind            string enum: "paragraph" | "text_input" | "button"
+  kind            string enum: "paragraph" | "text_input" | "radios" | "button"
   text            paragraph body / button label
-  name            text_input: question name (internal identifier)
-  label           text_input: visible label
-  hint            text_input: hint text
+  name            inputs: question name; required, generated unique per
+                  wizard (question-N); parameterised form = "input key"
+  label           inputs: visible label (radios: fieldset legend)
+  hint            inputs: hint text
+  options         radios: one option per line; submitted value is the
+                  parameterised option label
+
+BranchRule        one "if answer X is Y go to page Z" condition on a button
+  component_id    the button
+  position        evaluation order, first complete match wins
+  input_name      any input key in the wizard (cross-page branching works)
+  value           matched forgivingly: both sides parameterised
+  target_slug     page slug; in builder mode a missing target is created
+                  blank when the button is clicked
 ```
 
 Flat columns on `components` rather than STI/delegated types/JSON — simplest
-thing that works for three kinds. Revisit if kinds multiply.
+thing that works for these kinds. Revisit if kinds multiply.
 
-Navigation is linear for MVP: the continue button goes to the next page by
-position (creating it in builder mode if it doesn't exist yet).
+Navigation: clicking a button POSTs the preview/run form to
+`pages/:id/answers`. Answers are stored in the session (per wizard, keyed by
+input key). The clicked button's first matching branch rule decides the next
+page; with no match the journey continues linearly by position (creating the
+next page in builder mode if needed).
 
 ## Routes (RESTful only)
 
@@ -51,8 +68,12 @@ position (creating it in builder mode if it doesn't exist yet).
 root                         landings#show (landing page)
 resource  :session           stub sign in (create sets a session flag), destroy
 resources :wizards           index (dashboard), create, show (run/share mode)
-  resources :pages, shallow  create (next blank page), edit (THE BUILDER), update, show (run mode)
-    resources :components, shallow  create, update, destroy
+resources :pages             edit (THE BUILDER), update, show (run mode)
+  resources :components      create
+  resource  :answers         create (continue click: store answers, branch, redirect)
+resources :components        update, destroy
+  resources :branch_rules    create
+resources :branch_rules      update, destroy
 ```
 
 * `pages#edit` is the two-pane builder: left = controls, right = live preview.
@@ -64,9 +85,14 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 
 ## Form objects
 
-* `WizardForm`     — create wizard (+ its first blank page)
-* `PageForm`       — update title; create next page
-* `ComponentForm`  — create/update/destroy components (kind-aware validation)
+* `WizardForm`        — create wizard (+ its first blank page)
+* `PageForm`          — update title/slug (slug derivation lives here)
+* `AddComponentForm`  — append component with per-kind defaults + generated name
+* `ComponentForm`     — update components (kind-aware validation)
+* `AddBranchRuleForm` — append blank rule to a button
+* `BranchRuleForm`    — update a rule (parameterises the target slug)
+* `ContinueForm`      — resolve a button click to the next page (branch or
+                        linear; creates missing destinations in builder mode)
 
 ## Delivery steps
 
@@ -82,6 +108,14 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 - [x] 9. Text input component (text kind first), interactive in preview
 - [x] 10. Full journey feature spec mirroring the rough spec in the brief
 - [x] 11. Run mode / share link (wizards#show walks the journey)
+
+### Phase 2: branching (2026-06-11)
+
+- [x] 12. Page slugs (derive from title until customised, unique per wizard)
+- [x] 13. Radios component + generated unique input names (question-N)
+- [x] 14. Answers in session + BranchRule on buttons + ContinueForm; preview
+      and run mode submit one answers form; brief's eligibility scenario
+      passes in builder and run mode
 
 ## Progress log
 
@@ -113,6 +147,21 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   continue buttons link to the next page, disabled on the last page.
   "Share this wizard" link on the builder. 16 specs green, rubocop and
   brakeman clean. README rewritten.
+* 2026-06-11 — Phase 2 (branching) done in three slices. (1) Page slugs:
+  derive-from-title-until-customised via PageForm, title and slug as
+  separate autosubmit forms, slug heading + pages nav in the builder.
+  (2) Radios kind + options column; inputs require a name, generated
+  unique per wizard (question-N). (3) Branching: preview/run render one
+  answers form posting to pages/:id/answers; AnswersController stores
+  session answers per wizard and ContinueForm resolves the clicked
+  button's BranchRules (first complete match, parameterised comparison,
+  cross-page answers supported) with linear fallback; builder mode
+  creates missing destinations (branch targets land at end of journey).
+  Branch rule editor on button cards (select input / value / target
+  slug) with rule annotations under the preview button. Eligibility
+  scenario from the brief passes in builder and run mode. 34 specs
+  green; rubocop + brakeman clean. NOTE: Capybara.automatic_label_click
+  is on because GOV.UK radios visually hide the input element.
 
 ## Decisions / open questions
 
@@ -127,5 +176,13 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   split pane does stack below 768px as a cheap fallback.
 * Share links use sequential integer ids, so they are guessable. Swap to
   an unguessable token (e.g. `has_secure_token`) when accounts arrive.
-* "Add input" only offers "Text input" so far; radios, checkboxes, etc.
+* "Add input" offers Text input and Radio buttons; checkboxes, dates, etc.
   slot into the same disclosure + Component.kind pattern.
+* Branch rules reference pages by slug string: renaming a slug silently
+  orphans rules that point at it (they fall back to linear next). Surface
+  this in the UI later (warn, or update rules when slugs change).
+* Run-mode answers live in the session cookie (~4KB limit) and aren't
+  persisted; capturing/reviewing respondents' answers is a later feature.
+* Branch targets created from the builder are appended at the end of the
+  journey, so "linear next" after a branch target can be surprising —
+  fine while every branch page ends in its own button/rules.

@@ -3,15 +3,18 @@ Rails.application.routes.draw do
 
   resource :session, only: %i[create destroy]
 
-  resources :wizards, only: %i[index create show] do
-    resources :pages, only: %i[create]
-  end
+  resources :wizards, only: %i[index create show]
 
   resources :pages, only: %i[show edit update] do
     resources :components, only: %i[create]
+    resource :answers, only: %i[create]
   end
 
-  resources :components, only: %i[update destroy]
+  resources :components, only: %i[update destroy] do
+    resources :branch_rules, only: %i[create]
+  end
+
+  resources :branch_rules, only: %i[update destroy]
 
   get "up" => "rails/health#show", as: :rails_health_check
 end
