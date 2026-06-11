@@ -1,0 +1,30 @@
+<header class="govuk-header" data-module="govuk-header">
+  <div class="govuk-header__container govuk-width-container">
+    <div class="govuk-header__logo">
+      <a href="/" class="govuk-header__link govuk-header__link--homepage">
+        <span class="govuk-header__logotype">GOV.UK</span>
+      </a>
+    </div>
+  </div>
+</header>
+<section aria-label="Service information" class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-width-container">
+    <div class="govuk-service-navigation__container">
+      <span class="govuk-service-navigation__service-name">
+        <%= link_to "Prototype Builder", root_path, class: "govuk-service-navigation__link" %>
+      </span>
+      <% if signed_in %>
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <ul class="govuk-service-navigation__list">
+            <li class="govuk-service-navigation__item">
+              <%= link_to "Your wizards", wizards_path, class: "govuk-service-navigation__link" %>
+            </li>
+            <li class="govuk-service-navigation__item">
+              <%= button_to "Sign out", session_path, method: :delete, class: "govuk-service-navigation__link app-button-as-link" %>
+            </li>
+          </ul>
+        </nav>
+      <% end %>
+    </div>
+  </div>
+</section>

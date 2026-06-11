@@ -72,9 +72,9 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 
 - [x] 0. Commit generated Rails app
 - [x] 1. This plan
-- [ ] 2. RSpec + Capybara (+ selenium headless Chrome) setup
-- [ ] 3. Vendor govuk-frontend CSS/JS/assets (MVP: used as-is)
-- [ ] 4. Landing page + stubbed sign in
+- [x] 2. RSpec + Capybara (+ selenium headless Chrome) setup
+- [x] 3. Vendor govuk-frontend CSS/JS/assets (MVP: used as-is)
+- [x] 4. Landing page + stubbed sign in
 - [ ] 5. Wizard + Page models; "New wizard" lands on builder with blank page
 - [ ] 6. Title field with live preview (autosubmit + turbo stream)
 - [ ] 7. Paragraph components: add, edit, remove — live preview
@@ -86,6 +86,12 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 ## Progress log
 
 * 2026-06-11 — Project start. Committed generated Rails 8.1 app. Wrote plan.
+* 2026-06-11 — Steps 2–4 done. RSpec + Capybara (`:js` → headless Chrome)
+  running. govuk-frontend v6.2.0 vendored (CSS via Propshaft, ESM JS via
+  importmap, fonts/images under public/assets because the dist CSS hardcodes
+  those paths — see vendor/README.md; note v6 uses the refreshed brand
+  green #0f7a52). GOV.UK layout (header, service nav, footer), landing page,
+  stubbed sign in/out (session flag), empty dashboard. 4 specs green.
 
 ## Decisions / open questions
 

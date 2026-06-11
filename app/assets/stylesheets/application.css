@@ -1,10 +1,18 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
+ * Application-wide styles. GOV.UK Frontend is linked separately (and first)
+ * from govuk-frontend.css; rules here may override it.
  *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * Style rule: no domain concepts in CSS — classes here (app-*) must be
+ * generic enough to extract to a library.
  */
+
+/* Render a form button as if it were an inline link (e.g. "Sign out" in navigation). */
+.app-button-as-link {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
