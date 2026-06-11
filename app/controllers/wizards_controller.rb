@@ -21,4 +21,17 @@ class WizardsController < ApplicationController
       redirect_to wizards_path, alert: "Could not create a wizard"
     end
   end
+
+  def update
+    wizard = Wizard.find(params[:id])
+    form = WizardNameForm.new(wizard: wizard, name: params.require(:wizard)[:name])
+    form.save
+
+    respond_to do |format|
+      # Nothing on screen needs re-rendering, and the user is mid-typing in
+      # the name field — leave the page alone.
+      format.turbo_stream { head :no_content }
+      format.html { redirect_to edit_page_path(wizard.pages.first!) }
+    end
+  end
 end

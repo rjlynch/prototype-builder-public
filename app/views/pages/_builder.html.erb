@@ -1,5 +1,11 @@
 <div id="<%= dom_id(page, :builder) %>">
-  <span class="govuk-caption-m"><%= page.wizard.name %></span>
+  <%= form_with model: WizardNameForm.from_wizard(page.wizard), url: wizard_path(page.wizard), method: :patch, data: { controller: "autosubmit" } do |f| %>
+    <div class="govuk-form-group">
+      <%= f.label :name, "Wizard name", class: "govuk-label govuk-label--s" %>
+      <%= f.text_field :name, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+    </div>
+  <% end %>
+
   <%= render "pages/page_heading", page: page %>
 
   <p class="govuk-body">

@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   resource :session, only: %i[create destroy]
 
-  resources :wizards, only: %i[index create show]
+  resources :wizards, only: %i[index create show update]
 
   resources :pages, only: %i[show edit update] do
     resources :components, only: %i[create]
