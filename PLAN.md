@@ -117,6 +117,25 @@ resources :branch_rules      update, destroy
       and run mode submit one answers form; brief's eligibility scenario
       passes in builder and run mode
 
+### Phase 3: UX tightening (2026-06-11)
+
+Reviewed by walking the app in headless Chrome with screenshots
+(tmp/ux-review/). High-impact fixes, one commit each:
+
+- [x] Sticky preview pane (was scrolling out of view on long builders)
+- [x] GOV.UK logotype white (was v5 markup -> blue-on-blue in v6)
+- [x] Run layout for shared prototypes: plain header + "Prototype" phase
+      banner, no builder chrome
+- [x] Builder heading = page title; slug only in its field; pages nav
+      streamed fresh on title/slug updates (was three stale-able copies)
+- [x] Wizards renameable from the builder (autosubmit, 204 on stream)
+
+Deferred from the review (medium/polish): page delete + reorder, input
+labels alongside question-N in rule selects, save indicator, empty-state
+hints, flattening the "Add input" disclosure, run-mode dead-end message,
+copy-share-link button, radios legend-vs-title hint, "Button" card
+heading wording.
+
 ## Progress log
 
 * 2026-06-11 — Project start. Committed generated Rails 8.1 app. Wrote plan.
@@ -162,6 +181,10 @@ resources :branch_rules      update, destroy
   scenario from the brief passes in builder and run mode. 34 specs
   green; rubocop + brakeman clean. NOTE: Capybara.automatic_label_click
   is on because GOV.UK radios visually hide the input element.
+* 2026-06-11 — Phase 3 (UX): screenshot-driven review, then fixed the
+  five high-impact findings (see Phase 3 section). Wizard name is now
+  editable in the builder; run mode looks like a GOV.UK service with a
+  Prototype phase banner; preview is sticky. 36 specs green.
 
 ## Decisions / open questions
 
