@@ -1,0 +1,33 @@
+<%# Run mode: a shared prototype should look like a GOV.UK service, not
+    like the builder. No service navigation, no builder footer — just a
+    phase banner making clear it is a prototype. %>
+<!DOCTYPE html>
+<html lang="en" class="govuk-template">
+  <head>
+    <%= render "layouts/head" %>
+  </head>
+
+  <body class="govuk-template__body">
+    <script><%= raw "document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');" %></script>
+    <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
+
+    <%= render "layouts/govuk_header" %>
+
+    <div class="govuk-width-container">
+      <div class="govuk-phase-banner">
+        <p class="govuk-phase-banner__content">
+          <strong class="govuk-tag govuk-phase-banner__content__tag">Prototype</strong>
+          <span class="govuk-phase-banner__text">
+            This is a prototype built for research and feedback — it is not a real government service.
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <%= yield %>
+
+    <footer class="govuk-footer">
+      <div class="govuk-width-container"></div>
+    </footer>
+  </body>
+</html>

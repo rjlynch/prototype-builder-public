@@ -12,7 +12,13 @@ RSpec.describe "Sharing a wizard", type: :system do
 
     expect(page).to have_css("h1", text: "Claim a payment")
     expect(page).to have_content("Use this service to claim.")
-    expect(page).to have_no_field("Page title") # no builder chrome
+
+    # No builder chrome: it should read like a GOV.UK service, flagged as
+    # a prototype
+    expect(page).to have_no_field("Page title")
+    expect(page).to have_no_link("Your wizards")
+    expect(page).to have_no_content("Prototype Builder")
+    expect(page).to have_css(".govuk-phase-banner", text: "Prototype")
 
     click_button "Start now"
 

@@ -1,0 +1,13 @@
+<title><%= content_for(:title) || "GOV.UK Prototype Builder" %></title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<%= csrf_meta_tags %>
+<%= csp_meta_tag %>
+
+<%= yield :head %>
+
+<link rel="icon" sizes="48x48" href="/assets/images/favicon.ico">
+<link rel="icon" sizes="any" href="/assets/images/favicon.svg" type="image/svg+xml">
+
+<%= stylesheet_link_tag "govuk-frontend", "application", "data-turbo-track": "reload" %>
+<%= javascript_importmap_tags %>
