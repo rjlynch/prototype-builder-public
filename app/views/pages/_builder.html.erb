@@ -8,4 +8,28 @@
       <%= f.text_field :title, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
     </div>
   <% end %>
+
+  <% page.components.each do |component| %>
+    <%= render "components/editor", component: component %>
+  <% end %>
+
+  <div class="govuk-button-group">
+    <%= button_to "Add paragraph", page_components_path(page),
+          params: { component: { kind: "paragraph" } },
+          class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add continue button", page_components_path(page),
+          params: { component: { kind: "button" } },
+          class: "govuk-button govuk-button--secondary" %>
+  </div>
+
+  <details class="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">Add input</span>
+    </summary>
+    <div class="govuk-details__text">
+      <%= button_to "Text input", page_components_path(page),
+            params: { component: { kind: "text_input" } },
+            class: "govuk-button govuk-button--secondary" %>
+    </div>
+  </details>
 </div>

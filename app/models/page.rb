@@ -1,5 +1,6 @@
 class Page < ApplicationRecord
   belongs_to :wizard
+  has_many :components, -> { order(:position) }, dependent: :destroy, inverse_of: :page
 
   validates :position,
     presence: true,

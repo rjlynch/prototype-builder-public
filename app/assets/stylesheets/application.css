@@ -28,6 +28,24 @@
   min-height: 24rem;
 }
 
+/* A bordered card grouping a removable editor block. */
+.app-card {
+  border: 1px solid #b1b4b6;
+  padding: 15px;
+  margin-bottom: 20px;
+}
+
+.app-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.app-card__title {
+  margin-bottom: 10px;
+}
+
 /* Render a form button as if it were an inline link (e.g. "Sign out" in navigation). */
 .app-button-as-link {
   background: none;

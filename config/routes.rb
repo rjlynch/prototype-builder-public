@@ -7,7 +7,11 @@ Rails.application.routes.draw do
     resources :pages, only: %i[create]
   end
 
-  resources :pages, only: %i[edit update]
+  resources :pages, only: %i[edit update] do
+    resources :components, only: %i[create]
+  end
+
+  resources :components, only: %i[update destroy]
 
   get "up" => "rails/health#show", as: :rails_health_check
 end

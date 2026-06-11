@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_143522) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_144024) do
+  create_table "components", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "hint"
+    t.string "kind", null: false
+    t.string "label"
+    t.string "name"
+    t.integer "page_id", null: false
+    t.integer "position", null: false
+    t.text "text"
+    t.datetime "updated_at", null: false
+    t.index ["page_id", "position"], name: "index_components_on_page_id_and_position", unique: true
+    t.index ["page_id"], name: "index_components_on_page_id"
+  end
+
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "position", null: false
@@ -27,5 +41,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_143522) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "components", "pages"
   add_foreign_key "pages", "wizards"
 end

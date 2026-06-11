@@ -30,7 +30,7 @@ class PagesController < ApplicationController
         render turbo_stream: turbo_stream.replace(
           helpers.dom_id(page, :preview),
           partial: "pages/preview",
-          locals: { page: page }
+          locals: { page: page, mode: :builder }
         )
       end
       format.html { redirect_to edit_page_path(page) }

@@ -6,6 +6,9 @@
           <% if page.title.present? %>
             <h1 class="govuk-heading-l"><%= page.title %></h1>
           <% end %>
+          <% page.components.each do |component| %>
+            <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
+          <% end %>
         </div>
       </div>
     </div>

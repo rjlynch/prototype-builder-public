@@ -77,10 +77,10 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 - [x] 4. Landing page + stubbed sign in
 - [x] 5. Wizard + Page models; "New wizard" lands on builder with blank page
 - [x] 6. Title field with live preview (autosubmit + turbo stream)
-- [ ] 7. Paragraph components: add, edit, remove — live preview
-- [ ] 8. Continue button component: add, rename, click-through to next page
-- [ ] 9. Text input component (text kind first), interactive in preview
-- [ ] 10. Full journey feature spec mirroring the rough spec in the brief
+- [x] 7. Paragraph components: add, edit, remove — live preview
+- [x] 8. Continue button component: add, rename, click-through to next page
+- [x] 9. Text input component (text kind first), interactive in preview
+- [x] 10. Full journey feature spec mirroring the rough spec in the brief
 - [ ] 11. Run mode / share link (wizards#show walks the journey)
 
 ## Progress log
@@ -98,6 +98,15 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   PageForm backs the title field; generic `autosubmit` Stimulus controller
   debounce-submits as a turbo stream that replaces the preview pane.
   NextPageForm ready for the continue button. 12 specs green.
+* 2026-06-11 — Steps 7–10 done. Component model (flat columns, kind enum)
+  with AddComponentForm (per-kind defaults, appends at end) and
+  ComponentForm (one class backs all editor forms). Builder pane: editor
+  card per component with Remove; Add paragraph / Add continue button
+  buttons; "Add input" disclosure with Text input (more types later).
+  Turbo-stream strategy: create/destroy replace builder+preview panes,
+  update replaces preview only (typing focus never stolen). Preview's
+  continue button POSTs to pages#create (find-or-create next page) in
+  builder mode. Full journey spec from the brief passes. 14 specs green.
 
 ## Decisions / open questions
 
