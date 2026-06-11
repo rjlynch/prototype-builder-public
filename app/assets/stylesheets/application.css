@@ -28,6 +28,17 @@
   min-height: 24rem;
 }
 
+/* Keep the framed pane in view while the other pane scrolls. */
+@media (min-width: 769px) {
+  .app-split-pane__pane--framed {
+    position: sticky;
+    top: 15px;
+    max-height: calc(100vh - 30px);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
 /* A list rendered inline with separators (e.g. a small nav). */
 .app-inline-list li {
   display: inline-block;
