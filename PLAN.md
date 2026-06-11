@@ -75,8 +75,8 @@ resources :wizards           index (dashboard), create, show (run/share mode)
 - [x] 2. RSpec + Capybara (+ selenium headless Chrome) setup
 - [x] 3. Vendor govuk-frontend CSS/JS/assets (MVP: used as-is)
 - [x] 4. Landing page + stubbed sign in
-- [ ] 5. Wizard + Page models; "New wizard" lands on builder with blank page
-- [ ] 6. Title field with live preview (autosubmit + turbo stream)
+- [x] 5. Wizard + Page models; "New wizard" lands on builder with blank page
+- [x] 6. Title field with live preview (autosubmit + turbo stream)
 - [ ] 7. Paragraph components: add, edit, remove — live preview
 - [ ] 8. Continue button component: add, rename, click-through to next page
 - [ ] 9. Text input component (text kind first), interactive in preview
@@ -92,6 +92,12 @@ resources :wizards           index (dashboard), create, show (run/share mode)
   those paths — see vendor/README.md; note v6 uses the refreshed brand
   green #0f7a52). GOV.UK layout (header, service nav, footer), landing page,
   stubbed sign in/out (session flag), empty dashboard. 4 specs green.
+* 2026-06-11 — Steps 5–6 done. Wizard/Page models (no callbacks; position
+  set by form objects). WizardForm creates wizard + blank first page;
+  "New wizard" lands on the builder (pages#edit, app-split-pane layout).
+  PageForm backs the title field; generic `autosubmit` Stimulus controller
+  debounce-submits as a turbo stream that replaces the preview pane.
+  NextPageForm ready for the continue button. 12 specs green.
 
 ## Decisions / open questions
 

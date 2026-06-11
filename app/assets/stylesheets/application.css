@@ -6,6 +6,28 @@
  * generic enough to extract to a library.
  */
 
+/* Two-pane editor layout: controls on the left, framed preview on the right.
+   Desktop-first (per MVP); stacks on narrow screens. */
+.app-split-pane {
+  display: grid;
+  grid-template-columns: minmax(24rem, 2fr) 3fr;
+  gap: 30px;
+  align-items: start;
+  padding: 30px;
+}
+
+@media (max-width: 768px) {
+  .app-split-pane {
+    grid-template-columns: 1fr;
+  }
+}
+
+.app-split-pane__pane--framed {
+  border: 1px solid #b1b4b6;
+  background: #ffffff;
+  min-height: 24rem;
+}
+
 /* Render a form button as if it were an inline link (e.g. "Sign out" in navigation). */
 .app-button-as-link {
   background: none;
