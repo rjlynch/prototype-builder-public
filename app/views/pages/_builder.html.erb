@@ -47,9 +47,14 @@
       <span class="govuk-details__summary-text">Add input</span>
     </summary>
     <div class="govuk-details__text">
-      <%= button_to "Text input", page_components_path(page),
-            params: { component: { kind: "text_input" } },
-            class: "govuk-button govuk-button--secondary" %>
+      <div class="govuk-button-group">
+        <%= button_to "Text input", page_components_path(page),
+              params: { component: { kind: "text_input" } },
+              class: "govuk-button govuk-button--secondary" %>
+        <%= button_to "Radio buttons", page_components_path(page),
+              params: { component: { kind: "radios" } },
+              class: "govuk-button govuk-button--secondary" %>
+      </div>
     </div>
   </details>
 </div>

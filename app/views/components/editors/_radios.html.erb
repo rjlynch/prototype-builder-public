@@ -1,0 +1,17 @@
+<div class="govuk-form-group">
+  <%= f.label :name, "Name", class: "govuk-label" %>
+  <div class="govuk-hint">Used internally to identify the answer</div>
+  <%= f.text_field :name, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+</div>
+<div class="govuk-form-group">
+  <%= f.label :label, "Label", class: "govuk-label" %>
+  <%= f.text_field :label, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+</div>
+<div class="govuk-form-group">
+  <%= f.label :hint, "Hint", class: "govuk-label" %>
+  <%= f.text_field :hint, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+</div>
+<div class="govuk-form-group">
+  <%= f.label :options, "Options (one per line)", class: "govuk-label" %>
+  <%= f.text_area :options, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit" } %>
+</div>

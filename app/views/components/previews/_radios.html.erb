@@ -1,0 +1,29 @@
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset"
+            <%= "aria-describedby=#{dom_id(component, :preview_hint)}".html_safe if component.hint.present? %>>
+    <% if component.label.present? %>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <%= component.label %>
+      </legend>
+    <% end %>
+    <% if component.hint.present? %>
+      <div class="govuk-hint" id="<%= dom_id(component, :preview_hint) %>">
+        <%= component.hint %>
+      </div>
+    <% end %>
+    <div class="govuk-radios" data-module="govuk-radios">
+      <% component.option_list.each_with_index do |option, index| %>
+        <div class="govuk-radios__item">
+          <input class="govuk-radios__input"
+                 id="<%= dom_id(component, :"preview_option_#{index}") %>"
+                 name="answers[<%= component.input_key %>]"
+                 type="radio"
+                 value="<%= option.parameterize %>">
+          <label class="govuk-label govuk-radios__label" for="<%= dom_id(component, :"preview_option_#{index}") %>">
+            <%= option %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+</div>
