@@ -28,7 +28,12 @@
 !/tmp/storage/
 !/tmp/storage/.keep
 
-/public/assets
+# Ignore precompiled assets, but keep the vendored govuk-frontend
+# fonts/images which must live at /assets/... (see vendor/README.md).
+/public/assets/*
+!/public/assets/fonts/
+!/public/assets/images/
+!/public/assets/manifest.json
 
 # Ignore key files for decrypting credentials and more.
 /config/*.key
