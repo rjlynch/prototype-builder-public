@@ -1,24 +1,12 @@
 <div id="<%= dom_id(page, :builder) %>">
   <span class="govuk-caption-m"><%= page.wizard.name %></span>
-  <%= render "pages/slug_heading", page: page %>
+  <%= render "pages/page_heading", page: page %>
 
   <p class="govuk-body">
     <%= link_to "Share this wizard", wizard_path(page.wizard), class: "govuk-link", target: "_blank", rel: "noopener" %>
   </p>
 
-  <nav aria-label="Pages in this wizard">
-    <ul class="govuk-list app-inline-list">
-      <% page.wizard.pages.each do |other| %>
-        <li>
-          <% if other == page %>
-            <strong aria-current="page"><%= other.slug %></strong>
-          <% else %>
-            <%= link_to other.slug, edit_page_path(other), class: "govuk-link" %>
-          <% end %>
-        </li>
-      <% end %>
-    </ul>
-  </nav>
+  <%= render "pages/pages_nav", page: page %>
 
   <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch, data: { controller: "autosubmit" } do |f| %>
     <div class="govuk-form-group">

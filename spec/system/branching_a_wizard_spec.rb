@@ -10,7 +10,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     click_button "New wizard"
 
     fill_in "Page title", with: "Are you eligible?"
-    expect(page).to have_css("h2", text: "are-you-eligible")
+    expect(page).to have_field("Page slug", with: "are-you-eligible")
+    expect(page).to have_css("h2", text: "Are you eligible?")
 
     find("summary", text: "Add input").click
     add_component "Radio buttons"
@@ -53,7 +54,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "yes"
       click_button "Continue"
     end
-    expect(page).to have_css("h2", text: "congratulations")
+    expect(page).to have_field("Page slug", with: "congratulations")
     expect(page).to have_field("Page title", with: "")
 
     # Back on the question page, answer no instead
@@ -62,7 +63,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "no"
       click_button "Continue"
     end
-    expect(page).to have_css("h2", text: "you-are-not-eligible")
+    expect(page).to have_field("Page slug", with: "you-are-not-eligible")
   end
 
   def within_preview(&block)

@@ -1,0 +1,13 @@
+<nav id="<%= dom_id(page, :pages_nav) %>" aria-label="Pages in this wizard">
+  <ul class="govuk-list app-inline-list">
+    <% page.wizard.pages.each do |other| %>
+      <li>
+        <% if other == page %>
+          <strong aria-current="page"><%= other.slug %></strong>
+        <% else %>
+          <%= link_to other.slug, edit_page_path(other), class: "govuk-link" %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+</nav>
