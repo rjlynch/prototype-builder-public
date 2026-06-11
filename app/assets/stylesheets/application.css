@@ -28,6 +28,16 @@
   min-height: 24rem;
 }
 
+/* A list rendered inline with separators (e.g. a small nav). */
+.app-inline-list li {
+  display: inline-block;
+}
+
+.app-inline-list li + li::before {
+  content: "·";
+  margin: 0 5px;
+}
+
 /* A bordered card grouping a removable editor block. */
 .app-card {
   border: 1px solid #b1b4b6;

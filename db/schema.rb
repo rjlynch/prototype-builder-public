@@ -10,13 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_11_144024) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_11_151142) do
+  create_table "branch_rules", force: :cascade do |t|
+    t.integer "component_id", null: false
+    t.datetime "created_at", null: false
+    t.string "input_name", default: "", null: false
+    t.integer "position", null: false
+    t.string "target_slug", default: "", null: false
+    t.datetime "updated_at", null: false
+    t.string "value", default: "", null: false
+    t.index ["component_id", "position"], name: "index_branch_rules_on_component_id_and_position", unique: true
+    t.index ["component_id"], name: "index_branch_rules_on_component_id"
+  end
+
   create_table "components", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "hint"
     t.string "kind", null: false
     t.string "label"
     t.string "name"
+    t.text "options"
     t.integer "page_id", null: false
     t.integer "position", null: false
     t.text "text"
@@ -28,10 +41,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_144024) do
   create_table "pages", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "position", null: false
+    t.string "slug", null: false
     t.string "title", default: "", null: false
     t.datetime "updated_at", null: false
     t.integer "wizard_id", null: false
     t.index ["wizard_id", "position"], name: "index_pages_on_wizard_id_and_position", unique: true
+    t.index ["wizard_id", "slug"], name: "index_pages_on_wizard_id_and_slug", unique: true
     t.index ["wizard_id"], name: "index_pages_on_wizard_id"
   end
 
@@ -41,6 +56,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_11_144024) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "branch_rules", "components"
   add_foreign_key "components", "pages"
   add_foreign_key "pages", "wizards"
 end

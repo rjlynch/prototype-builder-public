@@ -6,7 +6,7 @@ RSpec.describe WizardForm do
 
     expect(form.save).to be(true)
     expect(form.wizard).to be_persisted
-    expect(form.first_page).to have_attributes(position: 1, title: "")
+    expect(form.first_page).to have_attributes(position: 1, title: "", slug: "page-1")
   end
 
   it "requires a name" do

@@ -12,7 +12,7 @@ class WizardForm
     return false unless valid?
 
     @wizard = Wizard.transaction do
-      Wizard.create!(name: name).tap { |wizard| wizard.pages.create!(position: 1) }
+      Wizard.create!(name: name).tap { |wizard| wizard.pages.create!(position: 1, slug: Page.default_slug(1)) }
     end
 
     true

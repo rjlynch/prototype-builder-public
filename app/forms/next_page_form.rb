@@ -12,7 +12,15 @@ class NextPageForm
   def save
     return false unless valid?
 
-    @next_page = page.next || page.wizard.pages.create!(position: page.position + 1)
+    @next_page = page.next || create_next_page
     true
+  end
+
+  private
+
+  def create_next_page
+    position = page.position + 1
+    slug = Page.unique_slug(page.wizard, Page.default_slug(position))
+    page.wizard.pages.create!(position: position, slug: slug)
   end
 end

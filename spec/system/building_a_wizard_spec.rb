@@ -9,7 +9,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     click_button "New wizard"
 
     # --- Page 1 ---------------------------------------------------------
-    expect(page).to have_content("Page 1")
+    expect(page).to have_css("h2", text: "page-1")
 
     fill_in "Page title", with: "Claim an early years teacher recognition payment"
     within_preview do
@@ -54,7 +54,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within_preview { click_button "Start now" }
 
     # --- Page 2 ---------------------------------------------------------
-    expect(page).to have_content("Page 2")
+    expect(page).to have_css("h2", text: "page-2")
     expect(page).to have_field("Page title", with: "")
     within_preview do
       expect(page).to have_no_css("h1")
@@ -93,7 +93,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     end
 
     # --- Page 3 ---------------------------------------------------------
-    expect(page).to have_content("Page 3")
+    expect(page).to have_css("h2", text: "page-3")
     expect(page).to have_field("Page title", with: "")
   end
 

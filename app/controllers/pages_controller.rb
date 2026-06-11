@@ -29,16 +29,34 @@ class PagesController < ApplicationController
 
   def update
     page = Page.find(params[:id])
-    form = PageForm.new(page: page, title: params.require(:page)[:title])
+    attrs = params.require(:page).permit(:title, :slug)
+    form = PageForm.new(page: page, **attrs.to_h.symbolize_keys)
     form.save
 
     respond_to do |format|
       format.turbo_stream do
-        render turbo_stream: turbo_stream.replace(
-          helpers.dom_id(page, :preview),
-          partial: "pages/preview",
-          locals: { page: page, mode: :builder }
-        )
+        streams = [
+          turbo_stream.replace(
+            helpers.dom_id(page, :preview),
+            partial: "pages/preview",
+            locals: { page: page, mode: :builder }
+          ),
+          turbo_stream.replace(
+            helpers.dom_id(page, :slug_heading),
+            partial: "pages/slug_heading",
+            locals: { page: page }
+          )
+        ]
+        # Refresh the slug field when the title changed it — but never while
+        # the user is typing in the slug field itself.
+        unless attrs.key?(:slug)
+          streams << turbo_stream.replace(
+            helpers.dom_id(page, :slug_form),
+            partial: "pages/slug_form",
+            locals: { page: page }
+          )
+        end
+        render turbo_stream: streams
       end
       format.html { redirect_to edit_page_path(page) }
     end
