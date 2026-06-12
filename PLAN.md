@@ -136,6 +136,13 @@ hints, flattening the "Add input" disclosure, run-mode dead-end message,
 copy-share-link button, radios legend-vs-title hint, "Button" card
 heading wording.
 
+2026-06-12 — all deferred items above, plus a second round of user
+feedback (pane padding/background/full-height, wizard settings page,
+H1-as-label option, collapsible editor cards, subheading component,
+vertical add-button stack), filed as GitHub issues #3–#16 on
+rjlynch/prototype-builder, each labelled low/medium/high difficulty.
+The backlog now lives in the issue tracker, not this file.
+
 ## Progress log
 
 * 2026-06-11 — Project start. Committed generated Rails 8.1 app. Wrote plan.
