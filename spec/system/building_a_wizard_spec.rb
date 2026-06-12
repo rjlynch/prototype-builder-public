@@ -12,7 +12,12 @@ RSpec.describe "Building a wizard", :js, type: :system do
     expect(page).to have_css("h2", text: "Untitled page")
     expect(page).to have_field("Page slug", with: "page-1")
 
+    # Wizard-level settings live on their own page
+    click_link "Wizard settings"
+    expect(page).to have_css("h1", text: "Untitled wizard")
     fill_in "Wizard name", with: "EYTFI claim"
+    expect(page).to have_css("h1", text: "EYTFI claim") # the heading echoes the save
+    click_link "Back to the builder"
 
     fill_in "Page title", with: "Claim an early years teacher recognition payment"
     within_preview do
@@ -59,7 +64,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     # --- Page 2 ---------------------------------------------------------
     expect(page).to have_field("Page slug", with: "page-2")
     expect(page).to have_field("Page title", with: "")
-    expect(page).to have_field("Wizard name", with: "EYTFI claim") # rename stuck
+    expect(page).to have_css(".govuk-caption-m", text: "EYTFI claim") # rename stuck
     within_preview do
       expect(page).to have_no_css("h1")
     end
