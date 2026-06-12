@@ -1,21 +1,29 @@
 <div id="<%= dom_id(branch_rule, :editor) %>" class="app-condition">
-  <%= form_with model: BranchRuleForm.from_branch_rule(branch_rule), url: branch_rule_path(branch_rule), method: :patch, data: { controller: "autosubmit" } do |f| %>
-    <div class="govuk-form-group">
-      <%= f.label :input_name, "When answer to", class: "govuk-label" %>
-      <%= f.select :input_name,
-            branch_rule.component.page.wizard.input_keys,
-            { include_blank: true },
-            class: "govuk-select",
-            data: { action: "change->autosubmit#submit" } %>
-    </div>
-    <div class="govuk-form-group">
-      <%= f.label :value, "Is", class: "govuk-label" %>
-      <%= f.text_field :value, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
-    </div>
-    <div class="govuk-form-group">
-      <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
-      <%= f.text_field :target_slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
-    </div>
+  <% input_choices = branch_rule.component.page.wizard.input_choices %>
+  <% if input_choices.none? %>
+    <p class="govuk-hint">
+      This wizard has no inputs yet. Add a text input or radio buttons,
+      then you can branch on the answer.
+    </p>
+  <% else %>
+    <%= form_with model: BranchRuleForm.from_branch_rule(branch_rule), url: branch_rule_path(branch_rule), method: :patch, data: { controller: "autosubmit" } do |f| %>
+      <div class="govuk-form-group">
+        <%= f.label :input_name, "When answer to", class: "govuk-label" %>
+        <%= f.select :input_name,
+              input_choices,
+              { include_blank: true },
+              class: "govuk-select",
+              data: { action: "change->autosubmit#submit" } %>
+      </div>
+      <div class="govuk-form-group">
+        <%= f.label :value, "Is", class: "govuk-label" %>
+        <%= f.text_field :value, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      </div>
+      <div class="govuk-form-group">
+        <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
+        <%= f.text_field :target_slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      </div>
+    <% end %>
   <% end %>
   <%= button_to "Remove rule", branch_rule_path(branch_rule), method: :delete, class: "app-button-as-link govuk-link" %>
 </div>
