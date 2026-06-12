@@ -3,7 +3,9 @@
     <div class="govuk-main-wrapper">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          <% if page.title.present? %>
+          <%# When an input renders the title as its label/legend (the GOV.UK
+              single-question pattern), it owns the H1 — don't render it twice. %>
+          <% if page.title.present? && page.heading_component.nil? %>
             <h1 class="govuk-heading-l"><%= page.title %></h1>
           <% end %>
           <%= form_with url: page_answers_path(page), method: :post do %>

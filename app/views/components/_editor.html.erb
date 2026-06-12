@@ -2,7 +2,7 @@
          data-controller="persisted-details mirror" data-action="toggle->persisted-details#store">
   <summary class="app-card__summary">
     <h3 class="govuk-heading-s app-card__title"><%= component.kind.humanize %></h3>
-    <span class="app-card__snippet govuk-body-s" data-mirror-target="output"><%= component.input? ? component.label : component.text %></span>
+    <span class="app-card__snippet govuk-body-s" data-mirror-target="output"><%= component.summary_text %></span>
   </summary>
 
   <div class="app-card__actions">

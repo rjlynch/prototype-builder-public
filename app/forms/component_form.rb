@@ -16,19 +16,38 @@ class ComponentForm
       name: component.name,
       label: component.label,
       hint: component.hint,
-      options: component.options
+      options: component.options,
+      title_as_label: component.title_as_label
     )
   end
 
-  attr_accessor :component, :text, :name, :label, :hint, :options
+  attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label
 
   validates :text, :name, :label, :hint, :options, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
+  validate :single_page_heading, if: -> { component && wants_title_as_label? }
 
   def save
     return false unless valid?
 
-    component.update!(text: text, name: name, label: label, hint: hint, options: options)
+    component.update!(
+      text: text, name: name, label: label, hint: hint, options: options,
+      title_as_label: title_as_label
+    )
     true
+  end
+
+  private
+
+  def wants_title_as_label?
+    ActiveModel::Type::Boolean.new.cast(title_as_label)
+  end
+
+  # Only one input per page may render the title as its label/legend —
+  # a page has one H1. (Also validated on the model.)
+  def single_page_heading
+    return unless component.page.components.where(title_as_label: true).where.not(id: component.id).exists?
+
+    errors.add(:title_as_label, "is already in use on this page")
   end
 end

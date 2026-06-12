@@ -17,8 +17,10 @@ class ComponentsController < ApplicationController
     form.assign_attributes(component_params)
     form.save
 
-    # Preview only: the user is mid-typing in the builder pane, so leave it alone.
-    respond_with_panes(component.page, builder: false)
+    # Preview only: the user is mid-typing in the builder pane, so leave it
+    # alone. Exception: toggling title_as_label changes which fields the
+    # editors show, and a checkbox click is not typing — re-render the lot.
+    respond_with_panes(component.page, builder: component.previous_changes.key?("title_as_label"))
   end
 
   def destroy
@@ -31,6 +33,6 @@ class ComponentsController < ApplicationController
   private
 
   def component_params
-    params.require(:component).permit(:text, :name, :label, :hint, :options)
+    params.require(:component).permit(:text, :name, :label, :hint, :options, :title_as_label)
   end
 end

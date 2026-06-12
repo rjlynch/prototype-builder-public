@@ -31,4 +31,11 @@ class Page < ApplicationRecord
   def next
     wizard.pages.find_by(position: position + 1)
   end
+
+  # The input that renders the page title as its label/legend (the GOV.UK
+  # single-question pattern). First such input wins, so the title is never
+  # rendered twice. Nil when the page renders its own plain H1.
+  def heading_component
+    components.detect { |component| component.input? && component.title_as_label? }
+  end
 end

@@ -203,6 +203,17 @@ The backlog now lives in the issue tracker, not this file.
   no extra server streams. Remove moved out of the clickable summary
   into an actions row. 37 specs green.
 
+* 2026-06-12 — Issue #15: inputs can use the page title as their label
+  (text input) or fieldset legend (radios) — the GOV.UK single-question
+  pattern. New title_as_label boolean on components with a checkbox in
+  both input editors; only one input per page may take it (validated at
+  form and model level), the redundant Label field hides while it is
+  on, and other inputs stop offering the option. The builder pane
+  re-renders on toggle (a checkbox click is not typing) so the editors
+  reshape immediately; the preview's plain H1 steps aside when a
+  heading component exists. Same partial serves run mode. 43 specs
+  green.
+
 ## Decisions / open questions
 
 * Sign in is a stubbed session flag — real accounts deferred until the
