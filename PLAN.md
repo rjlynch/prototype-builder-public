@@ -214,6 +214,15 @@ The backlog now lives in the issue tracker, not this file.
   heading component exists. Same partial serves run mode. 43 specs
   green.
 
+* 2026-06-12 — Issues #3 and #4: pages can be deleted and reordered.
+  "Delete this page" (Turbo confirm) under the pages nav; DeletePageForm
+  keeps at least one page per wizard, renumbers survivors contiguously
+  (walking down in position order to dodge the unique index), and lands
+  the user on the previous page. Up/down arrows in the pages nav swap
+  positions via a nested singular position resource + MovePageForm
+  (swap parks at max+1 first, same index reason); slugs are untouched
+  so branch rules survive reordering. 53 specs green.
+
 ## Decisions / open questions
 
 * Sign in is a stubbed session flag — real accounts deferred until the

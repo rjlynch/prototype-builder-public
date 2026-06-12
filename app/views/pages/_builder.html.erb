@@ -14,6 +14,14 @@
 
   <%= render "pages/pages_nav", page: page %>
 
+  <% if page.wizard.pages.many? %>
+    <p class="govuk-body">
+      <%= button_to "Delete this page", page_path(page), method: :delete,
+            class: "app-button-as-link govuk-link",
+            form: { data: { turbo_confirm: "Delete this page and everything on it? This cannot be undone." } } %>
+    </p>
+  <% end %>
+
   <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch, data: { controller: "autosubmit" } do |f| %>
     <div class="govuk-form-group">
       <%= f.label :title, "Page title", class: "govuk-label" %>

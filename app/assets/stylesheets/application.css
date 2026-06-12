@@ -44,6 +44,11 @@
   display: inline-block;
 }
 
+.app-inline-list form {
+  display: inline;
+  margin-left: 5px;
+}
+
 .app-inline-list li + li::before {
   content: "·";
   margin: 0 5px;

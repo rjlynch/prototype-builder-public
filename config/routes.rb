@@ -5,9 +5,10 @@ Rails.application.routes.draw do
 
   resources :wizards, only: %i[index create show update]
 
-  resources :pages, only: %i[show edit update] do
+  resources :pages, only: %i[show edit update destroy] do
     resources :components, only: %i[create]
     resource :answers, only: %i[create]
+    resource :position, only: %i[update]
   end
 
   resources :components, only: %i[update destroy] do

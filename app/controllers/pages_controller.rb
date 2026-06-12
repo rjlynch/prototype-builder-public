@@ -14,6 +14,17 @@ class PagesController < ApplicationController
     render :edit, locals: { page: page }
   end
 
+  def destroy
+    page = Page.find(params[:id])
+    form = DeletePageForm.new(page: page)
+
+    if form.save
+      redirect_to edit_page_path(form.destination), status: :see_other
+    else
+      redirect_to edit_page_path(page), alert: "The only page in a wizard cannot be deleted"
+    end
+  end
+
   def update
     page = Page.find(params[:id])
     attrs = params.require(:page).permit(:title, :slug)
