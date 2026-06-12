@@ -193,6 +193,15 @@ The backlog now lives in the issue tracker, not this file.
   editable in the builder; run mode looks like a GOV.UK service with a
   Prototype phase banner; preview is sticky. 36 specs green.
 
+* 2026-06-12 — Issue #16: editor cards are collapsible <details> elements.
+  A generic `persisted-details` Stimulus controller remembers open/closed
+  state in sessionStorage keyed by element id, so it survives the full
+  builder-pane turbo-stream replaces (and reloads). Cards default open;
+  collapsed cards show kind + a content snippet, kept fresh by streaming
+  just the card's <summary> on component updates (same focus-safe trick
+  as the page heading). Remove moved out of the clickable summary into
+  an actions row. 37 specs green.
+
 ## Decisions / open questions
 
 * Sign in is a stubbed session flag — real accounts deferred until the

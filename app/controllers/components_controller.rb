@@ -17,8 +17,20 @@ class ComponentsController < ApplicationController
     form.assign_attributes(component_params)
     form.save
 
-    # Preview only: the user is mid-typing in the builder pane, so leave it alone.
-    respond_with_panes(component.page, builder: false)
+    # Preview only: the user is mid-typing in the builder pane, so leave it
+    # alone — except the card's summary line, which echoes what they typed
+    # and is safe to refresh (nobody types in a <summary>).
+    respond_with_panes(
+      component.page,
+      builder: false,
+      extra_streams: [
+        turbo_stream.replace(
+          helpers.dom_id(component, :card_summary),
+          partial: "components/card_summary",
+          locals: { component: component }
+        )
+      ]
+    )
   end
 
   def destroy

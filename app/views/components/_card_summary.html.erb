@@ -1,0 +1,7 @@
+<summary id="<%= dom_id(component, :card_summary) %>" class="app-card__summary">
+  <h3 class="govuk-heading-s app-card__title"><%= component.kind.humanize %></h3>
+  <% snippet = component.label.presence || component.text.presence || component.name %>
+  <% if snippet.present? %>
+    <span class="app-card__snippet govuk-body-s"><%= snippet.truncate(60) %></span>
+  <% end %>
+</summary>

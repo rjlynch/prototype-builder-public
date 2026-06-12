@@ -4,7 +4,7 @@
 module RendersBuilderPanes
   private
 
-  def respond_with_panes(page, builder:)
+  def respond_with_panes(page, builder:, extra_streams: [])
     respond_to do |format|
       format.turbo_stream do
         streams = [
@@ -12,7 +12,8 @@ module RendersBuilderPanes
             helpers.dom_id(page, :preview),
             partial: "pages/preview",
             locals: { page: page, mode: :builder }
-          )
+          ),
+          *extra_streams
         ]
         if builder
           streams << turbo_stream.replace(
