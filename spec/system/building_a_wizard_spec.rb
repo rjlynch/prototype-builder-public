@@ -12,8 +12,8 @@ RSpec.describe "Building a wizard", :js, type: :system do
     expect(page).to have_css("h2", text: "Untitled page")
     expect(page).to have_field("Page slug", with: "page-1")
 
-    # Wizard-level settings live on their own page
-    click_link "Wizard settings"
+    # The wizard title opens the wizard-level settings page
+    click_link "Untitled wizard"
     expect(page).to have_css("h1", text: "Untitled wizard")
     fill_in "Wizard name", with: "EYTFI claim"
     expect(page).to have_css("h1", text: "EYTFI claim") # the heading echoes the save
