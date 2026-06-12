@@ -223,6 +223,12 @@ The backlog now lives in the issue tracker, not this file.
   (swap parks at max+1 first, same index reason); slugs are untouched
   so branch rules survive reordering. 53 specs green.
 
+* 2026-06-12 — Issue #14: wizard settings moved off the builder onto
+  their own page (wizards#edit, autosubmit name field whose h1 streams
+  back the save as feedback). The builder shows the wizard name as a
+  caption over the page heading and links to settings beside the share
+  link. 53 specs green.
+
 ## Decisions / open questions
 
 * Sign in is a stubbed session flag — real accounts deferred until the

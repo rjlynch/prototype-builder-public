@@ -1,1 +1,4 @@
-<h2 id="<%= dom_id(page, :page_heading) %>" class="govuk-heading-m"><%= page.title.presence || "Untitled page" %></h2>
+<div id="<%= dom_id(page, :page_heading) %>">
+  <span class="govuk-caption-m"><%= page.wizard.name %></span>
+  <h2 class="govuk-heading-m"><%= page.title.presence || "Untitled page" %></h2>
+</div>
