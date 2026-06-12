@@ -1,5 +1,5 @@
 class Component < ApplicationRecord
-  KINDS = %w[ paragraph text_input radios button ].freeze
+  KINDS = %w[ paragraph subheading text_input radios button ].freeze
   INPUT_KINDS = %w[ text_input radios ].freeze
 
   belongs_to :page

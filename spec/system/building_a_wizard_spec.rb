@@ -48,6 +48,12 @@ RSpec.describe "Building a wizard", :js, type: :system do
       expect(page).to have_css("p", text: "Use this service to claim a recognition payment of £4,5000")
     end
 
+    add_component "Add subheading"
+    within_last_card { fill_in "Subheading text", with: "Before you start" }
+    within_preview do
+      expect(page).to have_css("h2", text: "Before you start")
+    end
+
     add_component "Add continue button"
     within_preview do
       expect(page).to have_button("Continue")

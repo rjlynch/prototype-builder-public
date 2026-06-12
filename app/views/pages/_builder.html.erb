@@ -33,6 +33,9 @@
     <%= button_to "Add paragraph", page_components_path(page),
           params: { component: { kind: "paragraph" } },
           class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add subheading", page_components_path(page),
+          params: { component: { kind: "subheading" } },
+          class: "govuk-button govuk-button--secondary" %>
     <%= button_to "Add continue button", page_components_path(page),
           params: { component: { kind: "button" } },
           class: "govuk-button govuk-button--secondary" %>
