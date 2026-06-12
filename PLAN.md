@@ -136,6 +136,13 @@ hints, flattening the "Add input" disclosure, run-mode dead-end message,
 copy-share-link button, radios legend-vs-title hint, "Button" card
 heading wording.
 
+2026-06-12 — all deferred items above, plus a second round of user
+feedback (pane padding/background/full-height, wizard settings page,
+H1-as-label option, collapsible editor cards, subheading component,
+vertical add-button stack), filed as GitHub issues #3–#16 on
+rjlynch/prototype-builder, each labelled low/medium/high difficulty.
+The backlog now lives in the issue tracker, not this file.
+
 ## Progress log
 
 * 2026-06-11 — Project start. Committed generated Rails 8.1 app. Wrote plan.
@@ -185,6 +192,16 @@ heading wording.
   five high-impact findings (see Phase 3 section). Wizard name is now
   editable in the builder; run mode looks like a GOV.UK service with a
   Prototype phase banner; preview is sticky. 36 specs green.
+
+* 2026-06-12 — Issue #16: editor cards are collapsible <details> elements.
+  A generic `persisted-details` Stimulus controller remembers open/closed
+  state in sessionStorage keyed by element id, so it survives the full
+  builder-pane turbo-stream replaces (and reloads). Cards default open;
+  collapsed cards show kind + a content snippet (label for inputs, text
+  otherwise), kept fresh client-side by a generic `mirror` Stimulus
+  controller copying the field's value into the summary as you type —
+  no extra server streams. Remove moved out of the clickable summary
+  into an actions row. 37 specs green.
 
 ## Decisions / open questions
 

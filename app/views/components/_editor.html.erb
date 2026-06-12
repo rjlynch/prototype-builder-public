@@ -1,6 +1,11 @@
-<div id="<%= dom_id(component, :editor) %>" class="app-card">
-  <div class="app-card__header">
+<details id="<%= dom_id(component, :editor) %>" class="app-card" open
+         data-controller="persisted-details mirror" data-action="toggle->persisted-details#store">
+  <summary class="app-card__summary">
     <h3 class="govuk-heading-s app-card__title"><%= component.kind.humanize %></h3>
+    <span class="app-card__snippet govuk-body-s" data-mirror-target="output"><%= component.input? ? component.label : component.text %></span>
+  </summary>
+
+  <div class="app-card__actions">
     <%= button_to component_path(component), method: :delete, class: "app-button-as-link govuk-link" do %>
       Remove<span class="govuk-visually-hidden"> <%= component.kind.humanize.downcase %></span>
     <% end %>
@@ -11,4 +16,4 @@
   <% end %>
 
   <%= render "components/branching", component: component if component.kind == "button" %>
-</div>
+</details>

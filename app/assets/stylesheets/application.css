@@ -49,21 +49,42 @@
   margin: 0 5px;
 }
 
-/* A bordered card grouping a removable editor block. */
+/* A bordered, collapsible card grouping a removable editor block. The card
+   is a <details> element; its <summary> shows a title and content snippet
+   so collapsed cards stay identifiable. */
 .app-card {
   border: 1px solid #b1b4b6;
   padding: 15px;
   margin-bottom: 20px;
 }
 
-.app-card__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 10px;
+.app-card__summary {
+  cursor: pointer;
+}
+
+.app-card[open] > .app-card__summary {
+  margin-bottom: 15px;
 }
 
 .app-card__title {
+  display: inline-block;
+  margin-bottom: 0;
+}
+
+.app-card__snippet {
+  color: #505a5f;
+  margin-bottom: 0;
+  margin-left: 10px;
+  display: inline-block;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+.app-card__actions {
+  text-align: right;
   margin-bottom: 10px;
 }
 
