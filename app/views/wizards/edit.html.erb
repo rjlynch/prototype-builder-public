@@ -5,6 +5,22 @@
     <span class="govuk-caption-l">Wizard settings</span>
     <%= render "wizards/name_heading", wizard: wizard %>
 
+    <p class="govuk-body-s app-wizard-actions">
+      <%= link_to "Share this wizard", wizard_path(wizard), class: "govuk-link", target: "_blank", rel: "noopener" %>
+      <span aria-hidden="true">·</span>
+      <button type="button"
+              class="app-button-as-link govuk-link"
+              data-controller="clipboard"
+              data-clipboard-text-value="<%= wizard_url(wizard) %>"
+              data-action="clipboard#copy">
+        <span data-clipboard-target="label">Copy link</span>
+      </button>
+    </p>
+
+    <hr class="app-section-divider">
+
+    <%= render "pages/pages_nav", pages: wizard.pages, current_page: nil, page: wizard.pages.first! %>
+
     <%= form_with model: WizardNameForm.from_wizard(wizard), url: wizard_path(wizard), method: :patch,
           data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">

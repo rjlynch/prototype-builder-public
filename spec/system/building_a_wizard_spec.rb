@@ -16,12 +16,17 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within_preview do
       expect(page).to have_content("Your page preview appears here")
     end
-    click_button "Copy link"
-    expect(page).to have_button("Copied")
 
     # The wizard title opens the wizard-level settings page
     click_link "Untitled wizard"
     expect(page).to have_css("h1", text: "Untitled wizard")
+    expect(page).to have_link("Share this wizard")
+    expect(page).to have_button("Copy link")
+    within("nav[aria-label='Pages in this wizard']") do
+      expect(page).to have_link("page-1")
+    end
+    click_button "Copy link"
+    expect(page).to have_button("Copied")
     fill_in "Wizard name", with: "EYTFI claim"
     expect(page).to have_css("h1", text: "EYTFI claim") # the heading echoes the save
     expect(page).to have_content("Saved")
@@ -83,6 +88,15 @@ RSpec.describe "Building a wizard", :js, type: :system do
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     expect(page).to have_field("Page title", with: "")
     expect(page).to have_css(".govuk-caption-m", text: "EYTFI claim") # rename stuck
+    expect(page).to have_link("Previous page")
+    click_link "Previous page"
+    expect(page).to have_css(
+      ".app-disclosure__summary",
+      text: "Slug claim-an-early-years-teacher-recognition-payment"
+    )
+    expect(page).to have_link("Next page")
+    click_link "Next page"
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     within_preview do
       expect(page).to have_no_css("h1")
     end

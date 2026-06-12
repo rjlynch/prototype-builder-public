@@ -85,6 +85,13 @@
   margin-bottom: 5px;
 }
 
+.app-field-heading__title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .app-field-heading--spread {
   justify-content: space-between;
 }
@@ -120,6 +127,11 @@
 
 .app-disclosure__value {
   color: #505a5f;
+}
+
+.app-wizard-actions {
+  margin-top: 5px;
+  margin-bottom: 0;
 }
 
 .app-icon {

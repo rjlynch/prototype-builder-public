@@ -1,14 +1,22 @@
 <div id="<%= dom_id(page, :builder) %>">
-  <section class="app-editor-section app-editor-section--nav">
-    <%= render "pages/pages_nav", page: page %>
-  </section>
-
-  <hr class="app-section-divider">
-
   <section class="app-editor-section app-editor-section--details">
     <div class="govuk-form-group">
       <div class="app-field-heading app-field-heading--spread">
-        <label class="govuk-label app-field-heading__label" for="page_form_title">Page title</label>
+        <div class="app-field-heading__title-group">
+          <label class="govuk-label app-field-heading__label" for="page_form_title">Page title</label>
+          <% if page.previous %>
+            <%= link_to edit_page_path(page.previous), class: "app-icon-link govuk-link govuk-link--muted", aria: { label: "Previous page" } do %>
+              <span class="govuk-visually-hidden">Previous page</span>
+              <%= svg_icon("chevron-left") %>
+            <% end %>
+          <% end %>
+          <% if page.next %>
+            <%= link_to edit_page_path(page.next), class: "app-icon-link govuk-link govuk-link--muted", aria: { label: "Next page" } do %>
+              <span class="govuk-visually-hidden">Next page</span>
+              <%= svg_icon("chevron-right") %>
+            <% end %>
+          <% end %>
+        </div>
         <% if page.wizard.pages.many? %>
           <%= button_to "Remove this page", page_path(page), method: :delete,
                 class: "app-button-as-link govuk-link app-link--danger",

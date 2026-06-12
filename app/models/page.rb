@@ -32,6 +32,10 @@ class Page < ApplicationRecord
     wizard.pages.find_by(position: position + 1)
   end
 
+  def previous
+    wizard.pages.find_by(position: position - 1)
+  end
+
   # The input that renders the page title as its label/legend (the GOV.UK
   # single-question pattern). First such input wins, so the title is never
   # rendered twice. Nil when the page renders its own plain H1.

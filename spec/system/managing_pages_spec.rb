@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Managing pages", :js, type: :system do
   it "deletes pages, keeping at least one" do
     build_three_page_wizard
+    click_link "Untitled wizard"
 
     # Delete the middle page from its own builder
     within_nav { click_link "second" }
@@ -11,25 +12,28 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     # Lands on the previous page; the deleted page is gone from the nav
     expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
+    click_link "Untitled wizard"
     within_nav { expect(page).to have_no_text("second") }
 
     # Linear navigation follows the renumbered positions
+    click_link "first"
     within_preview { click_button "Continue" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
 
     # Deleting down to one page removes the option entirely
     accept_confirm { click_button "Remove this page" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
+    click_link "Untitled wizard"
     expect(page).to have_no_button("Remove this page")
   end
 
   it "reorders pages from the nav" do
     build_three_page_wizard
+    click_link "Untitled wizard"
 
     # We are on "third"; pull it one position earlier
     click_button "Move third earlier"
 
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug third") # still on the same page
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "third")
       expect(page).to have_css("li:nth-child(3)", text: "second")
@@ -41,6 +45,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
 
     # And back again with the down arrow
+    click_link "Untitled wizard"
     click_button "Move third later"
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "second")

@@ -1,9 +1,12 @@
-<nav id="<%= dom_id(page, :pages_nav) %>" aria-label="Pages in this wizard">
+<% pages = local_assigns.fetch(:pages, page.wizard.pages) %>
+<% current_page = local_assigns.fetch(:current_page, page) %>
+<% reference_page = local_assigns.fetch(:page, pages.first) %>
+
+<nav id="<%= dom_id(reference_page, :pages_nav) %>" aria-label="Pages in this wizard">
   <ul class="govuk-list app-inline-list">
-    <% pages = page.wizard.pages %>
     <% pages.each do |other| %>
       <li>
-        <% if other == page %>
+        <% if current_page.present? && other == current_page %>
           <strong aria-current="page"><%= other.slug %></strong>
         <% else %>
           <%= link_to other.slug, edit_page_path(other), class: "govuk-link" %>

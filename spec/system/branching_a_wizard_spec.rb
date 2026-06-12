@@ -58,7 +58,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     expect(page).to have_field("Page title", with: "")
 
     # Back on the question page, answer no instead
-    click_link "are-you-eligible"
+    click_link "Previous page"
     within_preview do
       choose "no"
       click_button "Continue"

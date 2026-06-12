@@ -28,4 +28,15 @@ RSpec.describe Page, type: :model do
       expect(second.next).to be_nil
     end
   end
+
+  describe "#previous" do
+    it "returns the page at the preceding position, or nil" do
+      wizard = Wizard.create!(name: "Test wizard")
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      second = wizard.pages.create!(position: 2, slug: "page-2")
+
+      expect(second.previous).to eq(first)
+      expect(first.previous).to be_nil
+    end
+  end
 end
