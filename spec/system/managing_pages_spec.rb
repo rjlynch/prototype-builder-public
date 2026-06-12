@@ -23,6 +23,35 @@ RSpec.describe "Managing pages", :js, type: :system do
     expect(page).to have_no_button("Delete this page")
   end
 
+  it "reorders pages from the nav" do
+    build_three_page_wizard
+
+    # We are on "third"; pull it one position earlier
+    click_button "Move third earlier"
+
+    expect(page).to have_field("Page slug", with: "third") # still on the same page
+    within_nav do
+      expect(page).to have_css("li:nth-child(2)", text: "third")
+      expect(page).to have_css("li:nth-child(3)", text: "second")
+    end
+
+    # Linear navigation follows the new order
+    within_nav { click_link "first" }
+    within_preview { click_button "Continue" }
+    expect(page).to have_field("Page slug", with: "third")
+
+    # And back again with the down arrow
+    click_button "Move third later"
+    within_nav do
+      expect(page).to have_css("li:nth-child(2)", text: "second")
+      expect(page).to have_css("li:nth-child(3)", text: "third")
+    end
+
+    # No moving off either end of the journey
+    expect(page).to have_no_button("Move first earlier")
+    expect(page).to have_no_button("Move third later")
+  end
+
   def build_three_page_wizard
     visit root_path
     click_button "Sign in"

@@ -7,7 +7,7 @@ RSpec.describe DeletePageForm do
     form = DeletePageForm.new(page: wizard.pages.find_by(slug: "middle"))
 
     expect(form.save).to be(true)
-    expect(wizard.pages.reload.pluck(:position, :slug)).to eq([[1, "intro"], [2, "outro"]])
+    expect(wizard.pages.reload.pluck(:position, :slug)).to eq([ [ 1, "intro" ], [ 2, "outro" ] ])
   end
 
   it "deletes the page's components with it" do

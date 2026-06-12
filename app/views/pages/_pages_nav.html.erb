@@ -1,11 +1,24 @@
 <nav id="<%= dom_id(page, :pages_nav) %>" aria-label="Pages in this wizard">
   <ul class="govuk-list app-inline-list">
-    <% page.wizard.pages.each do |other| %>
+    <% pages = page.wizard.pages %>
+    <% pages.each do |other| %>
       <li>
         <% if other == page %>
           <strong aria-current="page"><%= other.slug %></strong>
         <% else %>
           <%= link_to other.slug, edit_page_path(other), class: "govuk-link" %>
+        <% end %>
+        <% if other.position > 1 %>
+          <%= button_to page_position_path(other), method: :patch,
+                params: { position: other.position - 1 }, class: "app-button-as-link govuk-link" do %>
+            &uarr;<span class="govuk-visually-hidden"> Move <%= other.slug %> earlier</span>
+          <% end %>
+        <% end %>
+        <% if other.position < pages.size %>
+          <%= button_to page_position_path(other), method: :patch,
+                params: { position: other.position + 1 }, class: "app-button-as-link govuk-link" do %>
+            &darr;<span class="govuk-visually-hidden"> Move <%= other.slug %> later</span>
+          <% end %>
         <% end %>
       </li>
     <% end %>
