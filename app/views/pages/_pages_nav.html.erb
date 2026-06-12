@@ -1,9 +1,10 @@
 <% pages = local_assigns.fetch(:pages, page.wizard.pages) %>
 <% current_page = local_assigns.fetch(:current_page, page) %>
 <% reference_page = local_assigns.fetch(:page, pages.first) %>
+<% stacked = local_assigns.fetch(:stacked, false) %>
 
 <nav id="<%= dom_id(reference_page, :pages_nav) %>" aria-label="Pages in this wizard">
-  <ul class="govuk-list app-inline-list">
+  <ul class="<%= stacked ? "govuk-list" : "govuk-list app-inline-list" %>">
     <% pages.each do |other| %>
       <li>
         <% if current_page.present? && other == current_page %>

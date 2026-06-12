@@ -1,0 +1,5 @@
+<div id="<%= dom_id(branch_rule, :missing_target) %>">
+  <% if branch_rule.missing_target? %>
+    <div class="govuk-hint app-warning">This page does not exist yet.</div>
+  <% end %>
+</div>

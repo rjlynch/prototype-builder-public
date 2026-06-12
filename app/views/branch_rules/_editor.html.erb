@@ -23,6 +23,7 @@
       <div class="govuk-form-group">
         <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
         <%= f.text_field :target_slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+        <%= render "branch_rules/missing_target", branch_rule: branch_rule %>
       </div>
       <%= render "shared/autosubmit_status" %>
     <% end %>

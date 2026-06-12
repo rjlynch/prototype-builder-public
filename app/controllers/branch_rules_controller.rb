@@ -17,8 +17,23 @@ class BranchRulesController < ApplicationController
     form.assign_attributes(branch_rule_params)
     form.save
 
-    # Preview only: the user is mid-typing in the rule's fields.
-    respond_with_panes(branch_rule.component.page, builder: false)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            helpers.dom_id(branch_rule.component.page, :preview),
+            partial: "pages/preview",
+            locals: { page: branch_rule.component.page, mode: :builder }
+          ),
+          turbo_stream.replace(
+            helpers.dom_id(branch_rule, :missing_target),
+            partial: "branch_rules/missing_target",
+            locals: { branch_rule: branch_rule }
+          )
+        ]
+      end
+      format.html { redirect_to edit_page_path(branch_rule.component.page) }
+    end
   end
 
   def destroy

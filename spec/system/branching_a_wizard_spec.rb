@@ -31,9 +31,6 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       fill_in "Is", with: "yes"
       fill_in "Go to page", with: "congratulations"
       expect(page).to have_content("Saved")
-    end
-    within_preview do
-      expect(page).to have_content("go to congratulations")
       expect(page).to have_content("This page does not exist yet.")
     end
 
@@ -43,9 +40,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       select "question-1 (Are you eligible?)", from: "When answer to"
       fill_in "Is", with: "no"
       fill_in "Go to page", with: "You are not eligible"
-    end
-    within_preview do
-      expect(page).to have_content("go to you-are-not-eligible")
+      expect(page).to have_content("Saved")
+      expect(page).to have_content("This page does not exist yet.")
     end
 
     # Answer yes: a blank "congratulations" page is created and we land
@@ -77,6 +73,39 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     within_last_condition do
       expect(page).to have_text("This wizard has no inputs yet")
       expect(page).to have_no_select("When answer to")
+    end
+  end
+
+  it "updates the missing page warning while typing a branch target" do
+    visit root_path
+    click_button "Sign in"
+    click_button "New wizard"
+
+    add_component "Add radio buttons"
+    within_last_card do
+      fill_in "Label", with: "Are you eligible?"
+      fill_in "Options (one per line)", with: "yes\nno"
+    end
+    within_preview do
+      expect(page).to have_css(".govuk-radios__label", text: "yes")
+      expect(page).to have_css(".govuk-radios__label", text: "no")
+    end
+
+    add_component "Add continue button"
+    within_preview { click_button "Continue" }
+    fill_in "Page title", with: "Existing page"
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug existing-page")
+
+    click_link "Previous page"
+    add_rule
+    within_last_condition do
+      select "question-1 (Are you eligible?)", from: "When answer to"
+      fill_in "Is", with: "yes"
+      fill_in "Go to page", with: "not-yet-created"
+      expect(page).to have_content("This page does not exist yet.")
+
+      fill_in "Go to page", with: "existing-page"
+      expect(page).to have_no_content("This page does not exist yet.")
     end
   end
 

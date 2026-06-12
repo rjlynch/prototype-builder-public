@@ -13,15 +13,3 @@
     This is the end of the prototype.
   </div>
 <% end %>
-
-<% if mode == :builder && component.branch_rules.any?(&:complete?) %>
-  <p class="app-annotation">
-    <% component.branch_rules.select(&:complete?).each do |rule| %>
-      if <%= rule.input_name %> is “<%= rule.value %>” go to <%= rule.target_slug %><br>
-      <% if rule.missing_target? %>
-        <span class="app-warning">This page does not exist yet.</span><br>
-      <% end %>
-    <% end %>
-    otherwise continue to the next page
-  </p>
-<% end %>
