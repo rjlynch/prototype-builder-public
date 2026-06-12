@@ -26,6 +26,16 @@
   border: 1px solid #b1b4b6;
   background: #ffffff;
   min-height: 24rem;
+  padding: 20px;
+}
+
+.app-split-pane__pane {
+  box-sizing: border-box;
+}
+
+.app-split-pane__pane:not(.app-split-pane__pane--framed) {
+  background: #f3f2f1;
+  padding: 20px;
 }
 
 /* Keep the framed pane in view while the other pane scrolls. */
@@ -33,6 +43,7 @@
   .app-split-pane__pane--framed {
     position: sticky;
     top: 15px;
+    min-height: calc(100vh - 30px);
     max-height: calc(100vh - 30px);
     overflow-y: auto;
     overflow-x: hidden;
