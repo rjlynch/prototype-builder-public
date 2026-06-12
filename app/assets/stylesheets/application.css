@@ -75,6 +75,12 @@
   color: #505a5f;
   margin-bottom: 0;
   margin-left: 10px;
+  display: inline-block;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
 }
 
 .app-card__actions {

@@ -197,10 +197,11 @@ The backlog now lives in the issue tracker, not this file.
   A generic `persisted-details` Stimulus controller remembers open/closed
   state in sessionStorage keyed by element id, so it survives the full
   builder-pane turbo-stream replaces (and reloads). Cards default open;
-  collapsed cards show kind + a content snippet, kept fresh by streaming
-  just the card's <summary> on component updates (same focus-safe trick
-  as the page heading). Remove moved out of the clickable summary into
-  an actions row. 37 specs green.
+  collapsed cards show kind + a content snippet (label for inputs, text
+  otherwise), kept fresh client-side by a generic `mirror` Stimulus
+  controller copying the field's value into the summary as you type —
+  no extra server streams. Remove moved out of the clickable summary
+  into an actions row. 37 specs green.
 
 ## Decisions / open questions
 
