@@ -33,6 +33,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     end
     within_preview do
       expect(page).to have_content("go to congratulations")
+      expect(page).to have_content("This page does not exist yet.")
     end
 
     # Second rule: no -> you-are-not-eligible

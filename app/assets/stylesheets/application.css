@@ -130,6 +130,10 @@
   color: #505a5f;
 }
 
+.app-warning {
+  color: #d4351c;
+}
+
 /* A bordered, collapsible card grouping a removable editor block. The card
    is a <details> element; its <summary> shows a title and content snippet
    so collapsed cards stay identifiable. */

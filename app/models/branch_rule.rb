@@ -14,6 +14,12 @@ class BranchRule < ApplicationRecord
     [ input_name, value, target_slug ].all?(&:present?)
   end
 
+  def missing_target?
+    return false if target_slug.blank?
+
+    component.page.wizard.pages.where(slug: target_slug).none?
+  end
+
   # Values are compared parameterised so "Yes" matches "yes" — kinder to
   # non-technical builders than exact string matching.
   def matches?(answers)
