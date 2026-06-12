@@ -107,6 +107,16 @@
   font-style: italic;
 }
 
+/* A vertical stack of buttons, one per line with tight spacing. */
+.app-button-stack form {
+  display: block;
+}
+
+.app-button-stack button {
+  display: block;
+  margin-bottom: 10px;
+}
+
 /* Render a form button as if it were an inline link (e.g. "Sign out" in navigation). */
 .app-button-as-link {
   background: none;
