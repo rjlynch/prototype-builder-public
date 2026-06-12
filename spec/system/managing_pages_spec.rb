@@ -7,7 +7,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     # Delete the middle page from its own builder
     within_nav { click_link "second" }
     expect(page).to have_field("Page slug", with: "second")
-    accept_confirm { click_button "Delete this page" }
+    accept_confirm { click_button "Remove this page" }
 
     # Lands on the previous page; the deleted page is gone from the nav
     expect(page).to have_field("Page slug", with: "first")
@@ -18,9 +18,9 @@ RSpec.describe "Managing pages", :js, type: :system do
     expect(page).to have_field("Page slug", with: "third")
 
     # Deleting down to one page removes the option entirely
-    accept_confirm { click_button "Delete this page" }
+    accept_confirm { click_button "Remove this page" }
     expect(page).to have_field("Page slug", with: "first")
-    expect(page).to have_no_button("Delete this page")
+    expect(page).to have_no_button("Remove this page")
   end
 
   it "reorders pages from the nav" do
@@ -57,7 +57,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     click_button "Sign in"
     click_button "New wizard"
 
-    expect(page).to have_no_button("Delete this page") # single page is undeletable
+    expect(page).to have_no_button("Remove this page") # single page is undeletable
 
     %w[First Second Third].each_with_index do |title, index|
       fill_in "Page title", with: title
