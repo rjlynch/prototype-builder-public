@@ -1,6 +1,14 @@
-<div id="<%= dom_id(page, :page_heading) %>">
-  <span class="govuk-caption-m">
-    <%= link_to page.wizard.name, edit_wizard_path(page.wizard), class: "govuk-link govuk-link--muted" %>
-  </span>
-  <h2 class="govuk-heading-m"><%= page.title.presence || "Untitled page" %></h2>
+<div id="<%= dom_id(page, :page_heading) %>" class="app-builder-heading">
+  <div class="app-builder-heading__wizard">
+    <span class="govuk-caption-m">
+      <%= link_to page.wizard.name, edit_wizard_path(page.wizard), class: "govuk-link govuk-link--muted" %>
+    </span>
+    <%= link_to edit_wizard_path(page.wizard), class: "app-icon-link govuk-link govuk-link--muted", aria: { label: "Wizard settings" } do %>
+      <%= svg_icon("cog") %>
+    <% end %>
+  </div>
+
+  <p class="govuk-body-s app-builder-heading__share">
+    <%= link_to "Share this wizard", wizard_path(page.wizard), class: "govuk-link", target: "_blank", rel: "noopener" %>
+  </p>
 </div>

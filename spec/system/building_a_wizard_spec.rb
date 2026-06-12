@@ -9,7 +9,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     click_button "New wizard"
 
     # --- Page 1 ---------------------------------------------------------
-    expect(page).to have_css("h2", text: "Untitled page")
+    expect(page).to have_no_css("h2", text: "Untitled page")
     expect(page).to have_field("Page slug", with: "page-1")
 
     # The wizard title opens the wizard-level settings page

@@ -1,29 +1,28 @@
 <div id="<%= dom_id(page, :builder) %>">
   <%= render "pages/page_heading", page: page %>
 
-  <ul class="govuk-list app-inline-list">
-    <li><%= link_to "Wizard settings", edit_wizard_path(page.wizard), class: "govuk-link" %></li>
-    <li><%= link_to "Share this wizard", wizard_path(page.wizard), class: "govuk-link", target: "_blank", rel: "noopener" %></li>
-  </ul>
-
-  <%= render "pages/pages_nav", page: page %>
-
-  <% if page.wizard.pages.many? %>
-    <p class="govuk-body">
-      <%= button_to "Delete this page", page_path(page), method: :delete,
-            class: "app-button-as-link govuk-link",
-            form: { data: { turbo_confirm: "Delete this page and everything on it? This cannot be undone." } } %>
-    </p>
-  <% end %>
-
-  <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch, data: { controller: "autosubmit" } do |f| %>
-    <div class="govuk-form-group">
-      <%= f.label :title, "Page title", class: "govuk-label" %>
-      <%= f.text_field :title, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+  <div class="govuk-form-group">
+    <div class="app-field-heading">
+      <label class="govuk-label app-field-heading__label" for="page_form_title">Page title</label>
+      <% if page.wizard.pages.many? %>
+        <%= button_to page_path(page), method: :delete,
+              class: "app-icon-button app-icon-button--danger",
+              form_class: "app-field-heading__action",
+              form: { data: { turbo_confirm: "Are you sure you want to delete this page" } } do %>
+          <%= svg_icon("bin") %>
+          <span class="govuk-visually-hidden">Delete this page</span>
+        <% end %>
+      <% end %>
     </div>
-  <% end %>
+
+    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch, data: { controller: "autosubmit" } do |f| %>
+      <%= f.text_field :title, id: "page_form_title", class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+    <% end %>
+  </div>
 
   <%= render "pages/slug_form", page: page %>
+
+  <%= render "pages/pages_nav", page: page %>
 
   <% page.components.each do |component| %>
     <%= render "components/editor", component: component %>

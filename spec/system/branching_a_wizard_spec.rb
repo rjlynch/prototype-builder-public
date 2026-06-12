@@ -11,7 +11,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
 
     fill_in "Page title", with: "Are you eligible?"
     expect(page).to have_field("Page slug", with: "are-you-eligible")
-    expect(page).to have_css("h2", text: "Are you eligible?")
+    expect(page).to have_field("Page title", with: "Are you eligible?")
     add_component "Add radio buttons"
     within_last_card do
       fill_in "Label", with: "Are you eligible?"

@@ -54,6 +54,67 @@
   margin: 0 5px;
 }
 
+.app-builder-heading {
+  margin-bottom: 15px;
+}
+
+.app-builder-heading__wizard,
+.app-field-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-builder-heading__share {
+  margin-top: 5px;
+  margin-bottom: 0;
+}
+
+.app-field-heading {
+  margin-bottom: 5px;
+}
+
+.app-field-heading__action {
+  display: inline-flex;
+  margin: 0;
+}
+
+.app-icon {
+  display: block;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.app-icon-link,
+.app-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.app-icon-link {
+  text-decoration: none;
+}
+
+.app-icon-button {
+  border: 0;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+}
+
+.app-icon-button--danger {
+  color: #d4351c;
+}
+
+.app-icon-button:focus {
+  outline: 3px solid transparent;
+  background-color: var(--govuk-focus-colour, #fd0);
+  box-shadow: 0 -2px var(--govuk-focus-colour, #fd0), 0 4px var(--govuk-focus-text-colour, #0b0c0c);
+}
+
 /* A bordered, collapsible card grouping a removable editor block. The card
    is a <details> element; its <summary> shows a title and content snippet
    so collapsed cards stay identifiable. */
