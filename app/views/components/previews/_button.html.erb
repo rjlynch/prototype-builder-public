@@ -8,6 +8,12 @@
   <%= component.text %>
 </button>
 
+<% if dead_end %>
+  <div class="govuk-inset-text">
+    This is the end of the prototype.
+  </div>
+<% end %>
+
 <% if mode == :builder && component.branch_rules.any?(&:complete?) %>
   <p class="app-annotation">
     <% component.branch_rules.select(&:complete?).each do |rule| %>

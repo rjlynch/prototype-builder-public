@@ -56,5 +56,6 @@ RSpec.describe "Sharing a wizard", type: :system do
     visit wizard_path(wizard)
 
     expect(page).to have_button("Continue", disabled: true)
+    expect(page).to have_css(".govuk-inset-text", text: "This is the end of the prototype.")
   end
 end
