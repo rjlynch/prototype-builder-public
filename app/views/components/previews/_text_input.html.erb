@@ -1,7 +1,15 @@
 <div class="govuk-form-group">
-  <label class="govuk-label" for="<%= dom_id(component, :preview_input) %>">
-    <%= component.label %>
-  </label>
+  <% if component.page_heading? %>
+    <h1 class="govuk-label-wrapper">
+      <label class="govuk-label govuk-label--l" for="<%= dom_id(component, :preview_input) %>">
+        <%= component.page.title %>
+      </label>
+    </h1>
+  <% else %>
+    <label class="govuk-label" for="<%= dom_id(component, :preview_input) %>">
+      <%= component.label %>
+    </label>
+  <% end %>
   <% if component.hint.present? %>
     <div class="govuk-hint" id="<%= dom_id(component, :preview_hint) %>">
       <%= component.hint %>

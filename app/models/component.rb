@@ -18,6 +18,12 @@ class Component < ApplicationRecord
     INPUT_KINDS.include?(kind)
   end
 
+  # True when this input supplies the page's H1 (the GOV.UK single-question
+  # pattern): the first input on the page with title_as_label set.
+  def page_heading?
+    title_as_label? && page.heading_component == self
+  end
+
   # The answer key this input's value is stored and matched under.
   def input_key
     name.to_s.parameterize

@@ -16,11 +16,12 @@ class ComponentForm
       name: component.name,
       label: component.label,
       hint: component.hint,
-      options: component.options
+      options: component.options,
+      title_as_label: component.title_as_label
     )
   end
 
-  attr_accessor :component, :text, :name, :label, :hint, :options
+  attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label
 
   validates :text, :name, :label, :hint, :options, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
@@ -28,7 +29,10 @@ class ComponentForm
   def save
     return false unless valid?
 
-    component.update!(text: text, name: name, label: label, hint: hint, options: options)
+    component.update!(
+      text: text, name: name, label: label, hint: hint, options: options,
+      title_as_label: title_as_label
+    )
     true
   end
 end

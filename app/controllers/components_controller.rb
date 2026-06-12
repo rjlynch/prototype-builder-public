@@ -31,6 +31,6 @@ class ComponentsController < ApplicationController
   private
 
   def component_params
-    params.require(:component).permit(:text, :name, :label, :hint, :options)
+    params.require(:component).permit(:text, :name, :label, :hint, :options, :title_as_label)
   end
 end
