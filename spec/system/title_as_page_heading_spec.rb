@@ -31,7 +31,7 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     within_preview { click_button "Continue" }
 
     # --- Text input: title as the label ---------------------------------
-    expect(page).to have_field("Page slug", with: "page-2")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     fill_in "Page title", with: "What is your nursery's name?"
     within_preview { expect(page).to have_css("h1", text: "What is your nursery's name?") }
     add_component "Add text input"

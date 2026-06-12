@@ -100,6 +100,28 @@
   margin: 20px 0;
 }
 
+.app-disclosure__summary {
+  color: #0b0c0c;
+  cursor: pointer;
+  margin-bottom: 10px;
+  text-decoration: underline;
+}
+
+.app-disclosure__summary:hover {
+  color: #2b8cc4;
+}
+
+.app-disclosure__summary:focus {
+  outline: 3px solid transparent;
+  color: var(--govuk-focus-text-colour, #0b0c0c);
+  background-color: var(--govuk-focus-colour, #fd0);
+  box-shadow: 0 -2px var(--govuk-focus-colour, #fd0), 0 4px var(--govuk-focus-text-colour, #0b0c0c);
+}
+
+.app-disclosure__value {
+  color: #505a5f;
+}
+
 .app-icon {
   display: block;
   width: 1.25rem;

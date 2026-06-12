@@ -6,20 +6,20 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     # Delete the middle page from its own builder
     within_nav { click_link "second" }
-    expect(page).to have_field("Page slug", with: "second")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug second")
     accept_confirm { click_button "Remove this page" }
 
     # Lands on the previous page; the deleted page is gone from the nav
-    expect(page).to have_field("Page slug", with: "first")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
     within_nav { expect(page).to have_no_text("second") }
 
     # Linear navigation follows the renumbered positions
     within_preview { click_button "Continue" }
-    expect(page).to have_field("Page slug", with: "third")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
 
     # Deleting down to one page removes the option entirely
     accept_confirm { click_button "Remove this page" }
-    expect(page).to have_field("Page slug", with: "first")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
     expect(page).to have_no_button("Remove this page")
   end
 
@@ -29,7 +29,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     # We are on "third"; pull it one position earlier
     click_button "Move third earlier"
 
-    expect(page).to have_field("Page slug", with: "third") # still on the same page
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug third") # still on the same page
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "third")
       expect(page).to have_css("li:nth-child(3)", text: "second")
@@ -38,7 +38,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     # Linear navigation follows the new order
     within_nav { click_link "first" }
     within_preview { click_button "Continue" }
-    expect(page).to have_field("Page slug", with: "third")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
 
     # And back again with the down arrow
     click_button "Move third later"
@@ -66,7 +66,7 @@ RSpec.describe "Managing pages", :js, type: :system do
 
       add_component "Add continue button"
       within_preview { click_button "Continue" }
-      expect(page).to have_field("Page slug", with: "page-#{index + 2}")
+      expect(page).to have_css(".app-disclosure__summary", text: "Slug page-#{index + 2}")
     end
   end
 

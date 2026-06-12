@@ -1,11 +1,17 @@
 <div id="<%= dom_id(page, :slug_form) %>">
-  <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
-        data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
-    <div class="govuk-form-group">
-      <%= f.label :slug, "Page slug", class: "govuk-label" %>
-      <div class="govuk-hint">Used to link pages together. Tracks the title until you change it.</div>
-      <%= f.text_field :slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
-    </div>
-    <%= render "shared/autosubmit_status" %>
-  <% end %>
+  <details class="app-disclosure">
+    <summary class="app-disclosure__summary">
+      Slug <span class="app-disclosure__value"><%= page.slug %></span>
+    </summary>
+
+    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
+      <div class="govuk-form-group">
+        <%= f.label :slug, "Page slug", class: "govuk-label" %>
+        <div class="govuk-hint">Used to link pages together. Tracks the title until you change it.</div>
+        <%= f.text_field :slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      </div>
+      <%= render "shared/autosubmit_status" %>
+    <% end %>
+  </details>
 </div>

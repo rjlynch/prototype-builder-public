@@ -10,7 +10,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     click_button "New wizard"
 
     fill_in "Page title", with: "Are you eligible?"
-    expect(page).to have_field("Page slug", with: "are-you-eligible")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug are-you-eligible")
     expect(page).to have_field("Page title", with: "Are you eligible?")
     add_component "Add radio buttons"
     within_last_card do
@@ -54,7 +54,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "yes"
       click_button "Continue"
     end
-    expect(page).to have_field("Page slug", with: "congratulations")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug congratulations")
     expect(page).to have_field("Page title", with: "")
 
     # Back on the question page, answer no instead
@@ -63,7 +63,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "no"
       click_button "Continue"
     end
-    expect(page).to have_field("Page slug", with: "you-are-not-eligible")
+    expect(page).to have_css(".app-disclosure__summary", text: "Slug you-are-not-eligible")
   end
 
   it "explains that branching needs an input first" do
