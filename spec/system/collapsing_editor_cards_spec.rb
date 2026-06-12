@@ -25,12 +25,12 @@ RSpec.describe "Collapsing editor cards", :js, type: :system do
     # stays collapsed, the new card arrives expanded
     add_component "Add continue button"
     expect(page).to have_css(".app-card:not([open]) .app-card__title", text: "Paragraph")
-    expect(page).to have_css(".app-card[open] .app-card__title", text: "Button")
+    expect(page).to have_css(".app-card[open] .app-card__title", text: "Continue button")
 
     # A full page load restores the state too
     visit current_path
     expect(page).to have_css(".app-card:not([open]) .app-card__title", text: "Paragraph")
-    expect(page).to have_css(".app-card[open] .app-card__title", text: "Button")
+    expect(page).to have_css(".app-card[open] .app-card__title", text: "Continue button")
 
     # Expanding again is remembered across the next re-render
     find(".app-card:not([open]) > summary").click

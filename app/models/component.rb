@@ -38,6 +38,12 @@ class Component < ApplicationRecord
     input? ? label : text
   end
 
+  def display_name
+    return "Continue button" if kind == "button"
+
+    kind.humanize
+  end
+
   # The answer key this input's value is stored and matched under.
   def input_key
     name.to_s.parameterize
