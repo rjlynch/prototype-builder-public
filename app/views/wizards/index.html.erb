@@ -5,7 +5,7 @@
     <%= button_to "New wizard", wizards_path, class: "govuk-button" %>
 
     <% if wizards.none? %>
-      <p class="govuk-body">You have not created any wizards yet.</p>
+      <p class="govuk-body app-empty-state">You have not created any wizards yet. Select New wizard to start building one.</p>
     <% else %>
       <ul class="govuk-list">
         <% wizards.each do |wizard| %>

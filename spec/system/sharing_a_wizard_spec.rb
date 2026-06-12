@@ -58,4 +58,13 @@ RSpec.describe "Sharing a wizard", type: :system do
     expect(page).to have_button("Continue", disabled: true)
     expect(page).to have_css(".govuk-inset-text", text: "This is the end of the prototype.")
   end
+
+  it "does not show builder empty-state hints in run mode" do
+    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard.pages.create!(position: 1, slug: "blank-page")
+
+    visit wizard_path(wizard)
+
+    expect(page).to have_no_content("Your page preview appears here")
+  end
 end

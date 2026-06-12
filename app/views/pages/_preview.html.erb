@@ -8,6 +8,11 @@
           <% if page.title.present? && page.heading_component.nil? %>
             <h1 class="govuk-heading-l"><%= page.title %></h1>
           <% end %>
+          <% if mode == :builder && page.title.blank? && page.components.none? %>
+            <p class="govuk-body app-empty-state">
+              Your page preview appears here — start by adding a title.
+            </p>
+          <% end %>
           <%= form_with url: page_answers_path(page), method: :post do %>
             <%= hidden_field_tag :mode, mode %>
             <% page.components.each do |component| %>

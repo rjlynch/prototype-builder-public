@@ -9,7 +9,7 @@ RSpec.describe "Signing in", type: :system do
     click_button "Sign in"
 
     expect(page).to have_content("Your wizards")
-    expect(page).to have_content("You have not created any wizards yet")
+    expect(page).to have_content("You have not created any wizards yet. Select New wizard to start building one.")
   end
 
   it "signs out again" do
