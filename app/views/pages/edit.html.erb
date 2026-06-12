@@ -1,4 +1,8 @@
 <% content_for :title, "Page builder – GOV.UK Prototype Builder" %>
+<div class="app-page-header">
+  <%= render "pages/page_heading", page: page %>
+</div>
+
 <main id="main-content" class="app-split-pane">
   <div class="app-split-pane__pane">
     <%= render "pages/builder", page: page %>
