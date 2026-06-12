@@ -11,8 +11,10 @@
     <% end %>
   </div>
 
-  <%= form_with model: ComponentForm.from_component(component), url: component_path(component), method: :patch, data: { controller: "autosubmit" } do |f| %>
+  <%= form_with model: ComponentForm.from_component(component), url: component_path(component), method: :patch,
+        data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <%= render "components/editors/#{component.kind}", f: f %>
+    <%= render "shared/autosubmit_status" %>
   <% end %>
 
   <%= render "components/branching", component: component if component.kind == "button" %>

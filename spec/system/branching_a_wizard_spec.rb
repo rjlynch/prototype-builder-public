@@ -30,6 +30,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       select "question-1 (Are you eligible?)", from: "When answer to"
       fill_in "Is", with: "yes"
       fill_in "Go to page", with: "congratulations"
+      expect(page).to have_content("Saved")
     end
     within_preview do
       expect(page).to have_content("go to congratulations")

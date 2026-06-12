@@ -5,12 +5,14 @@
     <span class="govuk-caption-l">Wizard settings</span>
     <%= render "wizards/name_heading", wizard: wizard %>
 
-    <%= form_with model: WizardNameForm.from_wizard(wizard), url: wizard_path(wizard), method: :patch, data: { controller: "autosubmit" } do |f| %>
+    <%= form_with model: WizardNameForm.from_wizard(wizard), url: wizard_path(wizard), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">
         <%= f.label :name, "Wizard name", class: "govuk-label" %>
         <div class="govuk-hint">Shown on your dashboard and at the top of the builder. Saves as you type.</div>
         <%= f.text_field :name, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
       </div>
+      <%= render "shared/autosubmit_status" %>
     <% end %>
   </main>
 </div>

@@ -15,8 +15,10 @@
       <% end %>
     </div>
 
-    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch, data: { controller: "autosubmit" } do |f| %>
+    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <%= f.text_field :title, id: "page_form_title", class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      <%= render "shared/autosubmit_status" %>
     <% end %>
   </div>
 

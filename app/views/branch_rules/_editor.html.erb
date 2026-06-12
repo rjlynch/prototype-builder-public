@@ -6,7 +6,8 @@
       then you can branch on the answer.
     </p>
   <% else %>
-    <%= form_with model: BranchRuleForm.from_branch_rule(branch_rule), url: branch_rule_path(branch_rule), method: :patch, data: { controller: "autosubmit" } do |f| %>
+    <%= form_with model: BranchRuleForm.from_branch_rule(branch_rule), url: branch_rule_path(branch_rule), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">
         <%= f.label :input_name, "When answer to", class: "govuk-label" %>
         <%= f.select :input_name,
@@ -23,6 +24,7 @@
         <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
         <%= f.text_field :target_slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
       </div>
+      <%= render "shared/autosubmit_status" %>
     <% end %>
   <% end %>
   <%= button_to "Remove rule", branch_rule_path(branch_rule), method: :delete, class: "app-button-as-link govuk-link" %>

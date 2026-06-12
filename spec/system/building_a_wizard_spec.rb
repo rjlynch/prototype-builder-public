@@ -22,15 +22,20 @@ RSpec.describe "Building a wizard", :js, type: :system do
     expect(page).to have_css("h1", text: "Untitled wizard")
     fill_in "Wizard name", with: "EYTFI claim"
     expect(page).to have_css("h1", text: "EYTFI claim") # the heading echoes the save
+    expect(page).to have_content("Saved")
     click_link "Back to the builder"
 
     fill_in "Page title", with: "Claim an early years teacher recognition payment"
+    expect(page).to have_content("Saved")
     within_preview do
       expect(page).to have_css("h1", text: "Claim an early years teacher recognition payment")
     end
 
     add_component "Add paragraph"
-    within_last_card { fill_in "Paragraph text", with: "Use this service to claim a recognition payment of £4,5000" }
+    within_last_card do
+      fill_in "Paragraph text", with: "Use this service to claim a recognition payment of £4,5000"
+      expect(page).to have_content("Saved")
+    end
     within_preview do
       expect(page).to have_css("p", text: "Use this service to claim a recognition payment of £4,5000")
     end
