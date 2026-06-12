@@ -25,6 +25,7 @@ class ComponentForm
 
   validates :text, :name, :label, :hint, :options, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
+  validate :single_page_heading, if: -> { component && wants_title_as_label? }
 
   def save
     return false unless valid?
@@ -34,5 +35,19 @@ class ComponentForm
       title_as_label: title_as_label
     )
     true
+  end
+
+  private
+
+  def wants_title_as_label?
+    ActiveModel::Type::Boolean.new.cast(title_as_label)
+  end
+
+  # Only one input per page may render the title as its label/legend —
+  # a page has one H1. (Also validated on the model.)
+  def single_page_heading
+    return unless component.page.components.where(title_as_label: true).where.not(id: component.id).exists?
+
+    errors.add(:title_as_label, "is already in use on this page")
   end
 end

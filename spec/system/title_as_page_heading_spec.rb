@@ -26,6 +26,9 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
       expect(page).to have_css(".govuk-radios__label", text: "Yes")
     end
 
+    # The redundant Label field hides while the title is the label
+    within_last_card { expect(page).to have_no_field("Label") }
+
     add_component "Add continue button"
     within_preview { click_button "Continue" }
 
@@ -42,15 +45,26 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
       expect(page).to have_css("h1.govuk-label-wrapper label.govuk-label--l", text: "What is your nursery's name?")
       expect(page).to have_css("h1", count: 1)
     end
+    within_last_card { expect(page).to have_no_field("Label") }
 
-    # Unticking restores the plain H1 and the component's own label
-    within_last_card { uncheck "Use the page title as the label" }
+    # While the title is taken, other inputs stop offering the option
+    find("summary", text: "Add input").click
+    add_component "Radio buttons"
+    within_last_card do
+      expect(page).to have_field("Label")
+      expect(page).to have_no_css(".govuk-checkboxes__label", text: "Use the page title as the label")
+    end
+
+    # Unticking restores the plain H1, the Label field, and the option elsewhere
+    within(all(".app-card").first) { uncheck "Use the page title as the label" }
     within_preview do
       expect(page).to have_css("h1.govuk-heading-l", text: "What is your nursery's name?")
       expect(page).to have_no_css("h1.govuk-label-wrapper")
     end
+    within(all(".app-card").first) { expect(page).to have_field("Label") }
+    within_last_card { expect(page).to have_css(".govuk-checkboxes__label", text: "Use the page title as the label") }
 
-    within_last_card { check "Use the page title as the label" }
+    within(all(".app-card").first) { check "Use the page title as the label" }
     within_preview { expect(page).to have_css("h1.govuk-label-wrapper") }
 
     # --- Run mode renders the same pattern -------------------------------
