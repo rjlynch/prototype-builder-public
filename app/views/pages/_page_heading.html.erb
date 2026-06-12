@@ -10,5 +10,13 @@
 
   <p class="govuk-body-s app-builder-heading__share">
     <%= link_to "Share this wizard", wizard_path(page.wizard), class: "govuk-link", target: "_blank", rel: "noopener" %>
+    <span aria-hidden="true">·</span>
+    <button type="button"
+            class="app-button-as-link govuk-link"
+            data-controller="clipboard"
+            data-clipboard-text-value="<%= wizard_url(page.wizard) %>"
+            data-action="clipboard#copy">
+      <span data-clipboard-target="label">Copy link</span>
+    </button>
   </p>
 </div>

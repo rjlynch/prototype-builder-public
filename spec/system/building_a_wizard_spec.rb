@@ -14,6 +14,8 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within_preview do
       expect(page).to have_content("Your page preview appears here")
     end
+    click_button "Copy link"
+    expect(page).to have_button("Copied")
 
     # The wizard title opens the wizard-level settings page
     click_link "Untitled wizard"
