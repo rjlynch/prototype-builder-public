@@ -87,9 +87,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within_preview do
       expect(page).to have_css("p", text: "If you work in more than one setting")
     end
-
-    find("summary", text: "Add input").click
-    add_component "Text input"
+    add_component "Add text input"
     within_last_card do
       fill_in "Name", with: "nursery name"
       fill_in "Label", with: "Enter nursery name or postcode"

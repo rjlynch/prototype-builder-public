@@ -12,9 +12,7 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     # --- Radios: title as the fieldset legend ---------------------------
     fill_in "Page title", with: "Are you eligible?"
     within_preview { expect(page).to have_css("h1.govuk-heading-l", text: "Are you eligible?") }
-
-    find("summary", text: "Add input").click
-    add_component "Radio buttons"
+    add_component "Add radio buttons"
     within_last_card do
       fill_in "Options (one per line)", with: "Yes\nNo"
       check "Use the page title as the label"
@@ -36,9 +34,7 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     expect(page).to have_field("Page slug", with: "page-2")
     fill_in "Page title", with: "What is your nursery's name?"
     within_preview { expect(page).to have_css("h1", text: "What is your nursery's name?") }
-
-    find("summary", text: "Add input").click
-    add_component "Text input"
+    add_component "Add text input"
     within_last_card { check "Use the page title as the label" }
 
     within_preview do
@@ -48,8 +44,7 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     within_last_card { expect(page).to have_no_field("Label") }
 
     # While the title is taken, other inputs stop offering the option
-    find("summary", text: "Add input").click
-    add_component "Radio buttons"
+    add_component "Add radio buttons"
     within_last_card do
       expect(page).to have_field("Label")
       expect(page).to have_no_css(".govuk-checkboxes__label", text: "Use the page title as the label")
