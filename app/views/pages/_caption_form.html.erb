@@ -1,0 +1,17 @@
+<div id="<%= dom_id(page, :caption_form) %>">
+  <details class="app-disclosure">
+    <summary class="app-disclosure__summary">
+      Caption <span class="app-disclosure__value"><%= page.caption.presence || "None" %></span>
+    </summary>
+
+    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
+      <div class="govuk-form-group">
+        <%= f.label :caption, "Caption", class: "govuk-label" %>
+        <div class="govuk-hint">Shown above the heading, e.g. a section name. Matches the heading size.</div>
+        <%= f.text_field :caption, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      </div>
+      <%= render "shared/autosubmit_status" %>
+    <% end %>
+  </details>
+</div>

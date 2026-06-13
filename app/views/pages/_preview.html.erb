@@ -6,7 +6,8 @@
           <%# When an input renders the title as its label/legend (the GOV.UK
               single-question pattern), it owns the H1 — don't render it twice. %>
           <% if page.title.present? && page.heading_component.nil? %>
-            <h1 class="govuk-heading-l"><%= page.title %></h1>
+            <%= render "pages/preview_caption", page: page %>
+            <h1 class="<%= page.heading_class %>"><%= page.title %></h1>
           <% end %>
           <% if mode == :builder && page.title.blank? && page.components.none? %>
             <p class="govuk-body app-empty-state">

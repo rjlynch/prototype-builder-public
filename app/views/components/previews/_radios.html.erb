@@ -2,7 +2,8 @@
   <fieldset class="govuk-fieldset"
             <%= "aria-describedby=#{dom_id(component, :preview_hint)}".html_safe if component.hint.present? %>>
     <% if component.page_heading? %>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= component.page.heading_size %>">
+        <%= render "pages/preview_caption", page: component.page %>
         <h1 class="govuk-fieldset__heading"><%= component.page.title %></h1>
       </legend>
     <% elsif component.label.present? %>

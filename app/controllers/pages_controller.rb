@@ -27,7 +27,7 @@ class PagesController < ApplicationController
 
   def update
     page = Page.find(params[:id])
-    attrs = params.require(:page).permit(:title, :slug)
+    attrs = params.require(:page).permit(:title, :slug, :heading_size, :caption)
     form = PageForm.new(page: page, **attrs.to_h.symbolize_keys)
     form.save
 
