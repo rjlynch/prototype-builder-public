@@ -229,6 +229,16 @@ The backlog now lives in the issue tracker, not this file.
   caption over the page heading and links to settings beside the share
   link. 53 specs green.
 
+* 2026-06-13 — Fixed editor focus jumping between same-kind cards. Root
+  cause: ComponentForm-backed editor forms generated duplicate field ids
+  (every paragraph editor was `component_text`), so after an autosubmit
+  Turbo restored focus by id and landed on the first match. Fixed by
+  namespacing the editor form with `dom_id(component)`, which scopes every
+  field id and label `for` per component (dropped the now-redundant manual
+  id/for on the title_as_label checkbox). New :js spec records any focusin
+  bounce to another textarea. Considered Turbo morph: it would still need
+  unique ids and isn't required once ids are unique. 59 specs green.
+
 ## Decisions / open questions
 
 * Sign in is a stubbed session flag — real accounts deferred until the

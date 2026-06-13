@@ -13,9 +13,9 @@
   <div class="govuk-form-group">
     <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
       <div class="govuk-checkboxes__item">
-        <%= f.check_box :title_as_label, id: dom_id(f.object.component, :title_as_label),
+        <%= f.check_box :title_as_label,
               class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
-        <%= f.label :title_as_label, "Use the page title as the label", for: dom_id(f.object.component, :title_as_label),
+        <%= f.label :title_as_label, "Use the page title as the label",
               class: "govuk-label govuk-checkboxes__label" %>
       </div>
     </div>

@@ -11,7 +11,12 @@
     <% end %>
   </div>
 
+  <%# Namespace the form so every field (and its label's `for`) gets a
+      component-scoped id. Without this, all editors of the same kind share ids
+      like "component_text"; after an autosubmit Turbo restores focus by id and
+      lands on the first match, jumping focus to the wrong card. %>
   <%= form_with model: ComponentForm.from_component(component), url: component_path(component), method: :patch,
+        namespace: dom_id(component),
         data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <%= render "components/editors/#{component.kind}", f: f %>
     <%= render "shared/autosubmit_status" %>
