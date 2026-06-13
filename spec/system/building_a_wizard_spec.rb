@@ -11,7 +11,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     # --- Page 1 ---------------------------------------------------------
     expect(page).to have_no_css("h2", text: "Untitled page")
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-1")
-    find(".app-disclosure__summary").click
+    find(".app-disclosure__summary", text: "Slug").click
     expect(page).to have_field("Page slug", with: "page-1")
     within_preview do
       expect(page).to have_content("Your page preview appears here")

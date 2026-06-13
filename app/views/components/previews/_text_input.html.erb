@@ -1,7 +1,8 @@
 <div class="govuk-form-group">
   <% if component.page_heading? %>
+    <%= render "pages/preview_caption", page: component.page %>
     <h1 class="govuk-label-wrapper">
-      <label class="govuk-label govuk-label--l" for="<%= dom_id(component, :preview_input) %>">
+      <label class="govuk-label govuk-label--<%= component.page.heading_size %>" for="<%= dom_id(component, :preview_input) %>">
         <%= component.page.title %>
       </label>
     </h1>

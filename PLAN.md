@@ -239,7 +239,22 @@ The backlog now lives in the issue tracker, not this file.
   bounce to another textarea. Considered Turbo morph: it would still need
   unique ids and isn't required once ids are unique. 59 specs green.
 
+* 2026-06-13 — Page heading options (GOV.UK heading styles). Added
+  `heading_size` (xl/l/m/s, default l) and `caption` columns to pages,
+  wired through PageForm's submitted-flag pattern. The title section gets a
+  "Heading size" select; the caption lives in its own disclosure (like the
+  slug). Page#heading_class / #caption_class derive the classes (caption "s"
+  reuses -m since GOV.UK has no caption-s). Size + caption apply across all
+  three H1 render paths — plain heading, and the title_as_label input
+  label/legend — via a shared pages/_preview_caption partial. 60 specs green.
+
 ## Decisions / open questions
+
+* Heading size/caption live on Page, not as a component: the title is a
+  singular, always-present Page attribute (one H1/page) that drives the slug
+  and can be borrowed by an input via title_as_label; size/caption are
+  presentation of that same title. Components stay for orderable, removable
+  body elements (incl. the subheading h2).
 
 * Sign in is a stubbed session flag — real accounts deferred until the
   builder flow works (per brief).

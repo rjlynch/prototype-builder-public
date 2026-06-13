@@ -13,14 +13,17 @@ class PageForm
   end
 
   def self.from_page(page)
-    new(page: page, title: page.title, slug: page.slug)
+    new(page: page, title: page.title, slug: page.slug,
+        heading_size: page.heading_size, caption: page.caption)
   end
 
   attr_accessor :page
-  attr_reader :title, :slug
+  attr_reader :title, :slug, :heading_size, :caption
 
   validates :title, length: { maximum: 500 }
   validates :slug, length: { maximum: 200 }
+  validates :caption, length: { maximum: 500 }
+  validates :heading_size, inclusion: { in: Page::HEADING_SIZES }, if: -> { @heading_size_submitted }
 
   def title=(value)
     @title = value
@@ -32,10 +35,22 @@ class PageForm
     @slug_submitted = true
   end
 
+  def heading_size=(value)
+    @heading_size = value
+    @heading_size_submitted = true
+  end
+
+  def caption=(value)
+    @caption = value
+    @caption_submitted = true
+  end
+
   def save
     return false unless valid?
 
     page.title = title if @title_submitted
+    page.heading_size = heading_size if @heading_size_submitted
+    page.caption = caption if @caption_submitted
     page.slug = resolve_slug
     page.save!
     true

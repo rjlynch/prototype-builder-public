@@ -28,11 +28,18 @@
       <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
             data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
         <%= f.text_field :title, id: "page_form_title", class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+        <div class="govuk-form-group app-heading-size">
+          <%= f.label :heading_size, "Heading size", class: "govuk-label govuk-label--s" %>
+          <% size_labels = { "xl" => "Extra large", "l" => "Large", "m" => "Medium", "s" => "Small" } %>
+          <%= f.select :heading_size, Page::HEADING_SIZES.map { |size| [size_labels[size], size] },
+                {}, class: "govuk-select", data: { action: "change->autosubmit#submit" } %>
+        </div>
         <%= render "shared/autosubmit_status" %>
       <% end %>
     </div>
 
     <%= render "pages/slug_form", page: page %>
+    <%= render "pages/caption_form", page: page %>
   </section>
 
   <hr class="app-section-divider">

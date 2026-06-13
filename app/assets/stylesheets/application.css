@@ -101,6 +101,14 @@
   margin: 0;
 }
 
+.app-heading-size {
+  margin-top: 10px;
+}
+
+.app-heading-size .govuk-select {
+  width: auto;
+}
+
 .app-section-divider {
   border: 0;
   border-top: 1px solid #b1b4b6;
