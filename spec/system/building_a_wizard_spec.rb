@@ -85,8 +85,8 @@ RSpec.describe "Building a wizard", :js, type: :system do
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     expect(page).to have_field("Page title", with: "")
     within_service_nav { expect(page).to have_link("EYTFI claim") } # rename stuck
-    expect(page).to have_link("Previous page")
-    click_link "Previous page"
+    # Back to page 1 (the first tab) via the tab menu
+    within_nav { first(".govuk-tabs__tab").click }
     expect(page).to have_css(
       ".app-disclosure__summary",
       text: "Slug claim-an-early-years-teacher-recognition-payment"
@@ -143,6 +143,10 @@ RSpec.describe "Building a wizard", :js, type: :system do
 
   def within_service_nav(&block)
     within(".govuk-service-navigation", &block)
+  end
+
+  def within_nav(&block)
+    within("nav[aria-label='Pages in this wizard']", &block)
   end
 
   def within_last_card(&block)

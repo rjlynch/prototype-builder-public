@@ -53,8 +53,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     expect(page).to have_css(".app-disclosure__summary", text: "Slug congratulations")
     expect(page).to have_field("Page title", with: "")
 
-    # Back on the question page, answer no instead
-    click_link "Previous page"
+    # Back on the question page (the first tab) via the tab menu, answer no
+    within_nav { first(".govuk-tabs__tab").click }
     within_preview do
       choose "no"
       click_button "Continue"
@@ -96,7 +96,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     fill_in "Page title", with: "Existing page"
     expect(page).to have_css(".app-disclosure__summary", text: "Slug existing-page")
 
-    click_link "Previous page"
+    # Back to the question page (the first tab) via the tab menu
+    within_nav { first(".govuk-tabs__tab").click }
     add_rule
     within_last_condition do
       select "question-1 (Are you eligible?)", from: "When answer to"
@@ -119,6 +120,10 @@ RSpec.describe "Branching a wizard", :js, type: :system do
 
   def within_last_condition(&block)
     within(all(".app-condition").last, &block)
+  end
+
+  def within_nav(&block)
+    within("nav[aria-label='Pages in this wizard']", &block)
   end
 
   def add_component(button_label)
