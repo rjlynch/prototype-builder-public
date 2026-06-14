@@ -13,8 +13,9 @@ RSpec.describe "Collapsing editor cards", :js, type: :system do
     within_last_card { fill_in "Paragraph text", with: "Some intro copy" }
     within_preview { expect(page).to have_css("p", text: "Some intro copy") }
 
-    # Collapse the paragraph card; its summary still identifies it
-    find(".app-card > summary").click
+    # Collapse the paragraph card; its summary still identifies it. (The page
+    # title card is always the first card, so target the paragraph directly.)
+    within_last_card { find("summary").click }
     expect(page).to have_css(".app-card:not([open])", count: 1)
     within(".app-card:not([open])") do
       expect(page).to have_css(".app-card__title", text: "Paragraph")
@@ -32,11 +33,12 @@ RSpec.describe "Collapsing editor cards", :js, type: :system do
     expect(page).to have_css(".app-card:not([open]) .app-card__title", text: "Paragraph")
     expect(page).to have_css(".app-card[open] .app-card__title", text: "Continue button")
 
-    # Expanding again is remembered across the next re-render
+    # Expanding again is remembered across the next re-render (counts include
+    # the always-open page title card)
     find(".app-card:not([open]) > summary").click
-    expect(page).to have_css(".app-card[open]", count: 2)
-    add_component "Add paragraph"
     expect(page).to have_css(".app-card[open]", count: 3)
+    add_component "Add paragraph"
+    expect(page).to have_css(".app-card[open]", count: 4)
   end
 
   def within_preview(&block)
@@ -48,7 +50,10 @@ RSpec.describe "Collapsing editor cards", :js, type: :system do
   end
 
   def add_component(button_label)
-    count = all(".app-card", minimum: 0).size
+    # The page title card is always present, so the builder has settled once
+    # at least one card exists; count from there to avoid a mid-render read.
+    expect(page).to have_css(".app-card", minimum: 1)
+    count = all(".app-card").size
     click_button button_label
     expect(page).to have_css(".app-card", count: count + 1)
   end

@@ -18,7 +18,6 @@ RSpec.describe "Page heading options", :js, type: :system do
     within_preview { expect(page).to have_css("h1.govuk-heading-xl", text: "Apply for a payment") }
 
     # The caption sits above the heading and matches its size
-    find(".app-disclosure__summary", text: "Caption").click
     fill_in "Caption", with: "Early years payments"
     within_preview do
       expect(page).to have_css("span.govuk-caption-xl", text: "Early years payments")
@@ -59,7 +58,10 @@ RSpec.describe "Page heading options", :js, type: :system do
   end
 
   def add_component(button_label)
-    count = all(".app-card", minimum: 0).size
+    # The page title card is always present, so the builder has settled once
+    # at least one card exists; count from there to avoid a mid-render read.
+    expect(page).to have_css(".app-card", minimum: 1)
+    count = all(".app-card").size
     click_button button_label
     expect(page).to have_css(".app-card", count: count + 1)
   end

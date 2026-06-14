@@ -17,14 +17,11 @@ RSpec.describe "Building a wizard", :js, type: :system do
       expect(page).to have_content("Your page preview appears here")
     end
 
-    # The wizard title opens the wizard-level settings page
+    # The wizard name in the service navigation opens the settings page
     click_link "Untitled wizard"
     expect(page).to have_css("h1", text: "Untitled wizard")
     expect(page).to have_link("Share this wizard")
     expect(page).to have_button("Copy link")
-    within("nav[aria-label='Pages in this wizard']") do
-      expect(page).to have_link("page-1")
-    end
     click_button "Copy link"
     expect(page).to have_button("Copied")
     fill_in "Wizard name", with: "EYTFI claim"
@@ -87,15 +84,15 @@ RSpec.describe "Building a wizard", :js, type: :system do
     # --- Page 2 ---------------------------------------------------------
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     expect(page).to have_field("Page title", with: "")
-    expect(page).to have_css(".govuk-caption-m", text: "EYTFI claim") # rename stuck
-    expect(page).to have_link("Previous page")
-    click_link "Previous page"
+    within_service_nav { expect(page).to have_link("EYTFI claim") } # rename stuck
+    # Back to page 1 (the first tab) via the tab menu
+    within_nav { first(".govuk-tabs__tab").click }
     expect(page).to have_css(
       ".app-disclosure__summary",
       text: "Slug claim-an-early-years-teacher-recognition-payment"
     )
-    expect(page).to have_link("Next page")
-    click_link "Next page"
+    # Forward again from the preview's continue button (the next-page link is gone)
+    within_preview { click_button "Start now" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     within_preview do
       expect(page).to have_no_css("h1")
@@ -144,6 +141,14 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within(".app-split-pane__pane--framed", &block)
   end
 
+  def within_service_nav(&block)
+    within(".govuk-service-navigation", &block)
+  end
+
+  def within_nav(&block)
+    within("nav[aria-label='Pages in this wizard']", &block)
+  end
+
   def within_last_card(&block)
     within(all(".app-card").last, &block)
   end
@@ -151,7 +156,10 @@ RSpec.describe "Building a wizard", :js, type: :system do
   # Clicks an "add component" button and waits for the new editor card to
   # appear in the (re-rendered) builder pane.
   def add_component(button_label)
-    count = all(".app-card", minimum: 0).size
+    # The page title card is always present, so the builder has settled once
+    # at least one card exists; count from there to avoid a mid-render read.
+    expect(page).to have_css(".app-card", minimum: 1)
+    count = all(".app-card").size
     click_button button_label
     expect(page).to have_css(".app-card", count: count + 1)
   end

@@ -13,7 +13,7 @@
   grid-template-columns: minmax(24rem, 2fr) 3fr;
   gap: 30px;
   align-items: start;
-  padding: 30px;
+  padding: 15px 30px 30px;
 }
 
 @media (max-width: 768px) {
@@ -54,49 +54,38 @@
   }
 }
 
-/* A list rendered inline with separators (e.g. a small nav). */
-.app-inline-list li {
+/* Context shown in the service navigation after the service name, e.g. the
+   thing currently being edited. */
+.app-service-navigation__context {
   display: inline-block;
+  padding: 15px 0;
+  margin-right: 30px;
 }
 
-.app-inline-list form {
-  display: inline;
-  margin-left: 5px;
+.app-service-navigation__separator {
+  margin: 0 10px 0 0;
+  color: #505a5f;
 }
 
-.app-inline-list li + li::before {
-  content: "·";
-  margin: 0 5px;
+/* Tabs used as page navigation sit directly above the editor/preview panes,
+   so drop the component's default bottom margin. */
+.app-page-tabs {
+  margin-bottom: 0;
 }
 
-.app-builder-heading {
-  margin-bottom: 15px;
+/* Controls riding inside a tab (e.g. reordering arrows). The tab link paints
+   a full-bleed ::after overlay to make the whole tab clickable; raise the
+   controls above it so they stay independently clickable. */
+.app-tab-controls {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
-.app-builder-heading__wizard,
-.app-field-heading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.app-field-heading {
-  margin-bottom: 5px;
-}
-
-.app-field-heading__title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.app-field-heading--spread {
-  justify-content: space-between;
-}
-
-.app-field-heading__action {
+.app-tab-controls__form {
   display: inline-flex;
   margin: 0;
 }
@@ -107,12 +96,6 @@
 
 .app-heading-size .govuk-select {
   width: auto;
-}
-
-.app-section-divider {
-  border: 0;
-  border-top: 1px solid #b1b4b6;
-  margin: 20px 0;
 }
 
 .app-disclosure__summary {
@@ -233,7 +216,10 @@
 }
 
 .app-card__actions {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
 }
 

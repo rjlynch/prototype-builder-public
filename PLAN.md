@@ -248,6 +248,37 @@ The backlog now lives in the issue tracker, not this file.
   three H1 render paths — plain heading, and the title_as_label input
   label/legend — via a shared pages/_preview_caption partial. 60 specs green.
 
+* 2026-06-14 — Builder UI reorganisation. The wizard name moved out of the
+  builder body and into the service navigation: pages#edit sets a
+  content_for(:service_navigation_context) the shared service-nav partial
+  yields after the service name, linking back to wizard settings (removed
+  the pages/_page_heading partial and its turbo-stream). The pages nav moved
+  off the wizard settings page back onto the builder, rendered as GOV.UK tabs
+  (current page = selected tab) showing the truncated page name (title, or
+  slug while untitled) with the reorder arrows riding inside each tab —
+  raised above the tab's full-bleed ::after overlay via z-index so they stay
+  clickable. Drag-to-reorder will replace the arrows later. 60 specs green;
+  rubocop clean. Follow-ups: tab labels truncate to the first 5 characters;
+  the redundant next-page link by the title was dropped (previous-page stays).
+
+* 2026-06-14 — Insert pages from the tabs. Each tab gets a plus icon that
+  inserts a new blank page right after that tab's page and lands the user on
+  it. RESTful: nested `resource :successor` under pages → SuccessorsController,
+  backed by InsertPageForm, which bumps the trailing pages' positions down by
+  one (highest first, to dodge the unique [wizard_id, position] index) and
+  gives the new page a unique position-based slug; existing slugs are untouched
+  so branch rules survive. 64 specs green; rubocop clean.
+
+* 2026-06-14 — Page title section folded into a collapsible app-card, like the
+  component editors (its own pages/_title_card partial: title + heading size +
+  caption + slug, with a live-mirrored title snippet). Dropped the section
+  divider; the caption left its disclosure to sit always-visible before the
+  slug (which keeps its disclosure). Removed the now-dead app-field-heading /
+  app-section-divider CSS; app-card__actions became a flex row (Previous-page
+  link + Remove). System specs that assumed the first .app-card was a component
+  were retargeted, and the add_component helper now waits for the (always
+  present) title card before counting, removing a mid-render race. 64 green.
+
 ## Decisions / open questions
 
 * Heading size/caption live on Page, not as a component: the title is a

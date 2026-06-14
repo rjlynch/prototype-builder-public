@@ -51,15 +51,15 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     end
 
     # Unticking restores the plain H1, the Label field, and the option elsewhere
-    within(all(".app-card").first) { uncheck "Use the page title as the label" }
+    within_text_input_card { uncheck "Use the page title as the label" }
     within_preview do
       expect(page).to have_css("h1.govuk-heading-l", text: "What is your nursery's name?")
       expect(page).to have_no_css("h1.govuk-label-wrapper")
     end
-    within(all(".app-card").first) { expect(page).to have_field("Label") }
+    within_text_input_card { expect(page).to have_field("Label") }
     within_last_card { expect(page).to have_css(".govuk-checkboxes__label", text: "Use the page title as the label") }
 
-    within(all(".app-card").first) { check "Use the page title as the label" }
+    within_text_input_card { check "Use the page title as the label" }
     within_preview { expect(page).to have_css("h1.govuk-label-wrapper") }
 
     # --- Run mode renders the same pattern -------------------------------
@@ -81,8 +81,15 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     within(all(".app-card").last, &block)
   end
 
+  def within_text_input_card(&block)
+    within(find(".app-card", text: "Text input"), &block)
+  end
+
   def add_component(button_label)
-    count = all(".app-card", minimum: 0).size
+    # The page title card is always present, so the builder has settled once
+    # at least one card exists; count from there to avoid a mid-render read.
+    expect(page).to have_css(".app-card", minimum: 1)
+    count = all(".app-card").size
     click_button button_label
     expect(page).to have_css(".app-card", count: count + 1)
   end

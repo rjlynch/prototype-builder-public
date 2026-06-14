@@ -1,6 +1,13 @@
 <% content_for :title, "Page builder – GOV.UK Prototype Builder" %>
+
+<%# The wizard name sits in the service navigation, linking back to its
+    settings — it is the context for everything in the builder. %>
+<% content_for :service_navigation_context do %>
+  <%= link_to page.wizard.name, edit_wizard_path(page.wizard), class: "govuk-service-navigation__link" %>
+<% end %>
+
 <div class="app-page-header">
-  <%= render "pages/page_heading", page: page %>
+  <%= render "pages/pages_nav", pages: page.wizard.pages, current_page: page, page: page %>
 </div>
 
 <main id="main-content" class="app-split-pane">
