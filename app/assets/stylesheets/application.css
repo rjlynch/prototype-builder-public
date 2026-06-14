@@ -90,45 +90,12 @@
   margin: 0;
 }
 
-.app-field-heading {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.app-field-heading {
-  margin-bottom: 5px;
-}
-
-.app-field-heading__title-group {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-.app-field-heading--spread {
-  justify-content: space-between;
-}
-
-.app-field-heading__action {
-  display: inline-flex;
-  margin: 0;
-}
-
 .app-heading-size {
   margin-top: 10px;
 }
 
 .app-heading-size .govuk-select {
   width: auto;
-}
-
-.app-section-divider {
-  border: 0;
-  border-top: 1px solid #b1b4b6;
-  margin: 20px 0;
 }
 
 .app-disclosure__summary {
@@ -249,7 +216,10 @@
 }
 
 .app-card__actions {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 10px;
 }
 

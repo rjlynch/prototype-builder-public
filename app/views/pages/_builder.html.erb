@@ -1,64 +1,25 @@
 <div id="<%= dom_id(page, :builder) %>">
-  <section class="app-editor-section app-editor-section--details">
-    <div class="govuk-form-group">
-      <div class="app-field-heading app-field-heading--spread">
-        <div class="app-field-heading__title-group">
-          <label class="govuk-label app-field-heading__label" for="page_form_title">Page title</label>
-          <% if page.previous %>
-            <%= link_to edit_page_path(page.previous), class: "app-icon-link govuk-link govuk-link--muted", aria: { label: "Previous page" } do %>
-              <span class="govuk-visually-hidden">Previous page</span>
-              <%= svg_icon("chevron-left") %>
-            <% end %>
-          <% end %>
-        </div>
-        <% if page.wizard.pages.many? %>
-          <%= button_to "Remove this page", page_path(page), method: :delete,
-                class: "app-button-as-link govuk-link app-link--danger",
-                form_class: "app-field-heading__action",
-                form: { data: { turbo_confirm: "Are you sure you want to delete this page" } } %>
-        <% end %>
-      </div>
+  <%= render "pages/title_card", page: page %>
 
-      <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
-            data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
-        <%= f.text_field :title, id: "page_form_title", class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
-        <div class="govuk-form-group app-heading-size">
-          <%= f.label :heading_size, "Heading size", class: "govuk-label govuk-label--s" %>
-          <% size_labels = { "xl" => "Extra large", "l" => "Large", "m" => "Medium", "s" => "Small" } %>
-          <%= f.select :heading_size, Page::HEADING_SIZES.map { |size| [size_labels[size], size] },
-                {}, class: "govuk-select", data: { action: "change->autosubmit#submit" } %>
-        </div>
-        <%= render "shared/autosubmit_status" %>
-      <% end %>
-    </div>
+  <% page.components.each do |component| %>
+    <%= render "components/editor", component: component %>
+  <% end %>
 
-    <%= render "pages/slug_form", page: page %>
-    <%= render "pages/caption_form", page: page %>
-  </section>
-
-  <hr class="app-section-divider">
-
-  <section class="app-editor-section app-editor-section--content">
-    <% page.components.each do |component| %>
-      <%= render "components/editor", component: component %>
-    <% end %>
-
-    <div class="app-button-stack">
-      <%= button_to "Add paragraph", page_components_path(page),
-            params: { component: { kind: "paragraph" } },
-            class: "govuk-button govuk-button--secondary" %>
-      <%= button_to "Add subheading", page_components_path(page),
-            params: { component: { kind: "subheading" } },
-            class: "govuk-button govuk-button--secondary" %>
-      <%= button_to "Add text input", page_components_path(page),
-            params: { component: { kind: "text_input" } },
-            class: "govuk-button govuk-button--secondary" %>
-      <%= button_to "Add radio buttons", page_components_path(page),
-            params: { component: { kind: "radios" } },
-            class: "govuk-button govuk-button--secondary" %>
-      <%= button_to "Add continue button", page_components_path(page),
-            params: { component: { kind: "button" } },
-            class: "govuk-button govuk-button--secondary" %>
-    </div>
-  </section>
+  <div class="app-button-stack">
+    <%= button_to "Add paragraph", page_components_path(page),
+          params: { component: { kind: "paragraph" } },
+          class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add subheading", page_components_path(page),
+          params: { component: { kind: "subheading" } },
+          class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add text input", page_components_path(page),
+          params: { component: { kind: "text_input" } },
+          class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add radio buttons", page_components_path(page),
+          params: { component: { kind: "radios" } },
+          class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add continue button", page_components_path(page),
+          params: { component: { kind: "button" } },
+          class: "govuk-button govuk-button--secondary" %>
+  </div>
 </div>

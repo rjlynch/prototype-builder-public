@@ -152,7 +152,10 @@ RSpec.describe "Building a wizard", :js, type: :system do
   # Clicks an "add component" button and waits for the new editor card to
   # appear in the (re-rendered) builder pane.
   def add_component(button_label)
-    count = all(".app-card", minimum: 0).size
+    # The page title card is always present, so the builder has settled once
+    # at least one card exists; count from there to avoid a mid-render read.
+    expect(page).to have_css(".app-card", minimum: 1)
+    count = all(".app-card").size
     click_button button_label
     expect(page).to have_css(".app-card", count: count + 1)
   end

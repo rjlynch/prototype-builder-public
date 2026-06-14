@@ -269,6 +269,16 @@ The backlog now lives in the issue tracker, not this file.
   gives the new page a unique position-based slug; existing slugs are untouched
   so branch rules survive. 64 specs green; rubocop clean.
 
+* 2026-06-14 — Page title section folded into a collapsible app-card, like the
+  component editors (its own pages/_title_card partial: title + heading size +
+  caption + slug, with a live-mirrored title snippet). Dropped the section
+  divider; the caption left its disclosure to sit always-visible before the
+  slug (which keeps its disclosure). Removed the now-dead app-field-heading /
+  app-section-divider CSS; app-card__actions became a flex row (Previous-page
+  link + Remove). System specs that assumed the first .app-card was a component
+  were retargeted, and the add_component helper now waits for the (always
+  present) title card before counting, removing a mid-render race. 64 green.
+
 ## Decisions / open questions
 
 * Heading size/caption live on Page, not as a component: the title is a
