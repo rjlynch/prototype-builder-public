@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   end
 
   resources :components, only: %i[update destroy] do
+    resource :position, only: %i[update], controller: "component_positions"
     resources :branch_rules, only: %i[create]
   end
 

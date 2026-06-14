@@ -180,6 +180,28 @@
   margin-top: 5px;
 }
 
+/* An editor card paired with its reorder arrows: the card grows to fill the
+   row, the arrows ride in a narrow column on the right (visible whether the
+   card is open or closed). */
+.app-editor {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+.app-card__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 0 0 auto;
+  /* Line the first arrow up with the card title (the card's own padding). */
+  padding-top: 13px;
+}
+
+.app-card__controls-form {
+  margin: 0;
+}
+
 /* A bordered, collapsible card grouping a removable editor block. The card
    is a <details> element; its <summary> shows a title and content snippet
    so collapsed cards stay identifiable. */
@@ -188,6 +210,13 @@
   background: #ffffff;
   padding: 15px;
   margin-bottom: 20px;
+}
+
+/* Let the card take the width the arrows leave; min-width:0 keeps the
+   snippet's ellipsis working inside the flex row. */
+.app-editor > .app-card {
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .app-card__summary {
