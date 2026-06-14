@@ -13,7 +13,7 @@
   grid-template-columns: minmax(24rem, 2fr) 3fr;
   gap: 30px;
   align-items: start;
-  padding: 30px;
+  padding: 15px 30px 30px;
 }
 
 @media (max-width: 768px) {
@@ -65,6 +65,12 @@
 .app-service-navigation__separator {
   margin: 0 10px 0 0;
   color: #505a5f;
+}
+
+/* Tabs used as page navigation sit directly above the editor/preview panes,
+   so drop the component's default bottom margin. */
+.app-page-tabs {
+  margin-bottom: 0;
 }
 
 /* Controls riding inside a tab (e.g. reordering arrows). The tab link paints
