@@ -1,26 +1,51 @@
-<details id="<%= dom_id(component, :editor) %>" class="app-card" open
-         data-controller="persisted-details mirror" data-action="toggle->persisted-details#store">
-  <summary class="app-card__summary">
-    <h3 class="govuk-heading-s app-card__title"><%= component.display_name %></h3>
-    <span class="app-card__snippet govuk-body-s" data-mirror-target="output"><%= component.summary_text %></span>
-  </summary>
+<%# The reorder arrows sit beside the card (not inside its <summary>) so they
+    stay visible whether the card is open or closed, and a click can't toggle
+    the card. Each arrow swaps the component with its neighbour in the page. %>
+<% siblings = component.page.components %>
+<div class="app-editor">
+  <details id="<%= dom_id(component, :editor) %>" class="app-card" open
+           data-controller="persisted-details mirror" data-action="toggle->persisted-details#store">
+    <summary class="app-card__summary">
+      <h3 class="govuk-heading-s app-card__title"><%= component.display_name %></h3>
+      <span class="app-card__snippet govuk-body-s" data-mirror-target="output"><%= component.summary_text %></span>
+    </summary>
 
-  <div class="app-card__actions">
-    <%= button_to component_path(component), method: :delete, class: "app-button-as-link govuk-link" do %>
-      Remove<span class="govuk-visually-hidden"> <%= component.display_name.downcase %></span>
+    <div class="app-card__actions">
+      <%= button_to component_path(component), method: :delete, class: "app-button-as-link govuk-link" do %>
+        Remove<span class="govuk-visually-hidden"> <%= component.display_name.downcase %></span>
+      <% end %>
+    </div>
+
+    <%# Namespace the form so every field (and its label's `for`) gets a
+        component-scoped id. Without this, all editors of the same kind share ids
+        like "component_text"; after an autosubmit Turbo restores focus by id and
+        lands on the first match, jumping focus to the wrong card. %>
+    <%= form_with model: ComponentForm.from_component(component), url: component_path(component), method: :patch,
+          namespace: dom_id(component),
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
+      <%= render "components/editors/#{component.kind}", f: f %>
+      <%= render "shared/autosubmit_status" %>
+    <% end %>
+
+    <%= render "components/branching", component: component if component.kind == "button" %>
+  </details>
+
+  <div class="app-card__controls">
+    <% unless component == siblings.first %>
+      <%= button_to component_position_path(component), method: :patch,
+            params: { direction: "up" },
+            class: "app-icon-button", form_class: "app-card__controls-form" do %>
+        <span aria-hidden="true">&uarr;</span>
+        <span class="govuk-visually-hidden">Move <%= component.display_name.downcase %> up</span>
+      <% end %>
+    <% end %>
+    <% unless component == siblings.last %>
+      <%= button_to component_position_path(component), method: :patch,
+            params: { direction: "down" },
+            class: "app-icon-button", form_class: "app-card__controls-form" do %>
+        <span aria-hidden="true">&darr;</span>
+        <span class="govuk-visually-hidden">Move <%= component.display_name.downcase %> down</span>
+      <% end %>
     <% end %>
   </div>
-
-  <%# Namespace the form so every field (and its label's `for`) gets a
-      component-scoped id. Without this, all editors of the same kind share ids
-      like "component_text"; after an autosubmit Turbo restores focus by id and
-      lands on the first match, jumping focus to the wrong card. %>
-  <%= form_with model: ComponentForm.from_component(component), url: component_path(component), method: :patch,
-        namespace: dom_id(component),
-        data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
-    <%= render "components/editors/#{component.kind}", f: f %>
-    <%= render "shared/autosubmit_status" %>
-  <% end %>
-
-  <%= render "components/branching", component: component if component.kind == "button" %>
-</details>
+</div>

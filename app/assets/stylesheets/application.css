@@ -180,6 +180,26 @@
   margin-top: 5px;
 }
 
+/* An editor card paired with its reorder arrows. The arrows are kept outside
+   the card's <summary> (a click inside it would toggle the card open/closed),
+   but positioned to sit on the summary line, pinned to its right edge, so they
+   read as part of the summary whether the card is open or closed. */
+.app-editor {
+  position: relative;
+}
+
+.app-card__controls {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+  display: flex;
+  gap: 2px;
+}
+
+.app-card__controls-form {
+  margin: 0;
+}
+
 /* A bordered, collapsible card grouping a removable editor block. The card
    is a <details> element; its <summary> shows a title and content snippet
    so collapsed cards stay identifiable. */
@@ -192,6 +212,8 @@
 
 .app-card__summary {
   cursor: pointer;
+  /* Leave room on the right for the absolutely-positioned reorder arrows. */
+  padding-right: 60px;
 }
 
 .app-card[open] > .app-card__summary {

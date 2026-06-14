@@ -89,6 +89,8 @@ resources :branch_rules      update, destroy
 * `PageForm`          — update title/slug (slug derivation lives here)
 * `AddComponentForm`  — append component with per-kind defaults + generated name
 * `ComponentForm`     — update components (kind-aware validation)
+* `MoveComponentForm` — swap a component up/down with its adjacent sibling
+                        (by order, so it works across position gaps)
 * `AddBranchRuleForm` — append blank rule to a button
 * `BranchRuleForm`    — update a rule (parameterises the target slug)
 * `ContinueForm`      — resolve a button click to the next page (branch or
@@ -279,7 +281,32 @@ The backlog now lives in the issue tracker, not this file.
   were retargeted, and the add_component helper now waits for the (always
   present) title card before counting, removing a mid-render race. 64 green.
 
+* 2026-06-14 — Reorder editor cards. Up/down arrows ride in a column beside
+  each component editor (a new `.app-editor` flex wrapper; arrows are siblings
+  of the `<details>`, not inside its `<summary>`, so they show whether the
+  card is open or closed and a click never toggles the card). The arrow PATCHes
+  `component_position_path` → `ComponentPositionsController#update` →
+  `MoveComponentForm`, which swaps positions with the adjacent sibling (by
+  order, surviving the gaps that component deletes leave behind). Both panes
+  re-render via the existing `RendersBuilderPanes` turbo streams. Gotcha worth
+  remembering: the form loads `page.components` (caching the association) before
+  swapping, so the controller must `reload` it or the re-rendered panes show the
+  old order — the pages reorder dodged this only because it `redirect_back`s.
+
 ## Decisions / open questions
+
+* Reordering and the page title (deferred, will refactor): the title is a Page
+  attribute rendered first in the preview, and the title *card* is pinned first
+  in the editor with no arrows — that part composes cleanly. The wrinkle is the
+  single-question pattern (`title_as_label`): there the page's H1 is rendered
+  *inside* an input component, which the arrows can now move below other
+  components, putting the H1 in the middle of the page (invalid markup, and it
+  breaks "title is always first"). Keeping it correct would mean pinning any
+  `title_as_label` component to position 1 and special-casing the arrows to
+  refuse to move it — leaking the title domain concept into the generic reorder
+  mechanism. Left as-is for now; the real fix is to make the title a first-class
+  first component (or otherwise pin the heading), then drop the special case.
+
 
 * Heading size/caption live on Page, not as a component: the title is a
   singular, always-present Page attribute (one H1/page) that drives the slug
