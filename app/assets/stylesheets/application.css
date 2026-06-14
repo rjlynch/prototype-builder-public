@@ -180,22 +180,20 @@
   margin-top: 5px;
 }
 
-/* An editor card paired with its reorder arrows: the card grows to fill the
-   row, the arrows ride in a narrow column on the right (visible whether the
-   card is open or closed). */
+/* An editor card paired with its reorder arrows. The arrows are kept outside
+   the card's <summary> (a click inside it would toggle the card open/closed),
+   but positioned to sit on the summary line, pinned to its right edge, so they
+   read as part of the summary whether the card is open or closed. */
 .app-editor {
-  display: flex;
-  align-items: flex-start;
-  gap: 6px;
+  position: relative;
 }
 
 .app-card__controls {
+  position: absolute;
+  top: 12px;
+  right: 15px;
   display: flex;
-  flex-direction: column;
   gap: 2px;
-  flex: 0 0 auto;
-  /* Line the first arrow up with the card title (the card's own padding). */
-  padding-top: 13px;
 }
 
 .app-card__controls-form {
@@ -212,15 +210,10 @@
   margin-bottom: 20px;
 }
 
-/* Let the card take the width the arrows leave; min-width:0 keeps the
-   snippet's ellipsis working inside the flex row. */
-.app-editor > .app-card {
-  flex: 1 1 auto;
-  min-width: 0;
-}
-
 .app-card__summary {
   cursor: pointer;
+  /* Leave room on the right for the absolutely-positioned reorder arrows. */
+  padding-right: 60px;
 }
 
 .app-card[open] > .app-card__summary {
