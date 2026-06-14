@@ -52,6 +52,23 @@ RSpec.describe "Managing pages", :js, type: :system do
     expect(page).to have_no_button("Move Third later")
   end
 
+  it "inserts a new page after one from its tab" do
+    build_three_page_wizard
+
+    # Insert after the first page; we land on the new blank page's builder
+    within_nav { click_button "Add a page after First" }
+    expect(page).to have_field("Page title", with: "")
+
+    # The new page sits between First and Second, shifting the rest down
+    within_nav do
+      expect(page).to have_css("li", count: 4)
+      expect(page).to have_css("li:nth-child(1)", text: "First")
+      expect(page).to have_css("li:nth-child(2).govuk-tabs__list-item--selected")
+      expect(page).to have_css("li:nth-child(3)", text: "Secon")
+      expect(page).to have_css("li:nth-child(4)", text: "Third")
+    end
+  end
+
   def build_three_page_wizard
     visit root_path
     click_button "Sign in"

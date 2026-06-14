@@ -29,6 +29,11 @@
               <span class="govuk-visually-hidden">Move <%= name %> later</span>
             <% end %>
           <% end %>
+          <%= button_to page_successor_path(other),
+                class: "app-icon-button", form_class: "app-tab-controls__form" do %>
+            <%= svg_icon("plus") %>
+            <span class="govuk-visually-hidden">Add a page after <%= name %></span>
+          <% end %>
         </span>
       </li>
     <% end %>

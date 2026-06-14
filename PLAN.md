@@ -258,7 +258,16 @@ The backlog now lives in the issue tracker, not this file.
   slug while untitled) with the reorder arrows riding inside each tab —
   raised above the tab's full-bleed ::after overlay via z-index so they stay
   clickable. Drag-to-reorder will replace the arrows later. 60 specs green;
-  rubocop clean.
+  rubocop clean. Follow-ups: tab labels truncate to the first 5 characters;
+  the redundant next-page link by the title was dropped (previous-page stays).
+
+* 2026-06-14 — Insert pages from the tabs. Each tab gets a plus icon that
+  inserts a new blank page right after that tab's page and lands the user on
+  it. RESTful: nested `resource :successor` under pages → SuccessorsController,
+  backed by InsertPageForm, which bumps the trailing pages' positions down by
+  one (highest first, to dodge the unique [wizard_id, position] index) and
+  gives the new page a unique position-based slug; existing slugs are untouched
+  so branch rules survive. 64 specs green; rubocop clean.
 
 ## Decisions / open questions
 
