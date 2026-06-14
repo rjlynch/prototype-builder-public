@@ -17,14 +17,11 @@ RSpec.describe "Building a wizard", :js, type: :system do
       expect(page).to have_content("Your page preview appears here")
     end
 
-    # The wizard title opens the wizard-level settings page
+    # The wizard name in the service navigation opens the settings page
     click_link "Untitled wizard"
     expect(page).to have_css("h1", text: "Untitled wizard")
     expect(page).to have_link("Share this wizard")
     expect(page).to have_button("Copy link")
-    within("nav[aria-label='Pages in this wizard']") do
-      expect(page).to have_link("page-1")
-    end
     click_button "Copy link"
     expect(page).to have_button("Copied")
     fill_in "Wizard name", with: "EYTFI claim"
@@ -87,7 +84,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     # --- Page 2 ---------------------------------------------------------
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     expect(page).to have_field("Page title", with: "")
-    expect(page).to have_css(".govuk-caption-m", text: "EYTFI claim") # rename stuck
+    within_service_nav { expect(page).to have_link("EYTFI claim") } # rename stuck
     expect(page).to have_link("Previous page")
     click_link "Previous page"
     expect(page).to have_css(
@@ -142,6 +139,10 @@ RSpec.describe "Building a wizard", :js, type: :system do
 
   def within_preview(&block)
     within(".app-split-pane__pane--framed", &block)
+  end
+
+  def within_service_nav(&block)
+    within(".govuk-service-navigation", &block)
   end
 
   def within_last_card(&block)

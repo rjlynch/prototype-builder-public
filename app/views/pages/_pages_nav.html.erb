@@ -1,29 +1,35 @@
 <% pages = local_assigns.fetch(:pages, page.wizard.pages) %>
 <% current_page = local_assigns.fetch(:current_page, page) %>
 <% reference_page = local_assigns.fetch(:page, pages.first) %>
-<% stacked = local_assigns.fetch(:stacked, false) %>
 
-<nav id="<%= dom_id(reference_page, :pages_nav) %>" aria-label="Pages in this wizard">
-  <ul class="<%= stacked ? "govuk-list" : "govuk-list app-inline-list" %>">
+<%# Each page is a tab linking to its builder. The current page is the
+    selected tab. Per-tab controls reorder the page within the journey
+    (drag-to-reorder will replace the arrows later). %>
+<nav id="<%= dom_id(reference_page, :pages_nav) %>"
+     class="govuk-tabs app-page-tabs" aria-label="Pages in this wizard">
+  <ul class="govuk-tabs__list">
     <% pages.each do |other| %>
-      <li>
-        <% if current_page.present? && other == current_page %>
-          <strong aria-current="page"><%= other.slug %></strong>
-        <% else %>
-          <%= link_to other.slug, edit_page_path(other), class: "govuk-link" %>
-        <% end %>
-        <% if other.position > 1 %>
-          <%= button_to page_position_path(other), method: :patch,
-                params: { position: other.position - 1 }, class: "app-button-as-link govuk-link" do %>
-            &uarr;<span class="govuk-visually-hidden"> Move <%= other.slug %> earlier</span>
+      <% name = other.title.presence || other.slug %>
+      <li class="govuk-tabs__list-item <%= "govuk-tabs__list-item--selected" if current_page.present? && other == current_page %>">
+        <%= link_to truncate(name, length: 24), edit_page_path(other), class: "govuk-tabs__tab" %>
+        <span class="app-tab-controls">
+          <% if other.position > 1 %>
+            <%= button_to page_position_path(other), method: :patch,
+                  params: { position: other.position - 1 },
+                  class: "app-icon-button", form_class: "app-tab-controls__form" do %>
+              <span aria-hidden="true">&uarr;</span>
+              <span class="govuk-visually-hidden">Move <%= name %> earlier</span>
+            <% end %>
           <% end %>
-        <% end %>
-        <% if other.position < pages.size %>
-          <%= button_to page_position_path(other), method: :patch,
-                params: { position: other.position + 1 }, class: "app-button-as-link govuk-link" do %>
-            &darr;<span class="govuk-visually-hidden"> Move <%= other.slug %> later</span>
+          <% if other.position < pages.size %>
+            <%= button_to page_position_path(other), method: :patch,
+                  params: { position: other.position + 1 },
+                  class: "app-icon-button", form_class: "app-tab-controls__form" do %>
+              <span aria-hidden="true">&darr;</span>
+              <span class="govuk-visually-hidden">Move <%= name %> later</span>
+            <% end %>
           <% end %>
-        <% end %>
+        </span>
       </li>
     <% end %>
   </ul>

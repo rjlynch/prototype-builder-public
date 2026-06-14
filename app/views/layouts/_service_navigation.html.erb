@@ -4,6 +4,14 @@
       <span class="govuk-service-navigation__service-name">
         <%= link_to "Prototype Builder", root_path, class: "govuk-service-navigation__link" %>
       </span>
+      <%# Pages set this (via content_for) to show the thing being edited —
+          e.g. the wizard name links back to its settings from the builder. %>
+      <% if content_for?(:service_navigation_context) %>
+        <span class="app-service-navigation__context">
+          <span class="app-service-navigation__separator" aria-hidden="true">&rsaquo;</span>
+          <%= yield :service_navigation_context %>
+        </span>
+      <% end %>
       <% if signed_in %>
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
           <ul class="govuk-service-navigation__list">

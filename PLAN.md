@@ -248,6 +248,18 @@ The backlog now lives in the issue tracker, not this file.
   three H1 render paths — plain heading, and the title_as_label input
   label/legend — via a shared pages/_preview_caption partial. 60 specs green.
 
+* 2026-06-14 — Builder UI reorganisation. The wizard name moved out of the
+  builder body and into the service navigation: pages#edit sets a
+  content_for(:service_navigation_context) the shared service-nav partial
+  yields after the service name, linking back to wizard settings (removed
+  the pages/_page_heading partial and its turbo-stream). The pages nav moved
+  off the wizard settings page back onto the builder, rendered as GOV.UK tabs
+  (current page = selected tab) showing the truncated page name (title, or
+  slug while untitled) with the reorder arrows riding inside each tab —
+  raised above the tab's full-bleed ::after overlay via z-index so they stay
+  clickable. Drag-to-reorder will replace the arrows later. 60 specs green;
+  rubocop clean.
+
 ## Decisions / open questions
 
 * Heading size/caption live on Page, not as a component: the title is a

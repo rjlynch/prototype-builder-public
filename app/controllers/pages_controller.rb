@@ -40,11 +40,6 @@ class PagesController < ApplicationController
             locals: { page: page, mode: :builder }
           ),
           turbo_stream.replace(
-            helpers.dom_id(page, :page_heading),
-            partial: "pages/page_heading",
-            locals: { page: page }
-          ),
-          turbo_stream.replace(
             helpers.dom_id(page, :pages_nav),
             partial: "pages/pages_nav",
             locals: { page: page }
