@@ -91,8 +91,8 @@ RSpec.describe "Building a wizard", :js, type: :system do
       ".app-disclosure__summary",
       text: "Slug claim-an-early-years-teacher-recognition-payment"
     )
-    expect(page).to have_link("Next page")
-    click_link "Next page"
+    # Forward again from the preview's continue button (the next-page link is gone)
+    within_preview { click_button "Start now" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
     within_preview do
       expect(page).to have_no_css("h1")

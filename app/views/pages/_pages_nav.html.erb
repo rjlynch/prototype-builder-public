@@ -11,7 +11,7 @@
     <% pages.each do |other| %>
       <% name = other.title.presence || other.slug %>
       <li class="govuk-tabs__list-item <%= "govuk-tabs__list-item--selected" if current_page.present? && other == current_page %>">
-        <%= link_to truncate(name, length: 24), edit_page_path(other), class: "govuk-tabs__tab" %>
+        <%= link_to name.first(5), edit_page_path(other), class: "govuk-tabs__tab" %>
         <span class="app-tab-controls">
           <% if other.position > 1 %>
             <%= button_to page_position_path(other), method: :patch,

@@ -59,6 +59,7 @@
 .app-service-navigation__context {
   display: inline-block;
   padding: 15px 0;
+  margin-right: 30px;
 }
 
 .app-service-navigation__separator {

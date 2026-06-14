@@ -4,14 +4,14 @@ RSpec.describe "Managing pages", :js, type: :system do
   it "deletes pages, keeping at least one" do
     build_three_page_wizard
 
-    # Jump to the middle page via its tab, then delete it
-    within_nav { click_link "Second" }
+    # Jump to the middle page via its tab (labels show the first 5 chars)
+    within_nav { click_link "Secon" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug second")
     accept_confirm { click_button "Remove this page" }
 
     # Lands on the previous page; the deleted page is gone from the nav
     expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
-    within_nav { expect(page).to have_no_text("Second") }
+    within_nav { expect(page).to have_no_text("Secon") }
 
     # Linear navigation follows the renumbered positions
     within_nav { click_link "First" }
@@ -32,7 +32,7 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "Third")
-      expect(page).to have_css("li:nth-child(3)", text: "Second")
+      expect(page).to have_css("li:nth-child(3)", text: "Secon")
     end
 
     # Linear navigation follows the new order
@@ -43,7 +43,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     # And back again with the down arrow
     click_button "Move Third later"
     within_nav do
-      expect(page).to have_css("li:nth-child(2)", text: "Second")
+      expect(page).to have_css("li:nth-child(2)", text: "Secon")
       expect(page).to have_css("li:nth-child(3)", text: "Third")
     end
 
