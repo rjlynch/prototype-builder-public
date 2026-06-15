@@ -314,6 +314,13 @@ The backlog now lives in the issue tracker, not this file.
   submitted (a single `@submitted` hash). 82 specs green; rubocop + brakeman
   clean.
 
+* 2026-06-15 — Issue #52: brought the other page form objects onto PageForm's
+  call shape, so `page` is the first positional arg everywhere. DeletePageForm
+  and InsertPageForm take no params (`new(page)`); MovePageForm takes
+  `new(page, params: { position: })` and adopts `ActiveModel::Attributes`
+  (`attribute :position, :integer`), dropping the manual `position.to_i`.
+  Behaviour unchanged. 82 specs green; rubocop clean.
+
 ## Decisions / open questions
 
 * Reordering and the page title (deferred, will refactor): the title is a Page

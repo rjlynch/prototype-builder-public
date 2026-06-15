@@ -4,7 +4,7 @@ RSpec.describe MovePageForm do
   it "swaps the page with the one holding the target position" do
     wizard = create_wizard_with_slugs("intro", "middle", "outro")
 
-    form = MovePageForm.new(page: wizard.pages.find_by(slug: "outro"), position: "2")
+    form = MovePageForm.new(wizard.pages.find_by(slug: "outro"), params: { position: "2" })
 
     expect(form.save).to be(true)
     expect(wizard.pages.reload.pluck(:position, :slug)).to eq([ [ 1, "intro" ], [ 2, "outro" ], [ 3, "middle" ] ])
@@ -13,7 +13,7 @@ RSpec.describe MovePageForm do
   it "refuses a position no page holds" do
     wizard = create_wizard_with_slugs("intro", "outro")
 
-    form = MovePageForm.new(page: wizard.pages.first!, position: "5")
+    form = MovePageForm.new(wizard.pages.first!, params: { position: "5" })
 
     expect(form.save).to be(false)
     expect(wizard.pages.reload.pluck(:position, :slug)).to eq([ [ 1, "intro" ], [ 2, "outro" ] ])
@@ -22,7 +22,7 @@ RSpec.describe MovePageForm do
   it "refuses the page's own position" do
     wizard = create_wizard_with_slugs("intro", "outro")
 
-    form = MovePageForm.new(page: wizard.pages.first!, position: "1")
+    form = MovePageForm.new(wizard.pages.first!, params: { position: "1" })
 
     expect(form.save).to be(false)
   end

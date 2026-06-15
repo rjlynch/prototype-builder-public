@@ -3,7 +3,7 @@ class PositionsController < ApplicationController
 
   def update
     page = Page.find(params[:page_id])
-    form = MovePageForm.new(page: page, position: params.require(:position))
+    form = MovePageForm.new(page, params: { position: params.require(:position) })
     form.save
 
     # Reordering happens from the pages nav, which appears on every builder

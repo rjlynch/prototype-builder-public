@@ -16,7 +16,7 @@ class PagesController < ApplicationController
 
   def destroy
     page = Page.find(params[:id])
-    form = DeletePageForm.new(page: page)
+    form = DeletePageForm.new(page)
 
     if form.save
       redirect_to edit_page_path(form.destination), status: :see_other

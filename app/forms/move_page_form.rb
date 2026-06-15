@@ -3,10 +3,18 @@
 # are unaffected; linear continuation follows the new order.
 class MovePageForm
   include ActiveModel::Model
+  include ActiveModel::Attributes
 
-  attr_accessor :page, :position
+  attribute :position, :integer
+
+  attr_reader :page
 
   validate :target_is_another_page
+
+  def initialize(page, params: {})
+    @page = page
+    super(params.to_h.symbolize_keys)
+  end
 
   def save
     return false unless valid?
@@ -18,19 +26,15 @@ class MovePageForm
       # collides with the unique [wizard_id, position] index.
       page.update!(position: page.wizard.pages.maximum(:position) + 1)
       other.update!(position: original)
-      page.update!(position: target_position)
+      page.update!(position: position)
     end
     true
   end
 
   private
 
-  def target_position
-    position.to_i
-  end
-
   def target_page
-    @target_page ||= page.wizard.pages.find_by(position: target_position)
+    @target_page ||= page.wizard.pages.find_by(position: position)
   end
 
   def target_is_another_page
