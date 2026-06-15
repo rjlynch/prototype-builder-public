@@ -1,0 +1,12 @@
+<%# GOV.UK back link (https://design-system.service.gov.uk/components/back-link/).
+    The default behaviour is "go to the previous page" — but with branch rules
+    the journey isn't linear, so only the browser knows where the visitor came
+    from. The link therefore returns through browser history (back-link
+    controller), falling back without JS to the previous page by position. %>
+<% if page.show_back_link? %>
+  <% previous = page.previous %>
+  <%= link_to "Back",
+        (mode == :builder ? edit_page_path(previous) : page_path(previous)),
+        class: "govuk-back-link",
+        data: { controller: "back-link", action: "back-link#back" } %>
+<% end %>

@@ -14,11 +14,12 @@ class PageForm
 
   def self.from_page(page)
     new(page: page, title: page.title, slug: page.slug,
-        heading_size: page.heading_size, caption: page.caption)
+        heading_size: page.heading_size, caption: page.caption,
+        back_link: page.back_link)
   end
 
   attr_accessor :page
-  attr_reader :title, :slug, :heading_size, :caption
+  attr_reader :title, :slug, :heading_size, :caption, :back_link
 
   validates :title, length: { maximum: 500 }
   validates :slug, length: { maximum: 200 }
@@ -45,12 +46,18 @@ class PageForm
     @caption_submitted = true
   end
 
+  def back_link=(value)
+    @back_link = value
+    @back_link_submitted = true
+  end
+
   def save
     return false unless valid?
 
     page.title = title if @title_submitted
     page.heading_size = heading_size if @heading_size_submitted
     page.caption = caption if @caption_submitted
+    page.back_link = ActiveModel::Type::Boolean.new.cast(back_link) if @back_link_submitted
     page.slug = resolve_slug
     page.save!
     true

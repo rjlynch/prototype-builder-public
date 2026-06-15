@@ -1,0 +1,21 @@
+<%# Per-page back link toggle. Only the first page has nowhere to go back to,
+    so the control appears on every other page; the link itself always returns
+    through browser history (see pages/_back_link). %>
+<% if page.previous.present? %>
+  <div id="<%= dom_id(page, :back_link_form) %>">
+    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+          data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
+      <div class="govuk-form-group">
+        <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+          <div class="govuk-checkboxes__item">
+            <%= f.check_box :back_link, { class: "govuk-checkboxes__input",
+                  data: { action: "change->autosubmit#submit" } }, "true", "false" %>
+            <%= f.label :back_link, "Show a back link on this page",
+                  class: "govuk-label govuk-checkboxes__label" %>
+          </div>
+        </div>
+      </div>
+      <%= render "shared/autosubmit_status" %>
+    <% end %>
+  </div>
+<% end %>

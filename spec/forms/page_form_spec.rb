@@ -67,4 +67,25 @@ RSpec.describe PageForm do
       expect(page.reload.slug).to eq("what-is-your-name")
     end
   end
+
+  describe "the back link toggle" do
+    it "turns the back link off and on" do
+      page = build_page
+
+      PageForm.new(page: page, back_link: "false").save
+      expect(page.reload.back_link).to be(false)
+
+      PageForm.new(page: page, back_link: "true").save
+      expect(page.reload.back_link).to be(true)
+    end
+
+    it "leaves the back link untouched when it is not submitted" do
+      page = build_page
+      page.update!(back_link: false)
+
+      PageForm.new(page: page, title: "A new title").save
+
+      expect(page.reload.back_link).to be(false)
+    end
+  end
 end

@@ -39,4 +39,30 @@ RSpec.describe Page, type: :model do
       expect(first.previous).to be_nil
     end
   end
+
+  describe "#show_back_link?" do
+    it "is true by default for a page that has a previous one" do
+      wizard = Wizard.create!(name: "Test wizard")
+      wizard.pages.create!(position: 1, slug: "page-1")
+      second = wizard.pages.create!(position: 2, slug: "page-2")
+
+      expect(second.show_back_link?).to be(true)
+    end
+
+    it "is false for the first page, which has nowhere to go back to" do
+      wizard = Wizard.create!(name: "Test wizard")
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      wizard.pages.create!(position: 2, slug: "page-2")
+
+      expect(first.show_back_link?).to be(false)
+    end
+
+    it "is false when the back link is turned off for the page" do
+      wizard = Wizard.create!(name: "Test wizard")
+      wizard.pages.create!(position: 1, slug: "page-1")
+      second = wizard.pages.create!(position: 2, slug: "page-2", back_link: false)
+
+      expect(second.show_back_link?).to be(false)
+    end
+  end
 end
