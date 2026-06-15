@@ -8,6 +8,7 @@ class AddComponentForm
   DEFAULTS = {
     "paragraph" => { text: "" },
     "subheading" => { text: "" },
+    "list" => { text: "" },
     "text_input" => { label: "", hint: "" },
     "radios" => { label: "", hint: "", options: "" },
     "button" => { text: "Continue" }

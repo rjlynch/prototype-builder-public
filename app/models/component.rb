@@ -1,6 +1,7 @@
 class Component < ApplicationRecord
-  KINDS = %w[ paragraph subheading text_input radios button ].freeze
+  KINDS = %w[ paragraph subheading list text_input radios button ].freeze
   INPUT_KINDS = %w[ text_input radios ].freeze
+  LIST_STYLES = %w[ none bullet number ].freeze
 
   belongs_to :page
   has_many :branch_rules, -> { order(:position) }, dependent: :destroy, inverse_of: :component
@@ -8,6 +9,7 @@ class Component < ApplicationRecord
   scope :inputs, -> { where(kind: INPUT_KINDS) }
 
   validates :kind, inclusion: { in: KINDS }
+  validates :list_style, inclusion: { in: LIST_STYLES }
   validates :name, presence: true, if: :input?
   validates :position,
     presence: true,
@@ -52,6 +54,16 @@ class Component < ApplicationRecord
   # Radio options, one per line in the options column.
   def option_list
     options.to_s.lines.map(&:strip).reject(&:empty?)
+  end
+
+  # List items, one per line in the text column.
+  def list_items
+    text.to_s.lines.map(&:strip).reject(&:empty?)
+  end
+
+  # Numbered lists render as an ordered list; everything else as unordered.
+  def list_ordered?
+    list_style == "number"
   end
 
   # Where this button sends the user, given everything answered so far:

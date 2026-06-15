@@ -1,0 +1,9 @@
+<% classes = ["govuk-list"]
+   classes << "govuk-list--bullet" if component.list_style == "bullet"
+   classes << "govuk-list--number" if component.list_style == "number"
+   classes << "govuk-list--spaced" if component.list_spaced? %>
+<%= content_tag(component.list_ordered? ? :ol : :ul, class: classes.join(" ")) do %>
+  <% component.list_items.each do |item| %>
+    <li><%= item %></li>
+  <% end %>
+<% end %>
