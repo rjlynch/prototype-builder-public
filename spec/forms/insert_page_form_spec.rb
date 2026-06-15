@@ -4,7 +4,7 @@ RSpec.describe InsertPageForm do
   it "inserts a blank page after the given one and shifts the rest down" do
     wizard = create_wizard_with_slugs("intro", "middle", "outro")
 
-    form = InsertPageForm.new(page: wizard.pages.find_by(slug: "intro"))
+    form = InsertPageForm.new(wizard.pages.find_by(slug: "intro"))
 
     expect(form.save).to be(true)
     expect(form.new_page.position).to eq(2)
@@ -16,7 +16,7 @@ RSpec.describe InsertPageForm do
   it "appends after the last page" do
     wizard = create_wizard_with_slugs("intro", "outro")
 
-    form = InsertPageForm.new(page: wizard.pages.find_by(slug: "outro"))
+    form = InsertPageForm.new(wizard.pages.find_by(slug: "outro"))
 
     expect(form.save).to be(true)
     expect(wizard.pages.reload.pluck(:position).max).to eq(3)
@@ -26,7 +26,7 @@ RSpec.describe InsertPageForm do
   it "gives the new page a slug that is unique within the wizard" do
     wizard = create_wizard_with_slugs("intro", "page-2")
 
-    form = InsertPageForm.new(page: wizard.pages.find_by(slug: "intro"))
+    form = InsertPageForm.new(wizard.pages.find_by(slug: "intro"))
 
     expect(form.save).to be(true)
     expect(form.new_page.slug).not_to eq("page-2")

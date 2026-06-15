@@ -5,10 +5,13 @@
 class InsertPageForm
   include ActiveModel::Model
 
-  attr_accessor :page
-  attr_reader :new_page
+  attr_reader :page, :new_page
 
   validates :page, presence: true
+
+  def initialize(page)
+    @page = page
+  end
 
   def save
     return false unless valid?

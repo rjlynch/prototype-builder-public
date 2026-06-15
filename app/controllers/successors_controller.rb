@@ -5,7 +5,7 @@ class SuccessorsController < ApplicationController
   # ready to start building.
   def create
     page = Page.find(params[:page_id])
-    form = InsertPageForm.new(page: page)
+    form = InsertPageForm.new(page)
     form.save
 
     redirect_to edit_page_path(form.new_page), status: :see_other

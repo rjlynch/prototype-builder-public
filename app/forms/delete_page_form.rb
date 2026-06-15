@@ -5,9 +5,13 @@
 class DeletePageForm
   include ActiveModel::Model
 
-  attr_accessor :page
+  attr_reader :page
 
   validate :not_the_only_page
+
+  def initialize(page)
+    @page = page
+  end
 
   # The page to show once this one is gone: its predecessor, or the new
   # first page.
