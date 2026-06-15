@@ -10,7 +10,7 @@ RSpec.describe PageForm do
     it "derives the slug from the title while the slug is the default" do
       page = build_page
 
-      PageForm.new(page: page, title: "What is your name").save
+      PageForm.new(page, params: { title: "What is your name" }).save
 
       expect(page.reload.slug).to eq("what-is-your-name")
     end
@@ -18,7 +18,7 @@ RSpec.describe PageForm do
     it "keeps re-deriving as the title changes" do
       page = build_page(slug: "what-is-your", title: "What is your")
 
-      PageForm.new(page: page, title: "What is your name").save
+      PageForm.new(page, params: { title: "What is your name" }).save
 
       expect(page.reload.slug).to eq("what-is-your-name")
     end
@@ -26,7 +26,7 @@ RSpec.describe PageForm do
     it "stops deriving once the slug has been customised" do
       page = build_page(slug: "custom-slug", title: "Old title")
 
-      PageForm.new(page: page, title: "New title").save
+      PageForm.new(page, params: { title: "New title" }).save
 
       expect(page.reload.slug).to eq("custom-slug")
       expect(page.title).to eq("New title")
@@ -35,7 +35,7 @@ RSpec.describe PageForm do
     it "falls back to the page-N default when the title is cleared" do
       page = build_page(slug: "old-title", title: "Old title")
 
-      PageForm.new(page: page, title: "").save
+      PageForm.new(page, params: { title: "" }).save
 
       expect(page.reload.slug).to eq("page-1")
     end
@@ -45,7 +45,7 @@ RSpec.describe PageForm do
     it "parameterises whatever the user types" do
       page = build_page
 
-      PageForm.new(page: page, slug: "What Is Your Name?").save
+      PageForm.new(page, params: { slug: "What Is Your Name?" }).save
 
       expect(page.reload.slug).to eq("what-is-your-name")
     end
@@ -54,7 +54,7 @@ RSpec.describe PageForm do
       page = build_page
       page.wizard.pages.create!(position: 2, slug: "congratulations")
 
-      PageForm.new(page: page, slug: "congratulations").save
+      PageForm.new(page, params: { slug: "congratulations" }).save
 
       expect(page.reload.slug).to eq("congratulations-2")
     end
@@ -62,9 +62,30 @@ RSpec.describe PageForm do
     it "re-derives from the title when cleared" do
       page = build_page(slug: "custom", title: "What is your name")
 
-      PageForm.new(page: page, slug: "").save
+      PageForm.new(page, params: { slug: "" }).save
 
       expect(page.reload.slug).to eq("what-is-your-name")
+    end
+  end
+
+  describe "the back link toggle" do
+    it "turns the back link off and on" do
+      page = build_page
+
+      PageForm.new(page, params: { back_link: "false" }).save
+      expect(page.reload.back_link).to be(false)
+
+      PageForm.new(page, params: { back_link: "true" }).save
+      expect(page.reload.back_link).to be(true)
+    end
+
+    it "leaves the back link untouched when it is not submitted" do
+      page = build_page
+      page.update!(back_link: false)
+
+      PageForm.new(page, params: { title: "A new title" }).save
+
+      expect(page.reload.back_link).to be(false)
     end
   end
 end

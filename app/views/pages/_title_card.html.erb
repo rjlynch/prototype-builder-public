@@ -25,7 +25,7 @@
     </div>
   <% end %>
 
-  <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+  <%= form_with model: PageForm.new(page), url: page_path(page), method: :patch,
         data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <div class="govuk-form-group">
       <label class="govuk-label" for="page_form_title">Page title</label>
@@ -42,5 +42,6 @@
   <% end %>
 
   <%= render "pages/caption_form", page: page %>
+  <%= render "pages/back_link_form", page: page %>
   <%= render "pages/slug_form", page: page %>
 </details>

@@ -1,5 +1,5 @@
 <div id="<%= dom_id(page, :caption_form) %>">
-  <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+  <%= form_with model: PageForm.new(page), url: page_path(page), method: :patch,
         data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <div class="govuk-form-group">
       <%= f.label :caption, "Caption", class: "govuk-label" %>

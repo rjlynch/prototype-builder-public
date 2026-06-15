@@ -293,6 +293,27 @@ The backlog now lives in the issue tracker, not this file.
   swapping, so the controller must `reload` it or the re-rendered panes show the
   old order — the pages reorder dodged this only because it `redirect_back`s.
 
+* 2026-06-15 — Issue #38: back links. A GOV.UK back link renders at the top of
+  every page after the first, in both run mode and the builder preview (shared
+  pages/_back_link partial inside the preview's width container). It is a
+  singular per-page nav element, so — like heading_size/caption — it lives as a
+  Page attribute (`back_link` boolean, default true) wired through PageForm, not
+  as a Component. The journey isn't linear (branch rules can skip pages), so the
+  "go to the previous page" default can't be resolved server-side; instead the
+  link returns through browser history via a generic `back-link` Stimulus
+  controller (history.back()), so the anchor carries only a placeholder `#`
+  href and the partial needs no mode/builder context. A per-page checkbox in the
+  title card turns it off (shown only when the page has a previous one). Dropped
+  the issue's "configurable target slug": with history.back() the default already
+  lands on the real previous page, and a free-text slug is a technical concept
+  that would confuse the non-technical audience and let them create dead links.
+  Review follow-up: PageForm switched to `ActiveModel::Attributes` +
+  `initialize(page, params:)` that reverse-merges the page's current values, so
+  unsubmitted fields re-save as no-ops and the per-attribute `_submitted` flags
+  are gone — only the slug-tracks-title rule still inspects which fields were
+  submitted (a single `@submitted` hash). 82 specs green; rubocop + brakeman
+  clean.
+
 ## Decisions / open questions
 
 * Reordering and the page title (deferred, will refactor): the title is a Page

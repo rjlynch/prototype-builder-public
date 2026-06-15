@@ -43,6 +43,13 @@ class Page < ApplicationRecord
     wizard.pages.find_by(position: position - 1)
   end
 
+  # Whether to render a GOV.UK back link at the top of the page. On by
+  # default for every page that has a previous one; the first page has
+  # nowhere to go back to, so it never shows one regardless of the flag.
+  def show_back_link?
+    back_link? && previous.present?
+  end
+
   # The input that renders the page title as its label/legend (the GOV.UK
   # single-question pattern). First such input wins, so the title is never
   # rendered twice. Nil when the page renders its own plain H1.

@@ -1,0 +1,9 @@
+<%# GOV.UK back link (https://design-system.service.gov.uk/components/back-link/).
+    The default behaviour is "go to the previous page" — but with branch rules
+    the journey isn't linear, so only the browser knows where the visitor came
+    from. The link therefore returns through browser history (back-link
+    controller) rather than to a fixed URL, hence the placeholder href. %>
+<% if page.show_back_link? %>
+  <%= link_to "Back", "#", class: "govuk-back-link",
+        data: { controller: "back-link", action: "back-link#back" } %>
+<% end %>
