@@ -43,6 +43,27 @@ RSpec.describe ComponentForm do
     expect(component.label).to eq("Are you eligible?")
   end
 
+  it "saves the list style and spacing" do
+    component = create_component(kind: "list", text: "One\nTwo")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(list_style: "number", list_spaced: "1")
+
+    expect(form.save).to be(true)
+    expect(component.reload.list_style).to eq("number")
+    expect(component.list_spaced).to be(true)
+  end
+
+  it "rejects an unknown list style" do
+    component = create_component(kind: "list", text: "One")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(list_style: "stars")
+
+    expect(form.save).to be(false)
+    expect(component.reload.list_style).to eq("none")
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard")
     page = wizard.pages.create!(position: 1, slug: "page-1")

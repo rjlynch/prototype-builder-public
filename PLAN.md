@@ -35,14 +35,18 @@ Page              one screen in the journey, ordered
 Component         one element on a page, ordered
   page_id
   position        integer, 1-based, unique within page
-  kind            string enum: "paragraph" | "text_input" | "radios" | "button"
-  text            paragraph body / button label
+  kind            string enum: "paragraph" | "subheading" | "list" |
+                  "text_input" | "radios" | "button"
+  text            paragraph body / subheading / button label / list items
+                  (lists: one item per line)
   name            inputs: question name; required, generated unique per
                   wizard (question-N); parameterised form = "input key"
   label           inputs: visible label (radios: fieldset legend)
   hint            inputs: hint text
   options         radios: one option per line; submitted value is the
                   parameterised option label
+  list_style      lists: "none" | "bullet" | "number" (GOV.UK list styles)
+  list_spaced     lists: extra spacing between items
 
 BranchRule        one "if answer X is Y go to page Z" condition on a button
   component_id    the button
@@ -313,6 +317,20 @@ The backlog now lives in the issue tracker, not this file.
   are gone — only the slug-tracks-title rule still inspects which fields were
   submitted (a single `@submitted` hash). 82 specs green; rubocop + brakeman
   clean.
+
+* 2026-06-15 — Issue #39: lists. Added a `list` editor component (separate from
+  paragraphs) offering the GOV.UK list styles. It rides the existing Component
+  mechanism rather than a bespoke model: items live in the shared `text` column
+  (one per line, parsed by `list_items`, mirroring radios' `option_list`), and
+  two new columns hold the presentation — `list_style` (none/bullet/number,
+  validated against `Component::LIST_STYLES`) and a `list_spaced` boolean for
+  extra spacing between items. The preview composes the GOV.UK classes
+  (`govuk-list` + `--bullet`/`--number`/`--spaced`) and renders `<ol>` for
+  numbers, `<ul>` otherwise, all in the partial so no CSS knowledge leaks into
+  the model. Editor adds a textarea + a small radio group for style + a spacing
+  checkbox, all autosubmitting like the other editors; ComponentForm/permit gained
+  the two fields. 87 specs green (new model, form and system specs); rubocop +
+  brakeman clean.
 
 * 2026-06-15 — Issue #52: brought the other page form objects onto PageForm's
   call shape, so `page` is the first positional arg everywhere. DeletePageForm

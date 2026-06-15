@@ -17,14 +17,18 @@ class ComponentForm
       label: component.label,
       hint: component.hint,
       options: component.options,
-      title_as_label: component.title_as_label
+      title_as_label: component.title_as_label,
+      list_style: component.list_style,
+      list_spaced: component.list_spaced
     )
   end
 
-  attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label
+  attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
+    :list_style, :list_spaced
 
   validates :text, :name, :label, :hint, :options, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
+  validates :list_style, inclusion: { in: Component::LIST_STYLES }
   validate :single_page_heading, if: -> { component && wants_title_as_label? }
 
   def save
@@ -32,7 +36,7 @@ class ComponentForm
 
     component.update!(
       text: text, name: name, label: label, hint: hint, options: options,
-      title_as_label: title_as_label
+      title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced
     )
     true
   end

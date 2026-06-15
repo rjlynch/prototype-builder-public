@@ -1,0 +1,29 @@
+<div class="govuk-form-group">
+  <%= f.label :text, "List items (one per line)", class: "govuk-label" %>
+  <%= f.text_area :text, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit input->mirror#refresh", mirror_target: "source" } %>
+</div>
+<div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Style</legend>
+    <div class="govuk-radios govuk-radios--small" data-module="govuk-radios">
+      <% { "none" => "No bullets or numbers", "bullet" => "Bullets", "number" => "Numbers" }.each do |value, text| %>
+        <div class="govuk-radios__item">
+          <%= f.radio_button :list_style, value, id: dom_id(f.object.component, :"list_style_#{value}"),
+                class: "govuk-radios__input", data: { action: "change->autosubmit#submit" } %>
+          <%= f.label :list_style, text, value: value, for: dom_id(f.object.component, :"list_style_#{value}"),
+                class: "govuk-label govuk-radios__label" %>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+</div>
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <%= f.check_box :list_spaced, id: dom_id(f.object.component, :list_spaced),
+            class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+      <%= f.label :list_spaced, "Add extra spacing between items", for: dom_id(f.object.component, :list_spaced),
+            class: "govuk-label govuk-checkboxes__label" %>
+    </div>
+  </div>
+</div>

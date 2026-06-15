@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_15_000000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_15_120000) do
   create_table "branch_rules", force: :cascade do |t|
     t.integer "component_id", null: false
     t.datetime "created_at", null: false
@@ -28,6 +28,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_15_000000) do
     t.string "hint"
     t.string "kind", null: false
     t.string "label"
+    t.boolean "list_spaced", default: false, null: false
+    t.string "list_style", default: "none", null: false
     t.string "name"
     t.text "options"
     t.integer "page_id", null: false

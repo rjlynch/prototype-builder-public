@@ -12,6 +12,9 @@
     <%= button_to "Add subheading", page_components_path(page),
           params: { component: { kind: "subheading" } },
           class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add list", page_components_path(page),
+          params: { component: { kind: "list" } },
+          class: "govuk-button govuk-button--secondary" %>
     <%= button_to "Add text input", page_components_path(page),
           params: { component: { kind: "text_input" } },
           class: "govuk-button govuk-button--secondary" %>
