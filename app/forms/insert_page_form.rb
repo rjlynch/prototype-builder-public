@@ -11,6 +11,8 @@ class InsertPageForm
 
   def initialize(page)
     @page = page
+
+    super()
   end
 
   def save

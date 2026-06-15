@@ -11,6 +11,8 @@ class DeletePageForm
 
   def initialize(page)
     @page = page
+
+    super()
   end
 
   # The page to show once this one is gone: its predecessor, or the new
