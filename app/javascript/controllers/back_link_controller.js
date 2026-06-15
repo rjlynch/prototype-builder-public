@@ -1,15 +1,12 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Sends a link back to the previous entry in the browser's history, so it
-// returns to wherever the visitor actually came from. Falls back to the
-// link's own href when there is no history to go back to (e.g. the page was
-// opened directly). Attach with data-controller="back-link" and
-// data-action="back-link#back" on an anchor.
+// returns to wherever the visitor actually came from. Attach with
+// data-controller="back-link" and data-action="back-link#back" on an anchor
+// (its href is just a placeholder — navigation is driven entirely here).
 export default class extends Controller {
   back(event) {
-    if (window.history.length > 1) {
-      event.preventDefault()
-      window.history.back()
-    }
+    event.preventDefault()
+    window.history.back()
   }
 }

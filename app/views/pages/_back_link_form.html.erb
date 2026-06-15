@@ -3,7 +3,7 @@
     through browser history (see pages/_back_link). %>
 <% if page.previous.present? %>
   <div id="<%= dom_id(page, :back_link_form) %>">
-    <%= form_with model: PageForm.from_page(page), url: page_path(page), method: :patch,
+    <%= form_with model: PageForm.new(page), url: page_path(page), method: :patch,
           data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">
         <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">

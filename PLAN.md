@@ -301,12 +301,17 @@ The backlog now lives in the issue tracker, not this file.
   as a Component. The journey isn't linear (branch rules can skip pages), so the
   "go to the previous page" default can't be resolved server-side; instead the
   link returns through browser history via a generic `back-link` Stimulus
-  controller (history.back()), falling back without JS to the previous page by
-  position. A per-page checkbox in the title card turns it off (shown only when
-  the page has a previous one). Dropped the issue's "configurable target slug":
-  with history.back() the default already lands on the real previous page, and a
-  free-text slug is a technical concept that would confuse the non-technical
-  audience and let them create dead links. 82 specs green; rubocop + brakeman
+  controller (history.back()), so the anchor carries only a placeholder `#`
+  href and the partial needs no mode/builder context. A per-page checkbox in the
+  title card turns it off (shown only when the page has a previous one). Dropped
+  the issue's "configurable target slug": with history.back() the default already
+  lands on the real previous page, and a free-text slug is a technical concept
+  that would confuse the non-technical audience and let them create dead links.
+  Review follow-up: PageForm switched to `ActiveModel::Attributes` +
+  `initialize(page, params:)` that reverse-merges the page's current values, so
+  unsubmitted fields re-save as no-ops and the per-attribute `_submitted` flags
+  are gone — only the slug-tracks-title rule still inspects which fields were
+  submitted (a single `@submitted` hash). 82 specs green; rubocop + brakeman
   clean.
 
 ## Decisions / open questions

@@ -13,8 +13,7 @@ RSpec.describe "Back links", type: :system do
     expect(page).to have_no_link("Back")
 
     visit page_path(second)
-    # Without JS the link falls back to the previous page by position.
-    expect(page).to have_link("Back", href: page_path(first))
+    expect(page).to have_link("Back")
   end
 
   it "can be turned off for an individual page" do
