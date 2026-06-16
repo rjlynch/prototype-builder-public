@@ -339,6 +339,26 @@ The backlog now lives in the issue tracker, not this file.
   (`attribute :position, :integer`), dropping the manual `position.to_i`.
   Behaviour unchanged. 82 specs green; rubocop clean.
 
+* 2026-06-16 — Issue #36: bold + links in paragraphs and lists. After a first
+  attempt with Trix/Action Text (PR #55) proved too heavy for a feature where
+  "we're not entering loads of links", the scope was reset to a tiny markdown
+  subset rendered at display time — `**bold**` and `[text](target)` — so no
+  WYSIWYG editor, no Action Text/Active Storage, no migration: content stays in
+  the existing `text` column. A `govuk_markdown` helper HTML-escapes the source
+  first, then introduces only `<strong class="govuk-!-font-weight-bold">` and
+  `<a class="govuk-link">`, so user input can't inject markup (brakeman clean on
+  the html_safe output). Link targets resolve forgivingly: full URLs / `mailto:`
+  / root-relative / `#heading` anchors pass through; anything else is looked up
+  as a sibling page slug and linked to that page, or left as an inert `#` (which
+  also neutralises `javascript:` schemes). Subheadings gained an `id` (the
+  parameterised text) so same-page heading links work. Both the paragraph and
+  list editors keep their plain textarea and gain a shared "Help with
+  formatting" `app-disclosure` explaining the syntax. Syntax-highlighting the
+  textarea was left out (explicitly a nice-to-have, and the overlay technique it
+  needs was the kind of complexity that sank the Trix attempt). 96 specs green
+  (helper + system); rubocop + brakeman clean. Follow-ups: a page/heading link
+  picker, and textarea link highlighting.
+
 ## Decisions / open questions
 
 * Reordering and the page title (deferred, will refactor): the title is a Page

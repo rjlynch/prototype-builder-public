@@ -1,6 +1,7 @@
 <div class="govuk-form-group">
   <%= f.label :text, "List items (one per line)", class: "govuk-label" %>
   <%= f.text_area :text, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit input->mirror#refresh", mirror_target: "source" } %>
+  <%= render "components/editors/formatting_help" %>
 </div>
 <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
