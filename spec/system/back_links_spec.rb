@@ -5,7 +5,7 @@ require "rails_helper"
 # the page the visitor actually came from even when branch rules skipped pages.
 RSpec.describe "Back links", type: :system do
   it "shows a back link on pages after the first, but not on the first page" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     first = wizard.pages.create!(position: 1, slug: "start", title: "Start")
     second = wizard.pages.create!(position: 2, slug: "second", title: "Second")
 
@@ -17,7 +17,7 @@ RSpec.describe "Back links", type: :system do
   end
 
   it "can be turned off for an individual page" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     wizard.pages.create!(position: 1, slug: "start", title: "Start")
     second = wizard.pages.create!(position: 2, slug: "second", title: "Second", back_link: false)
 
@@ -28,7 +28,7 @@ RSpec.describe "Back links", type: :system do
 
   describe "with JavaScript", :js do
     it "returns to the page the visitor came from, even when branching skipped pages" do
-      wizard = Wizard.create!(name: "Untitled wizard")
+      wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       start = wizard.pages.create!(position: 1, slug: "start", title: "Start")
       start.components.create!(position: 1, kind: "radios", name: "question-1", options: "yes\nno")
       button = start.components.create!(position: 2, kind: "button", text: "Continue")
@@ -54,7 +54,7 @@ RSpec.describe "Back links", type: :system do
       visit root_path
       click_button "Sign in"
 
-      wizard = Wizard.create!(name: "Untitled wizard")
+      wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       wizard.pages.create!(position: 1, slug: "start", title: "Start")
       second = wizard.pages.create!(position: 2, slug: "second", title: "Second")
 
@@ -73,7 +73,7 @@ RSpec.describe "Back links", type: :system do
       visit root_path
       click_button "Sign in"
 
-      wizard = Wizard.create!(name: "Untitled wizard")
+      wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       first = wizard.pages.create!(position: 1, slug: "start", title: "Start")
       wizard.pages.create!(position: 2, slug: "second", title: "Second")
 

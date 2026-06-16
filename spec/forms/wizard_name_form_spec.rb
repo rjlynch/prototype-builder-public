@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe WizardNameForm do
   it "renames the wizard" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
 
     form = WizardNameForm.new(wizard: wizard, name: "EYTFI claim")
 
@@ -11,7 +11,7 @@ RSpec.describe WizardNameForm do
   end
 
   it "keeps the old name when blank is submitted" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
 
     form = WizardNameForm.new(wizard: wizard, name: "")
 

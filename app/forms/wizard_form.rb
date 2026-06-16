@@ -3,16 +3,17 @@
 class WizardForm
   include ActiveModel::Model
 
-  attr_accessor :name
+  attr_accessor :name, :team
   attr_reader :wizard
 
   validates :name, presence: true
+  validates :team, presence: true
 
   def save
     return false unless valid?
 
     @wizard = Wizard.transaction do
-      Wizard.create!(name: name).tap { |wizard| wizard.pages.create!(position: 1, slug: Page.default_slug(1)) }
+      Wizard.create!(name: name, team: team).tap { |wizard| wizard.pages.create!(position: 1, slug: Page.default_slug(1)) }
     end
 
     true

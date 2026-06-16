@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
+
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
@@ -10,9 +12,31 @@ class ApplicationController < ActionController::Base
   # because Rails::HealthController doesn't inherit from ApplicationController.
   before_action :authenticate_tester, if: -> { Rails.env.production? }
 
-  helper_method :signed_in?
+  # A user acting outside their team is sent back to the dashboard.
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
+  helper_method :signed_in?, :current_user
 
   private
+
+  # Hardcoded until magic-link sign in lands (issue #32). The next PR replaces
+  # this with the user resolved from the session, and assumes one already
+  # exists in the database. Pundit's `pundit_user` defaults to this.
+  HARDCODED_USER_EMAIL = "rjlynchdev@gmail.com"
+
+  def current_user
+    @current_user ||= User.find_by(email_address: HARDCODED_USER_EMAIL)
+  end
+
+  # The team whose dashboard the user is currently looking at. A navigation
+  # concern, kept out of the policies (which authorize on membership).
+  def current_team
+    current_user&.current_team
+  end
+
+  def user_not_authorized
+    redirect_to wizards_path, alert: "You do not have access to that wizard"
+  end
 
   def authenticate_tester
     credentials = Rails.application.credentials.basic_auth

@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Page, type: :model do
   describe "validations" do
     it "requires a unique position within its wizard" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       wizard.pages.create!(position: 1, slug: "page-1")
       duplicate = wizard.pages.build(position: 1, slug: "other")
 
@@ -12,7 +12,7 @@ RSpec.describe Page, type: :model do
     end
 
     it "requires a positive integer position" do
-      page = Wizard.create!(name: "Test wizard").pages.build(position: 0, slug: "page-0")
+      page = Wizard.create!(name: "Test wizard", team: personal_team).pages.build(position: 0, slug: "page-0")
 
       expect(page).not_to be_valid
     end
@@ -20,7 +20,7 @@ RSpec.describe Page, type: :model do
 
   describe "#next" do
     it "returns the page at the following position, or nil" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       first = wizard.pages.create!(position: 1, slug: "page-1")
       second = wizard.pages.create!(position: 2, slug: "page-2")
 
@@ -31,7 +31,7 @@ RSpec.describe Page, type: :model do
 
   describe "#previous" do
     it "returns the page at the preceding position, or nil" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       first = wizard.pages.create!(position: 1, slug: "page-1")
       second = wizard.pages.create!(position: 2, slug: "page-2")
 
@@ -42,7 +42,7 @@ RSpec.describe Page, type: :model do
 
   describe "#show_back_link?" do
     it "is true by default for a page that has a previous one" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       wizard.pages.create!(position: 1, slug: "page-1")
       second = wizard.pages.create!(position: 2, slug: "page-2")
 
@@ -50,7 +50,7 @@ RSpec.describe Page, type: :model do
     end
 
     it "is false for the first page, which has nowhere to go back to" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       first = wizard.pages.create!(position: 1, slug: "page-1")
       wizard.pages.create!(position: 2, slug: "page-2")
 
@@ -58,7 +58,7 @@ RSpec.describe Page, type: :model do
     end
 
     it "is false when the back link is turned off for the page" do
-      wizard = Wizard.create!(name: "Test wizard")
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
       wizard.pages.create!(position: 1, slug: "page-1")
       second = wizard.pages.create!(position: 2, slug: "page-2", back_link: false)
 

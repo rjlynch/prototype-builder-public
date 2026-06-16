@@ -28,7 +28,7 @@ RSpec.describe MovePageForm do
   end
 
   def create_wizard_with_slugs(*slugs)
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     slugs.each.with_index(1) { |slug, position| wizard.pages.create!(position: position, slug: slug) }
     wizard
   end

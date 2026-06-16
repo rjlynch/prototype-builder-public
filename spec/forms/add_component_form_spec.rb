@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe AddComponentForm do
   it "appends components with per-kind defaults" do
-    wizard = Wizard.create!(name: "Test wizard")
+    wizard = Wizard.create!(name: "Test wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
 
     paragraph = AddComponentForm.new(page: page, kind: "paragraph")
@@ -18,7 +18,7 @@ RSpec.describe AddComponentForm do
   end
 
   it "generates input names unique within the wizard" do
-    wizard = Wizard.create!(name: "Test wizard")
+    wizard = Wizard.create!(name: "Test wizard", team: personal_team)
     first_page = wizard.pages.create!(position: 1, slug: "page-1")
     second_page = wizard.pages.create!(position: 2, slug: "page-2")
 
@@ -32,7 +32,7 @@ RSpec.describe AddComponentForm do
   end
 
   it "skips over names the user has already taken" do
-    wizard = Wizard.create!(name: "Test wizard")
+    wizard = Wizard.create!(name: "Test wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
     page.components.create!(position: 1, kind: "text_input", name: "question-1")
 
@@ -43,7 +43,7 @@ RSpec.describe AddComponentForm do
   end
 
   it "rejects unknown kinds" do
-    wizard = Wizard.create!(name: "Test wizard")
+    wizard = Wizard.create!(name: "Test wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
 
     form = AddComponentForm.new(page: page, kind: "carousel")

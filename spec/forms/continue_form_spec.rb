@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ContinueForm do
   def build_wizard
-    Wizard.create!(name: "Test wizard")
+    Wizard.create!(name: "Test wizard", team: personal_team)
   end
 
   def add_button(page, rules: [])

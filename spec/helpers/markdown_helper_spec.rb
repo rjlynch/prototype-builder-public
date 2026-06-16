@@ -33,7 +33,7 @@ RSpec.describe MarkdownHelper, type: :helper do
     end
 
     context "with a page for internal links" do
-      let(:wizard) { Wizard.create!(name: "Test") }
+      let(:wizard) { Wizard.create!(name: "Test", team: personal_team) }
       let!(:source) { wizard.pages.create!(position: 1, title: "Start", slug: "start") }
       let!(:target) { wizard.pages.create!(position: 2, title: "Next", slug: "next-page") }
 

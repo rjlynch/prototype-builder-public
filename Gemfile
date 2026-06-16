@@ -43,6 +43,9 @@ gem "image_processing", "~> 2.0"
 # Send transactional email via Resend in production [https://resend.com]
 gem "resend", "~> 1.3"
 
+# Minimal authorization via plain Ruby policy objects [https://github.com/varvet/pundit]
+gem "pundit", "~> 2.4"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"
