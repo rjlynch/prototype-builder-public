@@ -372,6 +372,20 @@ The backlog now lives in the issue tracker, not this file.
   streams a consistent sqlite snapshot to `tmp/backups`. One-time manual setup
   (GitHub secrets `RAILS_MASTER_KEY` + `SSH_PRIVATE_KEY`) documented in README.
   96 specs green; rubocop clean; production boot/eager-load verified.
+* 2026-06-16 — Issue #58: email provider. Resend (`resend` gem) is the
+  production mailer — `config.action_mailer.delivery_method = :resend` in
+  production.rb, with the API key read from encrypted credentials
+  (`resend.api_key`) in a `config/initializers/resend.rb`; the gem's railtie
+  registers the `:resend` delivery method. Production also flips
+  `raise_delivery_errors = true` so a broken setup surfaces rather than dropping
+  mail. Development prints emails to the console instead: a tiny
+  `ConsoleMailDelivery` (registered as `:console` via `add_delivery_method`)
+  writes the full message to `$stdout` and the log, so testers see mail in the
+  server output with no inbox or external call. `ApplicationMailer`'s default
+  `from` moved off the generated `from@example.com` to
+  `noreply@wizard.lynchsoftware.com` (the domain verified with Resend — DNS
+  TXT/MX configured on Cloudflare; will need redoing on a future domain). 99
+  specs green; rubocop + brakeman clean; dev/prod mailer resolution verified.
 
 ## Decisions / open questions
 
