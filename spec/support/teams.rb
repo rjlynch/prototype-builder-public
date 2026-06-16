@@ -23,6 +23,9 @@ module TeamHelpers
   def sign_in(user = current_user)
     visit new_session_path(token: user.generate_token_for(:sign_in))
     click_button "Sign in"
+    # Wait for the redirect to land before returning. Under the JS driver this
+    # ensures the session cookie is set before the spec navigates on.
+    expect(page).to have_current_path(wizards_path)
   end
 end
 

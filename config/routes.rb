@@ -1,8 +1,9 @@
 Rails.application.routes.draw do
   root "landings#show"
 
-  # Request a magic link (new = email form, create = send the email).
-  resource :sign_in, only: %i[new create]
+  # Request a magic link: new = email form, create = send the email then
+  # redirect to show = the neutral "check your email" confirmation.
+  resource :sign_in, only: %i[new create show]
 
   # The session itself: new = the magic-link confirmation page, create = consume
   # the token and sign in, destroy = sign out.

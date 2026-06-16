@@ -49,4 +49,14 @@ RSpec.describe "Signing in", type: :system do
 
     expect(page).to have_content("Check your email")
   end
+
+  # Turbo ignores a 200 response to a form submission, so the confirmation only
+  # appears if create redirects (PRG). Guards against regressing to render.
+  it "shows the confirmation under Turbo after submitting the form", :js do
+    visit new_sign_in_path
+    fill_in "Email address", with: "stranger@example.com"
+    click_button "Send sign-in link"
+
+    expect(page).to have_content("Check your email")
+  end
 end

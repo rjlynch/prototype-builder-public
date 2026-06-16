@@ -16,6 +16,8 @@ RSpec.describe "Authentication", type: :request do
         post sign_in_path, params: { email_address: "person@example.com" }
       }.to have_enqueued_mail(AuthMailer, :sign_in_link).with(user)
 
+      expect(response).to redirect_to(sign_in_path)
+      follow_redirect!
       expect(response.body).to include("Check your email")
     end
 
@@ -30,6 +32,8 @@ RSpec.describe "Authentication", type: :request do
         post sign_in_path, params: { email_address: "stranger@example.com" }
       }.to have_enqueued_mail(AuthMailer, :no_account).with("stranger@example.com")
 
+      expect(response).to redirect_to(sign_in_path)
+      follow_redirect!
       expect(response.body).to include("Check your email")
     end
 

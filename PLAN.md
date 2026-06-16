@@ -84,7 +84,8 @@ next page in builder mode if needed).
 
 ```
 root                         landings#show (landing page)
-resource  :sign_in           new (email form), create (email a magic link)
+resource  :sign_in           new (email form), create (email a magic link,
+                             then redirect), show ("check your email")
 resource  :session           new (magic-link confirm page), create (consume
                              token + sign in), destroy (sign out)
 resources :wizards           index (dashboard), create, show (run/share mode)
@@ -427,8 +428,10 @@ The backlog now lives in the issue tracker, not this file.
   `session[:user_id]` (set by `sign_in`, which resets the session first to
   avoid fixation). Flow: `sign_ins#new` is an email form → `sign_ins#create`
   emails a link to an existing user (or a plain "no account yet" note to an
-  unknown address) and always shows the same neutral "check your email" page, so
-  it never reveals who is registered. The link opens `sessions#new`, a
+  unknown address) and redirects to `sign_ins#show`, the same neutral "check
+  your email" page either way, so it never reveals who is registered. (Redirect,
+  not render: Turbo ignores a 200 to a form submit, so PRG is required for the
+  confirmation to actually appear — caught in PR review.) The link opens `sessions#new`, a
   confirmation page whose button POSTs the token to `sessions#create` — so an
   email scanner prefetching the link can't sign anyone in. Tokens are stateless
   and self-expiring via `User.generates_token_for(:sign_in, expires_in:
