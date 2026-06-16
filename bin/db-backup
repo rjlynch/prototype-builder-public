@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# Back up the production sqlite database to your local machine.
+#
+#   bin/db-backup
+#
+# Takes a consistent snapshot inside the running container with sqlite's online
+# `.backup` (safe while the app is writing), then streams the file off the
+# server's named docker volume into ./tmp/backups.
+set -euo pipefail
+
+HOST="77.42.86.45"
+VOLUME="govuk_prototype_builder_storage"
+TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
+DEST_DIR="tmp/backups"
+DEST="${DEST_DIR}/production-${TIMESTAMP}.sqlite3"
+
+mkdir -p "${DEST_DIR}"
+
+echo "Snapshotting production database on ${HOST}..."
+bin/kamal app exec --reuse \
+  "sqlite3 storage/production.sqlite3 \".backup '/rails/storage/backup.sqlite3'\""
+
+echo "Streaming snapshot to ${DEST}..."
+ssh "root@${HOST}" \
+  "docker run --rm -v ${VOLUME}:/v busybox cat /v/backup.sqlite3" > "${DEST}"
+
+echo "Removing snapshot from the server..."
+ssh "root@${HOST}" \
+  "docker run --rm -v ${VOLUME}:/v busybox rm -f /v/backup.sqlite3"
+
+echo "Backup written to ${DEST}"
