@@ -44,11 +44,12 @@ Deployed with [Kamal](https://kamal-deploy.org) to a Hetzner host
 (`wizard.lynchsoftware.com`), sharing a kamal-proxy with other apps on the
 box. The image is built and pushed to GitHub Container Registry (`ghcr.io`).
 
-**Continuous deployment.** Every push to `main` (a direct push or a merged
-PR) triggers `.github/workflows/deploy.yml`, which builds the image and runs
-`kamal deploy`. Production sits behind HTTP Basic auth (the `basic_auth`
-key in Rails encrypted credentials) while it's open to invited testers; the
-`/up` health check is exempt.
+**Continuous deployment.** The `deploy` job in `.github/workflows/ci.yml`
+runs on every push to `main` (a direct push or a merged PR), but only after
+the scan/lint/test jobs pass. It builds the image and runs `kamal deploy`.
+Production sits behind HTTP Basic auth (the `basic_auth` key in Rails
+encrypted credentials) while it's open to invited testers; the `/up` health
+check is exempt.
 
 One-time setup — add two repository secrets (Settings → Secrets → Actions):
 
