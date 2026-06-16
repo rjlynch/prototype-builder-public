@@ -1,22 +1,26 @@
 class WizardPolicy < ApplicationPolicy
   def index? = true
-  def create? = current_team.present?
-  def edit? = owned?
-  def update? = owned?
+  def create? = user.present?
+  def edit? = member_of_owning_team?
+  def update? = member_of_owning_team?
 
   private
 
-  # A wizard is editable only by users acting in the team that owns it. The
-  # public share link (WizardsController#show) is unauthenticated and does not
-  # go through this policy.
-  def owned? = current_team.present? && record.team_id == current_team.id
+  # Access follows team membership: a user may act on any wizard owned by a team
+  # they belong to. Which of their teams is "current" is a navigation concern
+  # the controller layers on top (it filters the dashboard); it is deliberately
+  # not encoded here. The public share link (WizardsController#show) is
+  # unauthenticated and does not go through this policy.
+  def member_of_owning_team?
+    user.present? && user.teams.exists?(record.team_id)
+  end
 
-  # Wizards visible in the dashboard are those belonging to the current team.
+  # Every wizard belonging to a team the user is a member of.
   class Scope < ApplicationPolicy::Scope
     def resolve
-      return scope.none if user&.current_team.nil?
+      return scope.none if user.nil?
 
-      scope.where(team: user.current_team)
+      scope.joins(team: :users).where(users: { id: user.id })
     end
   end
 end

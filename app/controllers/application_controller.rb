@@ -28,6 +28,12 @@ class ApplicationController < ActionController::Base
     @current_user ||= User.find_by(email_address: HARDCODED_USER_EMAIL)
   end
 
+  # The team whose dashboard the user is currently looking at. A navigation
+  # concern, kept out of the policies (which authorize on membership).
+  def current_team
+    current_user&.current_team
+  end
+
   def user_not_authorized
     redirect_to wizards_path, alert: "You do not have access to that wizard"
   end

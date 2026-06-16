@@ -9,12 +9,15 @@ class WizardsController < ApplicationController
   end
 
   def index
-    render :index, locals: { wizards: policy_scope(Wizard).order(:created_at) }
+    # policy_scope keeps you to wizards in teams you belong to; the current-team
+    # filter narrows that to the dashboard you're actually viewing.
+    wizards = policy_scope(Wizard).where(team: current_team).order(:created_at)
+    render :index, locals: { wizards: wizards }
   end
 
   def create
     authorize Wizard
-    form = WizardForm.new(name: "Untitled wizard", team: current_user.current_team)
+    form = WizardForm.new(name: "Untitled wizard", team: current_team)
 
     if form.save
       redirect_to edit_page_path(form.first_page)

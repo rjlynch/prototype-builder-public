@@ -407,10 +407,13 @@ The backlog now lives in the issue tracker, not this file.
   non-deterministic), and a `Membership` join so a user can belong to several
   teams. A user's `default_team` is the team they're "currently" working in.
   `Wizard` now `belongs_to :team` (backfilled, then NOT NULL). Authorization is
-  Pundit: `WizardPolicy`/`PagePolicy` allow edit/update (and create) only for
-  records in the current team, `WizardPolicy::Scope` limits the dashboard to the
-  current team's wizards; the public share/run views (`wizards#show`,
-  `pages#show`) stay unauthenticated. The current user is **hardcoded** in
+  Pundit and hangs off **team membership**: `WizardPolicy`/`PagePolicy` allow
+  edit/update for any record owned by a team the user belongs to, and
+  `WizardPolicy::Scope` returns wizards across all the user's teams. "Current
+  team" is kept out of the policies as a navigation concern: the dashboard
+  (`wizards#index`) layers a `where(team: current_team)` filter on top of the
+  membership scope, and new wizards are created in `current_team`. The public
+  share/run views (`wizards#show`, `pages#show`) stay unauthenticated. The current user is **hardcoded** in
   ApplicationController (`rjlynchdev@gmail.com`) until PR 2 adds magic-link sign
   in; PR 3 adds sign up. A one-off, idempotent data migration created the
   "Personal Team" + Richard Lynch user and assigned the existing wizards to it

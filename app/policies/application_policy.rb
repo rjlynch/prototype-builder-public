@@ -17,10 +17,6 @@ class ApplicationPolicy
   def edit? = update?
   def destroy? = false
 
-  # The team the user is currently working in. Authorization hangs off this:
-  # a user may only act on records belonging to their current team.
-  def current_team = user&.current_team
-
   class Scope
     def initialize(user, scope)
       @user = user
