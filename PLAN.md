@@ -358,6 +358,20 @@ The backlog now lives in the issue tracker, not this file.
   needs was the kind of complexity that sank the Trix attempt). 96 specs green
   (helper + system); rubocop + brakeman clean. Follow-ups: a page/heading link
   picker, and textarea link highlighting.
+* 2026-06-16 — Deploy to Hetzner (issue #30). Kamal 2 deploy to the existing
+  `77.42.86.45` host (shared kamal-proxy with workout_tracker), TLS on
+  `wizard.lynchsoftware.com`. Switched the registry from the reference app's
+  server-local `localhost:5555` to `ghcr.io` so a GitHub runner can push —
+  CD (`.github/workflows/deploy.yml`) builds and `kamal deploy`s on every push
+  to main (covers both "push" and "merged PR" triggers). Production turns on
+  `assume_ssl`/`force_ssl` (with `/up` excluded). The whole app sits behind
+  HTTP Basic auth in production only (ApplicationController `before_action`,
+  creds in Rails encrypted credentials under `basic_auth`) while it's open to
+  invited testers; `/up` bypasses it as Rails::HealthController doesn't inherit
+  ApplicationController. Aliases `console`/`shell`/`logs`/`db`; `bin/db-backup`
+  streams a consistent sqlite snapshot to `tmp/backups`. One-time manual setup
+  (GitHub secrets `RAILS_MASTER_KEY` + `SSH_PRIVATE_KEY`) documented in README.
+  96 specs green; rubocop clean; production boot/eager-load verified.
 
 ## Decisions / open questions
 

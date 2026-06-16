@@ -37,3 +37,35 @@ bin/brakeman         # security static analysis
 
 The end-to-end journey from the project brief lives in
 `spec/system/building_a_wizard_spec.rb`.
+
+## Deployment
+
+Deployed with [Kamal](https://kamal-deploy.org) to a Hetzner host
+(`wizard.lynchsoftware.com`), sharing a kamal-proxy with other apps on the
+box. The image is built and pushed to GitHub Container Registry (`ghcr.io`).
+
+**Continuous deployment.** Every push to `main` (a direct push or a merged
+PR) triggers `.github/workflows/deploy.yml`, which builds the image and runs
+`kamal deploy`. Production sits behind HTTP Basic auth (the `basic_auth`
+key in Rails encrypted credentials) while it's open to invited testers; the
+`/up` health check is exempt.
+
+One-time setup — add two repository secrets (Settings → Secrets → Actions):
+
+- `RAILS_MASTER_KEY` — contents of `config/master.key`.
+- `SSH_PRIVATE_KEY` — a private key whose public half is in the server's
+  `root` `authorized_keys`.
+
+The registry uses the workflow's `GITHUB_TOKEN` (no PAT needed).
+
+**Manual operations** (run locally; needs SSH access and the gh CLI logged
+in for the registry token):
+
+```sh
+bin/kamal deploy     # build + deploy by hand
+bin/kamal console    # Rails console on the server
+bin/kamal shell      # bash shell in the container
+bin/kamal logs       # tail application logs
+bin/kamal db         # sqlite dbconsole
+bin/db-backup        # stream a production DB snapshot to tmp/backups/
+```
