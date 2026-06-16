@@ -7,8 +7,7 @@ require "rails_helper"
 # match, bouncing focus to the wrong card while the user is mid-type.
 RSpec.describe "Editor field focus", :js, type: :system do
   it "keeps focus in the card being typed in when a second card of the same kind exists" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     add_component "Add paragraph"

@@ -1,0 +1,20 @@
+<% if flash.any? %>
+  <div class="govuk-width-container">
+    <% flash.each do |type, message| %>
+      <% success = type.to_s == "notice" %>
+      <div class="govuk-notification-banner<%= " govuk-notification-banner--success" if success %>"
+           role="<%= success ? "status" : "alert" %>"
+           aria-labelledby="govuk-notification-banner-title"
+           data-module="govuk-notification-banner">
+        <div class="govuk-notification-banner__header">
+          <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+            <%= success ? "Success" : "Important" %>
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-notification-banner__heading"><%= message %></p>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% end %>

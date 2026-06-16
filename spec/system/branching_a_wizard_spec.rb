@@ -5,8 +5,7 @@ require "rails_helper"
 # no -> you-are-not-eligible.
 RSpec.describe "Branching a wizard", :js, type: :system do
   it "routes to different pages depending on a radio answer" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     fill_in "Page title", with: "Are you eligible?"
@@ -63,8 +62,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
   end
 
   it "explains that branching needs an input first" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     add_component "Add continue button"
@@ -77,8 +75,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
   end
 
   it "updates the missing page warning while typing a branch target" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     add_component "Add radio buttons"

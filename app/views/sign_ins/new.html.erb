@@ -1,0 +1,20 @@
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Sign in</h1>
+        <p class="govuk-body">Enter your email address and we'll send you a link to sign in.</p>
+
+        <%= form_with url: sign_in_path, method: :post do |f| %>
+          <div class="govuk-form-group">
+            <%= label_tag :email_address, "Email address", class: "govuk-label" %>
+            <%= email_field_tag :email_address, params[:email_address],
+                  class: "govuk-input", autocomplete: "email", spellcheck: "false" %>
+          </div>
+
+          <%= f.submit "Send sign-in link", class: "govuk-button" %>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>

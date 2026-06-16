@@ -51,8 +51,7 @@ RSpec.describe "Back links", type: :system do
     end
 
     it "is configured from the page builder and previews live" do
-      visit root_path
-      click_button "Sign in"
+      sign_in
 
       wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       wizard.pages.create!(position: 1, slug: "start", title: "Start")
@@ -70,8 +69,7 @@ RSpec.describe "Back links", type: :system do
     end
 
     it "does not offer back link controls on the first page" do
-      visit root_path
-      click_button "Sign in"
+      sign_in
 
       wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       first = wizard.pages.create!(position: 1, slug: "start", title: "Start")

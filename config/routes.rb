@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   root "landings#show"
 
-  resource :session, only: %i[create destroy]
+  # Request a magic link (new = email form, create = send the email).
+  resource :sign_in, only: %i[new create]
+
+  # The session itself: new = the magic-link confirmation page, create = consume
+  # the token and sign in, destroy = sign out.
+  resource :session, only: %i[new create destroy]
 
   resources :wizards, only: %i[index create show edit update]
 

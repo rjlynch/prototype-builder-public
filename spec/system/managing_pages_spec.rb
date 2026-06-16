@@ -70,8 +70,7 @@ RSpec.describe "Managing pages", :js, type: :system do
   end
 
   def build_three_page_wizard
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     expect(page).to have_no_button("Remove this page") # single page is undeletable
