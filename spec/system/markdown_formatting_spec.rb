@@ -5,8 +5,7 @@ require "rails_helper"
 # the syntax. (No WYSIWYG editor: the plain textarea stays.)
 RSpec.describe "Markdown formatting", :js, type: :system do
   it "renders bold and links from paragraph and list markdown" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     fill_in "Page title", with: "Eligibility"

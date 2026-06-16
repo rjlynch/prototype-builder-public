@@ -5,8 +5,7 @@ require "rails_helper"
 # once as the H1 rather than twice.
 RSpec.describe "Using the page title as the question", :js, type: :system do
   it "renders the title as the input's label or legend, never duplicating the H1" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     # --- Radios: title as the fieldset legend ---------------------------

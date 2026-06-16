@@ -6,8 +6,7 @@ require "rails_helper"
 # plain H1 or an input borrows the title as its label/legend.
 RSpec.describe "Page heading options", :js, type: :system do
   it "sets the heading size and caption, and applies them across the preview" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     fill_in "Page title", with: "Apply for a payment"

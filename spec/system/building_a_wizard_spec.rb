@@ -4,8 +4,7 @@ require "rails_helper"
 # multi-page journey in the page builder while the preview pane updates live.
 RSpec.describe "Building a wizard", :js, type: :system do
   it "builds a two-page journey with a live, interactive preview" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     # --- Page 1 ---------------------------------------------------------

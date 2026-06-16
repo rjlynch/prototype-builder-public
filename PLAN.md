@@ -84,7 +84,10 @@ next page in builder mode if needed).
 
 ```
 root                         landings#show (landing page)
-resource  :session           stub sign in (create sets a session flag), destroy
+resource  :sign_in           new (email form), create (email a magic link,
+                             then redirect), show ("check your email")
+resource  :session           new (magic-link confirm page), create (consume
+                             token + sign in), destroy (sign out)
 resources :wizards           index (dashboard), create, show (run/share mode)
 resources :pages             edit (THE BUILDER), update, show (run mode)
   resources :components      create
@@ -420,6 +423,27 @@ The backlog now lives in the issue tracker, not this file.
   (runs automatically on the next prod deploy). Active Record Encryption keys
   added to credentials (`active_record_encryption`). 121 specs green; rubocop +
   brakeman clean.
+* 2026-06-16 — Issue #32 (accounts), PR 2 of 3: magic-link sign in; the
+  hardcoded current user is gone. `current_user` now comes from
+  `session[:user_id]` (set by `sign_in`, which resets the session first to
+  avoid fixation). Flow: `sign_ins#new` is an email form → `sign_ins#create`
+  emails a link to an existing user (or a plain "no account yet" note to an
+  unknown address) and redirects to `sign_ins#show`, the same neutral "check
+  your email" page either way, so it never reveals who is registered. (Redirect,
+  not render: Turbo ignores a 200 to a form submit, so PRG is required for the
+  confirmation to actually appear — caught in PR review.) The link opens `sessions#new`, a
+  confirmation page whose button POSTs the token to `sessions#create` — so an
+  email scanner prefetching the link can't sign anyone in. Tokens are stateless
+  and self-expiring via `User.generates_token_for(:sign_in, expires_in:
+  15.minutes)`, tied to `last_signed_in_at` so a link is single-use (signing in
+  bumps the timestamp, invalidating it). `create` records the sign in
+  (`sign_in_count` + `last_signed_in_at`) and redirects to the default team's
+  dashboard; invalid and expired links are handled identically. Emails are plain
+  text (`AuthMailer`, `.text.erb` only) — dev prints them to the console, prod
+  sends via Resend. Added a global GOV.UK notification-banner flash partial (the
+  app had none). Specs: the stub `click_button "Sign in"` is replaced by a
+  `sign_in` helper that walks the real confirm step; new request + mailer specs
+  cover the flow. 134 specs green; rubocop + brakeman clean.
 
 ## Decisions / open questions
 
@@ -428,10 +452,11 @@ The backlog now lives in the issue tracker, not this file.
   `PagesController` (the builder edit/update/destroy). The deeper nested builder
   controllers (`components`, `branch_rules`, `component_positions`, `successors`,
   `positions`, `answers`) still load by component/page id without a team check, so
-  a determined user could mutate another team's content by guessing ids. Harmless
-  while the only user is the hardcoded one; close this when PR 2 introduces real
-  sign in and multiple users can coexist (a shared `authorize_via_wizard` filter
-  resolving each record's wizard → team is the likely shape).
+  a determined user could mutate another team's content by guessing ids. Still
+  open after PR 2 (sign in): only the backfilled user exists until sign up (PR 3)
+  lands, so it stays theoretical. Close it once multiple users can coexist — a
+  shared `authorize_via_wizard` filter resolving each record's wizard → team is
+  the likely shape.
 
 * Reordering and the page title (deferred, will refactor): the title is a Page
   attribute rendered first in the preview, and the title *card* is pinned first

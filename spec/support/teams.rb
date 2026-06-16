@@ -12,18 +12,23 @@ module TeamHelpers
   # exist in the database.
   def current_user
     @current_user ||= User.create!(
-      email_address: ApplicationController::HARDCODED_USER_EMAIL,
+      email_address: "rjlynchdev@example.com",
       full_name: "Richard Lynch",
       default_team: personal_team
     ).tap { |user| Membership.create!(user: user, team: personal_team) }
+  end
+
+  # Sign a user in by walking the real magic-link confirmation step, so system
+  # specs exercise the same path a person does without going through email.
+  def sign_in(user = current_user)
+    visit new_session_path(token: user.generate_token_for(:sign_in))
+    click_button "Sign in"
+    # Wait for the redirect to land before returning. Under the JS driver this
+    # ensures the session cookie is set before the spec navigates on.
+    expect(page).to have_current_path(wizards_path)
   end
 end
 
 RSpec.configure do |config|
   config.include TeamHelpers
-
-  # Drive the app as the hardcoded current user wherever a request hits the
-  # controllers.
-  config.before(:each, type: :system) { current_user }
-  config.before(:each, type: :request) { current_user }
 end

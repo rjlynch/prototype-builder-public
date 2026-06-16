@@ -11,6 +11,8 @@
     <%= render "layouts/govuk_header" %>
     <%= render "layouts/service_navigation", signed_in: signed_in? %>
 
+    <%= render "layouts/flash" %>
+
     <%= yield %>
 
     <%= render "layouts/footer" %>

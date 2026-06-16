@@ -19,13 +19,16 @@ class ApplicationController < ActionController::Base
 
   private
 
-  # Hardcoded until magic-link sign in lands (issue #32). The next PR replaces
-  # this with the user resolved from the session, and assumes one already
-  # exists in the database. Pundit's `pundit_user` defaults to this.
-  HARDCODED_USER_EMAIL = "rjlynchdev@gmail.com"
-
   def current_user
-    @current_user ||= User.find_by(email_address: HARDCODED_USER_EMAIL)
+    @current_user ||= User.find_by(id: session[:user_id]) if session[:user_id]
+  end
+
+  # Establish a signed-in session. Resets the session first to avoid session
+  # fixation.
+  def sign_in(user)
+    reset_session
+    session[:user_id] = user.id
+    @current_user = user
   end
 
   # The team whose dashboard the user is currently looking at. A navigation
@@ -47,10 +50,10 @@ class ApplicationController < ActionController::Base
   end
 
   def signed_in?
-    session[:signed_in].present?
+    current_user.present?
   end
 
   def require_sign_in
-    redirect_to root_path unless signed_in?
+    redirect_to new_sign_in_path unless signed_in?
   end
 end

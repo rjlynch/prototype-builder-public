@@ -4,8 +4,7 @@ require "rails_helper"
 # GOV.UK list styles: no decoration, bullets, numbers, and extra spacing.
 RSpec.describe "List components", :js, type: :system do
   it "adds a list and switches between styles with a live preview" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     fill_in "Page title", with: "Before you start"

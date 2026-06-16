@@ -5,8 +5,7 @@ require "rails_helper"
 # or removing a component triggers.
 RSpec.describe "Collapsing editor cards", :js, type: :system do
   it "remembers collapsed cards across builder re-renders and reloads" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     add_component "Add paragraph"

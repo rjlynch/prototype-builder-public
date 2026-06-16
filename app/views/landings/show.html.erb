@@ -8,7 +8,8 @@
           with colleagues and users for feedback. No prototype kit, no code,
           no hosting to sort out.
         </p>
-        <%= button_to "Sign in", session_path, class: "govuk-button" %>
+        <%= link_to "Sign in", new_sign_in_path, class: "govuk-button", role: "button",
+              draggable: "false", data: { module: "govuk-button" } %>
       </div>
     </div>
   </main>

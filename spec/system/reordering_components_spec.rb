@@ -5,8 +5,7 @@ require "rails_helper"
 # not a component, so it has no arrows and stays first.
 RSpec.describe "Reordering components", :js, type: :system do
   it "moves a card up and down, reordering the preview" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     fill_in "Page title", with: "Before you start"
@@ -41,8 +40,7 @@ RSpec.describe "Reordering components", :js, type: :system do
   end
 
   it "does not offer to move past either end, and the title card has no arrows" do
-    visit root_path
-    click_button "Sign in"
+    sign_in
     click_button "New wizard"
 
     add_component "Add paragraph"
