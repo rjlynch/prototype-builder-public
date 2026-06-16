@@ -1,1 +1,2 @@
-<h2 class="govuk-heading-m"><%= component.text %></h2>
+<%# id lets paragraphs/lists link to this heading with [text](#heading-text). %>
+<h2 class="govuk-heading-m" id="<%= component.text.to_s.parameterize %>"><%= component.text %></h2>

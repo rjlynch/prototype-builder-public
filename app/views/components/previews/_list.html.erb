@@ -4,6 +4,6 @@
    classes << "govuk-list--spaced" if component.list_spaced? %>
 <%= content_tag(component.list_ordered? ? :ol : :ul, class: classes.join(" ")) do %>
   <% component.list_items.each do |item| %>
-    <li><%= item %></li>
+    <li><%= govuk_markdown(item, page: component.page) %></li>
   <% end %>
 <% end %>

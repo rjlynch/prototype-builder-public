@@ -15,7 +15,7 @@ RSpec.describe "Collapsing editor cards", :js, type: :system do
 
     # Collapse the paragraph card; its summary still identifies it. (The page
     # title card is always the first card, so target the paragraph directly.)
-    within_last_card { find("summary").click }
+    within_last_card { find(".app-card__summary").click }
     expect(page).to have_css(".app-card:not([open])", count: 1)
     within(".app-card:not([open])") do
       expect(page).to have_css(".app-card__title", text: "Paragraph")
