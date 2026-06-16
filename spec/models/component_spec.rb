@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe Component do
   it "allows only one input per page to use the title as its label" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
     page.components.create!(position: 1, kind: "radios", name: "question-1", title_as_label: true)
 

@@ -59,7 +59,7 @@ RSpec.describe MoveComponentForm do
   end
 
   def page_with_components(*kinds)
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
     kinds.each.with_index(1) do |kind, position|
       attributes = { kind: kind, position: position }

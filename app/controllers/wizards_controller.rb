@@ -9,11 +9,12 @@ class WizardsController < ApplicationController
   end
 
   def index
-    render :index, locals: { wizards: Wizard.order(:created_at) }
+    render :index, locals: { wizards: policy_scope(Wizard).order(:created_at) }
   end
 
   def create
-    form = WizardForm.new(name: "Untitled wizard")
+    authorize Wizard
+    form = WizardForm.new(name: "Untitled wizard", team: current_user.current_team)
 
     if form.save
       redirect_to edit_page_path(form.first_page)
@@ -24,11 +25,14 @@ class WizardsController < ApplicationController
 
   # Wizard-level settings, kept off the page builder.
   def edit
-    render :edit, locals: { wizard: Wizard.find(params[:id]) }
+    wizard = Wizard.find(params[:id])
+    authorize wizard
+    render :edit, locals: { wizard: wizard }
   end
 
   def update
     wizard = Wizard.find(params[:id])
+    authorize wizard
     form = WizardNameForm.new(wizard: wizard, name: params.require(:wizard)[:name])
     form.save
 

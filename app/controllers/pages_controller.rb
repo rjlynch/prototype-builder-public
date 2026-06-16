@@ -11,11 +11,13 @@ class PagesController < ApplicationController
   # The page builder: left pane of controls, right pane of live preview.
   def edit
     page = Page.find(params[:id])
+    authorize page
     render :edit, locals: { page: page }
   end
 
   def destroy
     page = Page.find(params[:id])
+    authorize page
     form = DeletePageForm.new(page)
 
     if form.save
@@ -27,6 +29,7 @@ class PagesController < ApplicationController
 
   def update
     page = Page.find(params[:id])
+    authorize page
     attrs = params.require(:page).permit(:title, :slug, :heading_size, :caption, :back_link)
     form = PageForm.new(page, params: attrs)
     form.save

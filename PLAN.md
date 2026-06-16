@@ -21,7 +21,21 @@ conversation.
 ## Data model
 
 ```
+Team              an account; owns wizards, has many users via memberships
+  name            string ("Personal Team" for a single user)
+
+User              a person who signs in to build wizards
+  email_address   encrypted (deterministic + downcase so it stays queryable
+                  and uniquely indexed); PII
+  full_name       encrypted (non-deterministic); PII
+  default_team_id  the team the user is currently working in
+
+Membership        joins a user to a team (the grant of access); a user can
+  user_id         belong to several teams
+  team_id         unique on [user_id, team_id]
+
 Wizard            the prototype/journey being built
+  team_id         the owning team
   name            string (defaults to first page title later; MVP: "Untitled wizard")
 
 Page              one screen in the journey, ordered
@@ -386,8 +400,35 @@ The backlog now lives in the issue tracker, not this file.
   `noreply@wizard.lynchsoftware.com` (the domain verified with Resend — DNS
   TXT/MX configured on Cloudflare; will need redoing on a future domain). 99
   specs green; rubocop + brakeman clean; dev/prod mailer resolution verified.
+* 2026-06-16 — Issue #32 (accounts), PR 1 of 3: account model + authorization,
+  no sign in yet. New `Team` (the account), `User` (email_address + full_name,
+  both encrypted at rest — email deterministic + downcase so it stays
+  queryable/uniquely indexed for the magic-link lookup later, full_name
+  non-deterministic), and a `Membership` join so a user can belong to several
+  teams. A user's `default_team` is the team they're "currently" working in.
+  `Wizard` now `belongs_to :team` (backfilled, then NOT NULL). Authorization is
+  Pundit: `WizardPolicy`/`PagePolicy` allow edit/update (and create) only for
+  records in the current team, `WizardPolicy::Scope` limits the dashboard to the
+  current team's wizards; the public share/run views (`wizards#show`,
+  `pages#show`) stay unauthenticated. The current user is **hardcoded** in
+  ApplicationController (`rjlynchdev@gmail.com`) until PR 2 adds magic-link sign
+  in; PR 3 adds sign up. A one-off, idempotent data migration created the
+  "Personal Team" + Richard Lynch user and assigned the existing wizards to it
+  (runs automatically on the next prod deploy). Active Record Encryption keys
+  added to credentials (`active_record_encryption`). 121 specs green; rubocop +
+  brakeman clean.
 
 ## Decisions / open questions
+
+* Authorization surface (issue #32, follow-up): PR 1 enforces team access on the
+  entry points — `WizardsController` (index scope + edit/update/create) and
+  `PagesController` (the builder edit/update/destroy). The deeper nested builder
+  controllers (`components`, `branch_rules`, `component_positions`, `successors`,
+  `positions`, `answers`) still load by component/page id without a team check, so
+  a determined user could mutate another team's content by guessing ids. Harmless
+  while the only user is the hardcoded one; close this when PR 2 introduces real
+  sign in and multiple users can coexist (a shared `authorize_via_wizard` filter
+  resolving each record's wizard → team is the likely shape).
 
 * Reordering and the page title (deferred, will refactor): the title is a Page
   attribute rendered first in the preview, and the title *card* is pinned first

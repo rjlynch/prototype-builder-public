@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe PageForm do
   def build_page(slug: "page-1", title: "")
-    wizard = Wizard.create!(name: "Test wizard")
+    wizard = Wizard.create!(name: "Test wizard", team: personal_team)
     wizard.pages.create!(position: 1, slug: slug, title: title)
   end
 

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Sharing a wizard", type: :system do
   it "lets anyone with the link walk through the journey without signing in" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     first = wizard.pages.create!(position: 1, slug: "claim-a-payment", title: "Claim a payment")
     first.components.create!(position: 1, kind: "paragraph", text: "Use this service to claim.")
     first.components.create!(position: 2, kind: "button", text: "Start now")
@@ -26,7 +26,7 @@ RSpec.describe "Sharing a wizard", type: :system do
   end
 
   it "follows branch rules based on answers" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     question = wizard.pages.create!(position: 1, slug: "are-you-eligible", title: "Are you eligible?")
     question.components.create!(position: 1, kind: "radios", name: "question-1", options: "yes\nno")
     button = question.components.create!(position: 2, kind: "button", text: "Continue")
@@ -49,7 +49,7 @@ RSpec.describe "Sharing a wizard", type: :system do
   end
 
   it "shows the continue button as disabled on the last page" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     only = wizard.pages.create!(position: 1, slug: "the-only-page", title: "The only page")
     only.components.create!(position: 1, kind: "button", text: "Continue")
 
@@ -60,7 +60,7 @@ RSpec.describe "Sharing a wizard", type: :system do
   end
 
   it "does not show builder empty-state hints in run mode" do
-    wizard = Wizard.create!(name: "Untitled wizard")
+    wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     wizard.pages.create!(position: 1, slug: "blank-page")
 
     visit wizard_path(wizard)
