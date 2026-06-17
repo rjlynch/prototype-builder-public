@@ -5,6 +5,7 @@ class BranchRulesController < ApplicationController
 
   def create
     component = Component.find(params[:component_id])
+    authorize_wizard(component.page.wizard)
     form = AddBranchRuleForm.new(component: component)
     form.save
 
@@ -13,6 +14,7 @@ class BranchRulesController < ApplicationController
 
   def update
     branch_rule = BranchRule.find(params[:id])
+    authorize_wizard(branch_rule.component.page.wizard)
     form = BranchRuleForm.from_branch_rule(branch_rule)
     form.assign_attributes(branch_rule_params)
     form.save
@@ -38,6 +40,7 @@ class BranchRulesController < ApplicationController
 
   def destroy
     branch_rule = BranchRule.find(params[:id])
+    authorize_wizard(branch_rule.component.page.wizard)
     branch_rule.destroy!
 
     respond_with_panes(branch_rule.component.page, builder: true)

@@ -41,6 +41,15 @@ class ApplicationController < ActionController::Base
     redirect_to wizards_path, alert: "You do not have access to that wizard"
   end
 
+  # Authorize edit access to a wizard's content by team membership. The nested
+  # builder controllers (components, branch rules, positions, …) load their
+  # child records by id, so the request URL carries no team — without this a
+  # signed-in user could reach another team's content by guessing ids. Resolve
+  # through the record to its wizard and run WizardPolicy.
+  def authorize_wizard(wizard)
+    authorize wizard, :update?
+  end
+
   def authenticate_tester
     credentials = Rails.application.credentials.basic_auth
     authenticate_or_request_with_http_basic("GOV.UK Prototype Builder") do |username, password|
