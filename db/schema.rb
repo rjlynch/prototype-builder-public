@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_17_130000) do
   create_table "branch_rules", force: :cascade do |t|
     t.integer "component_id", null: false
     t.datetime "created_at", null: false
@@ -35,6 +35,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_17_120000) do
     t.text "options"
     t.integer "page_id", null: false
     t.integer "position", null: false
+    t.string "target_slug", default: "", null: false
     t.text "text"
     t.boolean "title_as_label", default: false, null: false
     t.datetime "updated_at", null: false

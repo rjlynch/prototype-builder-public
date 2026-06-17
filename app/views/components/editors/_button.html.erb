@@ -17,3 +17,14 @@
     </div>
   </fieldset>
 </div>
+<div class="govuk-form-group">
+  <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
+  <div class="govuk-hint" id="<%= dom_id(f.object.component, :target_slug_hint) %>">
+    The page slug this button goes to. Leave blank to continue to the next
+    page. A matching branch rule below takes priority.
+  </div>
+  <%= f.text_field :target_slug, class: "govuk-input",
+        aria: { describedby: dom_id(f.object.component, :target_slug_hint) },
+        data: { action: "input->autosubmit#submit" } %>
+  <%= render "components/missing_target", component: f.object.component %>
+</div>

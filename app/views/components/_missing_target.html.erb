@@ -1,0 +1,5 @@
+<div id="<%= dom_id(component, :missing_target) %>">
+  <% if component.missing_target? %>
+    <div class="govuk-hint app-warning">This page does not exist yet.</div>
+  <% end %>
+</div>

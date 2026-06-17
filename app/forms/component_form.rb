@@ -20,14 +20,15 @@ class ComponentForm
       title_as_label: component.title_as_label,
       list_style: component.list_style,
       list_spaced: component.list_spaced,
-      button_style: component.button_style
+      button_style: component.button_style,
+      target_slug: component.target_slug
     )
   end
 
   attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
-    :list_style, :list_spaced, :button_style
+    :list_style, :list_spaced, :button_style, :target_slug
 
-  validates :text, :name, :label, :hint, :options, length: { maximum: 5_000 }
+  validates :text, :name, :label, :hint, :options, :target_slug, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
   validates :list_style, inclusion: { in: Component::LIST_STYLES }
   validates :button_style, inclusion: { in: Component::BUTTON_STYLES }
@@ -39,7 +40,7 @@ class ComponentForm
     component.update!(
       text: text, name: name, label: label, hint: hint, options: options,
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
-      button_style: button_style
+      button_style: button_style, target_slug: target_slug.to_s.parameterize
     )
     true
   end
