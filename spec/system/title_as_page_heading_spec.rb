@@ -18,9 +18,13 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     end
 
     within_preview do
-      expect(page).to have_css("legend h1.govuk-fieldset__heading", text: "Are you eligible?")
+      # The H1 sits at the top of the page; the radios fieldset references it.
+      expect(page).to have_css("h1.govuk-heading-l", text: "Are you eligible?")
+      expect(page).to have_no_css("legend h1")
       expect(page).to have_css("h1", count: 1)
       expect(page).to have_css(".govuk-radios__label", text: "Yes")
+      heading_id = find("h1.govuk-heading-l")[:id]
+      expect(find("fieldset.govuk-fieldset")[:"aria-labelledby"]).to eq(heading_id)
     end
 
     # The redundant Label field hides while the title is the label
@@ -64,7 +68,8 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     # --- Run mode renders the same pattern -------------------------------
     wizard = Wizard.last
     visit page_path(wizard.pages.first)
-    expect(page).to have_css("legend h1.govuk-fieldset__heading", text: "Are you eligible?")
+    expect(page).to have_css("h1.govuk-heading-l", text: "Are you eligible?")
+    expect(page).to have_css("fieldset.govuk-fieldset[aria-labelledby]")
     expect(page).to have_css("h1", count: 1)
 
     visit page_path(wizard.pages.second)

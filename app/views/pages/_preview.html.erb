@@ -4,11 +4,12 @@
     <div class="govuk-main-wrapper">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          <%# When an input renders the title as its label/legend (the GOV.UK
-              single-question pattern), it owns the H1 — don't render it twice. %>
-          <% if page.title.present? && page.heading_component.nil? %>
+          <%# The page H1 sits at the top, with an id so an input using it as its
+              label can reference it (aria-labelledby). A text input renders it
+              inline as its own <label>, so it is not repeated here. %>
+          <% if page.title.present? && !page.heading_rendered_inline? %>
             <%= render "pages/preview_caption", page: page %>
-            <h1 class="<%= page.heading_class %>"><%= page.title %></h1>
+            <h1 id="<%= dom_id(page, :heading) %>" class="<%= page.heading_class %>"><%= page.title %></h1>
           <% end %>
           <% if mode == :builder && page.title.blank? && page.components.none? %>
             <p class="govuk-body app-empty-state">
