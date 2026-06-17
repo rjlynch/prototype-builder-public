@@ -2,6 +2,7 @@ class Component < ApplicationRecord
   KINDS = %w[ paragraph subheading list text_input radios button ].freeze
   INPUT_KINDS = %w[ text_input radios ].freeze
   LIST_STYLES = %w[ none bullet number ].freeze
+  BUTTON_STYLES = %w[ continue secondary inverse start warning ].freeze
 
   belongs_to :page
   has_many :branch_rules, -> { order(:position) }, dependent: :destroy, inverse_of: :component
@@ -10,6 +11,7 @@ class Component < ApplicationRecord
 
   validates :kind, inclusion: { in: KINDS }
   validates :list_style, inclusion: { in: LIST_STYLES }
+  validates :button_style, inclusion: { in: BUTTON_STYLES }
   validates :name, presence: true, if: :input?
   validates :position,
     presence: true,
@@ -41,9 +43,20 @@ class Component < ApplicationRecord
   end
 
   def display_name
-    return "Continue button" if kind == "button"
+    return "Button" if kind == "button"
 
     kind.humanize
+  end
+
+  # The GOV.UK modifier class for this button's style ("continue" is the
+  # default button, so it carries no modifier).
+  def button_modifier_class
+    "govuk-button--#{button_style}" unless button_style == "continue"
+  end
+
+  # Start buttons render the GOV.UK arrow icon after their label.
+  def start_button?
+    button_style == "start"
   end
 
   # The answer key this input's value is stored and matched under.

@@ -61,6 +61,8 @@ Component         one element on a page, ordered
                   parameterised option label
   list_style      lists: "none" | "bullet" | "number" (GOV.UK list styles)
   list_spaced     lists: extra spacing between items
+  button_style    buttons: "continue" (default) | "secondary" | "inverse" |
+                  "start" | "warning" (GOV.UK button variants)
 
 BranchRule        one "if answer X is Y go to page Z" condition on a button
   component_id    the button
@@ -469,6 +471,18 @@ The backlog now lives in the issue tracker, not this file.
   land on the dashboard; invalid and expired links handled identically. The PR2
   "no account yet" email now points at sign up (pre-filling the address); landing
   + sign-in pages gained sign-up links. 164 specs green; rubocop + brakeman clean.
+
+* 2026-06-17 — Issue #78 (button types): the "Continue button" component is now
+  just "Button" with a `button_style` radio offering the five GOV.UK variants —
+  continue (default), secondary, inverse, start, warning. A new `button_style`
+  string column (default "continue") on `components`, validated against
+  `Component::BUTTON_STYLES` at model + form level. The preview maps the style to
+  its modifier class via `Component#button_modifier_class` (continue carries no
+  modifier) and renders the arrow `govuk-button__start-icon` SVG for start
+  buttons (`Component#start_button?`). Buttons stay `<button type="submit">` so
+  every variant keeps driving the journey, and branch-rule editing is unchanged
+  (it already keys off `kind == "button"`). The "Add continue button" control is
+  now "Add button". 171 specs green.
 
 ## Decisions / open questions
 

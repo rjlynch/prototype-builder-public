@@ -67,7 +67,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
       expect(page).to have_css("h2", text: "Before you start")
     end
 
-    add_component "Add continue button"
+    add_component "Add button"
     within_preview do
       expect(page).to have_button("Continue")
     end
@@ -120,7 +120,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
       expect(page).to have_content("Search by name or postcode")
     end
 
-    add_component "Add continue button"
+    add_component "Add button"
 
     within_preview do
       fill_in "Enter nursery name or postcode", with: "Sunny days nursery"

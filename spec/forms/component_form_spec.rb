@@ -64,6 +64,26 @@ RSpec.describe ComponentForm do
     expect(component.reload.list_style).to eq("none")
   end
 
+  it "saves the button style" do
+    component = create_component(kind: "button", text: "Continue")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(button_style: "start")
+
+    expect(form.save).to be(true)
+    expect(component.reload.button_style).to eq("start")
+  end
+
+  it "rejects an unknown button style" do
+    component = create_component(kind: "button", text: "Continue")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(button_style: "sparkly")
+
+    expect(form.save).to be(false)
+    expect(component.reload.button_style).to eq("continue")
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")

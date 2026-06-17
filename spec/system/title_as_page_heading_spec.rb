@@ -26,7 +26,7 @@ RSpec.describe "Using the page title as the question", :js, type: :system do
     # The redundant Label field hides while the title is the label
     within_last_card { expect(page).to have_no_field("Label") }
 
-    add_component "Add continue button"
+    add_component "Add button"
     within_preview { click_button "Continue" }
 
     # --- Text input: title as the label ---------------------------------

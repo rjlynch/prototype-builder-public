@@ -21,7 +21,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       expect(page).to have_css(".govuk-radios__label", text: "no")
     end
 
-    add_component "Add continue button"
+    add_component "Add button"
 
     # First rule: yes -> congratulations
     add_rule
@@ -65,7 +65,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     sign_in
     click_button "New wizard"
 
-    add_component "Add continue button"
+    add_component "Add button"
     add_rule
 
     within_last_condition do
@@ -88,7 +88,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       expect(page).to have_css(".govuk-radios__label", text: "no")
     end
 
-    add_component "Add continue button"
+    add_component "Add button"
     within_preview { click_button "Continue" }
     fill_in "Page title", with: "Existing page"
     expect(page).to have_css(".app-disclosure__summary", text: "Slug existing-page")
