@@ -5,7 +5,7 @@ class ComponentPositionsController < ApplicationController
 
   def update
     component = Component.find(params[:component_id])
-    authorize_wizard(component.page.wizard)
+    authorize component, :update?
     form = MoveComponentForm.new(component: component, direction: params.require(:direction))
     form.save
 

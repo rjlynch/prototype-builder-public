@@ -9,7 +9,7 @@ class AnswersController < ApplicationController
     # needs the same team check as the rest of the builder. Run mode is the
     # public share link and stays open to anyone with the URL.
     builder = params[:mode] == "builder" && signed_in?
-    authorize_wizard(page.wizard) if builder
+    authorize page, :update? if builder
 
     button = page.components.find_by(id: params[:button_id], kind: "button")
     answers = stored_answers(page.wizard).merge!(answer_params(page))

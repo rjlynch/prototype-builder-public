@@ -446,14 +446,17 @@ The backlog now lives in the issue tracker, not this file.
   cover the flow. 134 specs green; rubocop + brakeman clean.
 * 2026-06-17 — Issue #32 (accounts), PR 3 of 3: sign up, plus closing the
   nested-controller IDOR (folded in because sign up is what makes a second user
-  possible). (1) Authorization: an `authorize_wizard` helper resolves a record
-  to its wizard and runs WizardPolicy by team membership; every nested builder
-  controller (`components`, `branch_rules`, `component_positions`, `positions`,
-  `successors`, and the builder-mode branch of `answers`) now calls it, so a
-  signed-in user can no longer mutate another team's content by guessing ids.
-  Run mode (the public share link) stays open — `answers` only authorizes in
-  builder mode. A request spec proves a non-member is blocked from each endpoint
-  while run-mode answers still work for anyone. (2) Sign up: a `Signup` model
+  possible). (1) Authorization: each nested builder controller now authorizes
+  the record it acts on through that record's own policy, matching the
+  per-record pattern from PR 1 (`PagesController` already used `PagePolicy`).
+  Positions and successors `authorize page, :update?` (PagePolicy); components,
+  component positions and branch rules `authorize` the component via a new
+  `ComponentPolicy` (`record.page.wizard` → team membership); builder-mode
+  `answers` authorizes the page. So a signed-in user can no longer mutate
+  another team's content by guessing ids. Run mode (the public share link) stays
+  open — `answers` only authorizes in builder mode. A request spec proves a
+  non-member is blocked from each endpoint while run-mode answers still work for
+  anyone; ComponentPolicy has its own unit spec. (2) Sign up: a `Signup` model
   (encrypted email + full_name PII, like User; no uniqueness so duplicate
   pending signups stay neutral) with `generates_token_for :activation` and an
   `activate!` that creates a Personal Team + User + Membership and consumes
@@ -474,9 +477,11 @@ The backlog now lives in the issue tracker, not this file.
   builder controllers (`components`, `branch_rules`, `component_positions`,
   `successors`, `positions`, `answers`) loaded by id without a team check, an IDOR
   that was theoretical only while one user existed. PR 3 (which adds sign up, so a
-  second user can exist) added an `authorize_wizard` helper resolving each
-  record's wizard → team and calls it in every nested action; the builder-mode
-  branch of `answers` authorizes too while run mode stays public.
+  second user can exist) authorizes each nested action through the acted-on
+  record's own policy — `PagePolicy` for pages (positions, successors), a new
+  `ComponentPolicy` for components and their branch rules — matching PR 1's
+  per-record convention; the builder-mode branch of `answers` authorizes too
+  while run mode stays public.
 
 * Reordering and the page title (deferred, will refactor): the title is a Page
   attribute rendered first in the preview, and the title *card* is pinned first
