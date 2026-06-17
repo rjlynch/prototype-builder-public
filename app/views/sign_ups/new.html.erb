@@ -1,0 +1,50 @@
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <% if signup.errors.any? %>
+          <div class="govuk-error-summary" data-module="govuk-error-summary">
+            <div role="alert">
+              <h2 class="govuk-error-summary__title">There is a problem</h2>
+              <div class="govuk-error-summary__body">
+                <ul class="govuk-list govuk-error-summary__list">
+                  <% signup.errors.each do |error| %>
+                    <li><a href="#signup_<%= error.attribute %>"><%= error.full_message %></a></li>
+                  <% end %>
+                </ul>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <h1 class="govuk-heading-l">Create an account</h1>
+        <p class="govuk-body">We'll send you a link to confirm your account.</p>
+
+        <%= form_with url: sign_up_path, method: :post, scope: :signup do |f| %>
+          <div class="govuk-form-group<%= " govuk-form-group--error" if signup.errors[:full_name].any? %>">
+            <%= f.label :full_name, "Full name", class: "govuk-label" %>
+            <% signup.errors[:full_name].each do |message| %>
+              <p class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> <%= message %></p>
+            <% end %>
+            <%= f.text_field :full_name, value: signup.full_name, class: "govuk-input", autocomplete: "name" %>
+          </div>
+
+          <div class="govuk-form-group<%= " govuk-form-group--error" if signup.errors[:email_address].any? %>">
+            <%= f.label :email_address, "Email address", class: "govuk-label" %>
+            <% signup.errors[:email_address].each do |message| %>
+              <p class="govuk-error-message"><span class="govuk-visually-hidden">Error:</span> <%= message %></p>
+            <% end %>
+            <%= f.email_field :email_address, value: signup.email_address,
+                  class: "govuk-input", autocomplete: "email", spellcheck: "false" %>
+          </div>
+
+          <%= f.submit "Create account", class: "govuk-button" %>
+        <% end %>
+
+        <p class="govuk-body">
+          Already have an account? <%= link_to "Sign in", new_sign_in_path, class: "govuk-link" %>.
+        </p>
+      </div>
+    </div>
+  </main>
+</div>

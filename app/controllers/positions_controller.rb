@@ -3,6 +3,7 @@ class PositionsController < ApplicationController
 
   def update
     page = Page.find(params[:page_id])
+    authorize page, :update?
     form = MovePageForm.new(page, params: { position: params.require(:position) })
     form.save
 

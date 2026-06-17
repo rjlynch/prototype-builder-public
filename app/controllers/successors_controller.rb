@@ -5,6 +5,7 @@ class SuccessorsController < ApplicationController
   # ready to start building.
   def create
     page = Page.find(params[:page_id])
+    authorize page, :update?
     form = InsertPageForm.new(page)
     form.save
 

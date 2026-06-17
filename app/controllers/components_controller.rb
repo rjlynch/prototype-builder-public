@@ -5,6 +5,7 @@ class ComponentsController < ApplicationController
 
   def create
     page = Page.find(params[:page_id])
+    authorize page, :update?
     form = AddComponentForm.new(page: page, kind: params.require(:component)[:kind])
     form.save
 
@@ -13,6 +14,7 @@ class ComponentsController < ApplicationController
 
   def update
     component = Component.find(params[:id])
+    authorize component, :update?
     form = ComponentForm.from_component(component)
     form.assign_attributes(component_params)
     form.save
@@ -25,6 +27,7 @@ class ComponentsController < ApplicationController
 
   def destroy
     component = Component.find(params[:id])
+    authorize component, :destroy?
     component.destroy!
 
     respond_with_panes(component.page, builder: true)

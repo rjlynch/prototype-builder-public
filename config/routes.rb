@@ -5,9 +5,17 @@ Rails.application.routes.draw do
   # redirect to show = the neutral "check your email" confirmation.
   resource :sign_in, only: %i[new create show]
 
+  # Register: new = name + email form, create = send a confirmation link then
+  # redirect to show = the same neutral "check your email" confirmation.
+  resource :sign_up, only: %i[new create show]
+
   # The session itself: new = the magic-link confirmation page, create = consume
   # the token and sign in, destroy = sign out.
   resource :session, only: %i[new create destroy]
+
+  # Confirming a sign up: new = the confirmation page reached from the email,
+  # create = consume the token, create the account and sign in.
+  resource :activation, only: %i[new create]
 
   resources :wizards, only: %i[index create show edit update]
 
