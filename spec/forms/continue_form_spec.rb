@@ -5,8 +5,8 @@ RSpec.describe ContinueForm do
     Wizard.create!(name: "Test wizard", team: personal_team)
   end
 
-  def add_button(page, rules: [])
-    button = page.components.create!(position: 99, kind: "button", text: "Continue")
+  def add_button(page, rules: [], target_slug: "")
+    button = page.components.create!(position: 99, kind: "button", text: "Continue", target_slug: target_slug)
     rules.each_with_index do |rule, index|
       button.branch_rules.create!(position: index + 1, **rule)
     end
@@ -43,6 +43,62 @@ RSpec.describe ContinueForm do
 
       expect { form.save }.not_to change(wizard.pages, :count)
       expect(form.destination).to be_nil
+    end
+  end
+
+  describe "a button's specified slug" do
+    it "goes to the button's target instead of the next page" do
+      wizard = build_wizard
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      wizard.pages.create!(position: 2, slug: "page-2")
+      target = wizard.pages.create!(position: 3, slug: "summary")
+      button = add_button(first, target_slug: "summary")
+
+      form = ContinueForm.new(page: first, button: button, answers: {}, create_missing: false)
+      form.save
+
+      expect(form.destination).to eq(target)
+    end
+
+    it "is overridden by a matching branch rule" do
+      wizard = build_wizard
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      wizard.pages.create!(position: 2, slug: "summary")
+      branched = wizard.pages.create!(position: 3, slug: "not-eligible")
+      button = add_button(first, target_slug: "summary", rules: [
+        { input_name: "question-1", value: "no", target_slug: "not-eligible" }
+      ])
+
+      form = ContinueForm.new(page: first, button: button, answers: { "question-1" => "no" }, create_missing: false)
+      form.save
+
+      expect(form.destination).to eq(branched)
+    end
+
+    it "falls back to the button's slug when no rule matches" do
+      wizard = build_wizard
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      wizard.pages.create!(position: 2, slug: "page-2")
+      target = wizard.pages.create!(position: 3, slug: "summary")
+      button = add_button(first, target_slug: "summary", rules: [
+        { input_name: "question-1", value: "no", target_slug: "not-eligible" }
+      ])
+
+      form = ContinueForm.new(page: first, button: button, answers: { "question-1" => "yes" }, create_missing: false)
+      form.save
+
+      expect(form.destination).to eq(target)
+    end
+
+    it "creates the button's target in builder mode when it does not exist" do
+      wizard = build_wizard
+      first = wizard.pages.create!(position: 1, slug: "page-1")
+      button = add_button(first, target_slug: "summary")
+
+      form = ContinueForm.new(page: first, button: button, answers: {}, create_missing: true)
+
+      expect { form.save }.to change(wizard.pages, :count).by(1)
+      expect(form.destination).to have_attributes(slug: "summary", position: 2, title: "")
     end
   end
 

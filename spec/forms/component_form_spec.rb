@@ -84,6 +84,16 @@ RSpec.describe ComponentForm do
     expect(component.reload.button_style).to eq("continue")
   end
 
+  it "parameterises the button's target slug" do
+    component = create_component(kind: "button", text: "Continue")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(target_slug: "Check your answers")
+
+    expect(form.save).to be(true)
+    expect(component.reload.target_slug).to eq("check-your-answers")
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")

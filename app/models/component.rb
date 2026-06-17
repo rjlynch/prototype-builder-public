@@ -12,6 +12,7 @@ class Component < ApplicationRecord
   validates :kind, inclusion: { in: KINDS }
   validates :list_style, inclusion: { in: LIST_STYLES }
   validates :button_style, inclusion: { in: BUTTON_STYLES }
+  validates :target_slug, length: { maximum: 5_000 }
   validates :name, presence: true, if: :input?
   validates :position,
     presence: true,
@@ -79,10 +80,19 @@ class Component < ApplicationRecord
     list_style == "number"
   end
 
-  # Where this button sends the user, given everything answered so far:
-  # the first matching rule's target, or nil to continue linearly.
+  # Where this button sends the user, given everything answered so far: the
+  # first matching rule's target wins; otherwise the button's own specified
+  # slug (the "else" branch); nil falls through to the next page linearly.
   def destination_slug(answers)
-    branch_rules.detect { |rule| rule.matches?(answers) }&.target_slug
+    branch_rules.detect { |rule| rule.matches?(answers) }&.target_slug.presence || target_slug.presence
+  end
+
+  # A button pointing at a slug no page has yet — flagged in the editor (in
+  # builder mode the page is created blank when the button is first clicked).
+  def missing_target?
+    return false if target_slug.blank?
+
+    page.wizard.pages.where(slug: target_slug).none?
   end
 
   private

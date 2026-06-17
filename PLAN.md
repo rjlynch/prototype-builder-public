@@ -63,6 +63,8 @@ Component         one element on a page, ordered
   list_spaced     lists: extra spacing between items
   button_style    buttons: "continue" (default) | "secondary" | "inverse" |
                   "start" | "warning" (GOV.UK button variants)
+  target_slug     buttons: page slug to go to as the "else" when no branch rule
+                  matches; blank continues linearly to the next page
 
 BranchRule        one "if answer X is Y go to page Z" condition on a button
   component_id    the button
@@ -79,8 +81,9 @@ thing that works for these kinds. Revisit if kinds multiply.
 Navigation: clicking a button POSTs the preview/run form to
 `pages/:id/answers`. Answers are stored in the session (per wizard, keyed by
 input key). The clicked button's first matching branch rule decides the next
-page; with no match the journey continues linearly by position (creating the
-next page in builder mode if needed).
+page; failing that the button's own `target_slug` ("go to page"); failing that
+the journey continues linearly by position (creating the destination page in
+builder mode if needed).
 
 ## Routes (RESTful only)
 
@@ -483,6 +486,20 @@ The backlog now lives in the issue tracker, not this file.
   every variant keeps driving the journey, and branch-rule editing is unchanged
   (it already keys off `kind == "button"`). The "Add continue button" control is
   now "Add button". 171 specs green.
+
+* 2026-06-17 — Issue #76 (button target slug): a button can now name the page it
+  goes to, fixing journeys where "next by position" is wrong after pages are
+  reordered. New `target_slug` string column (default "") on `components`,
+  parameterised on save like a branch rule's target. `Component#destination_slug`
+  resolves in priority order: first matching branch rule → the button's own
+  `target_slug` (the "else") → nil (linear next page); `ContinueForm` is otherwise
+  unchanged (it already created missing targets in builder mode, so a button slug
+  pointing at a not-yet-built page just creates it on click). The editor gains a
+  "Go to page" field with copy explaining blank = next page, plus the same live
+  "This page does not exist yet." warning branch rules have — for that, button
+  updates take the branch-rule turbo response (refresh preview + missing-target
+  hint, leave the editor pane so the slug field keeps focus) instead of
+  `respond_with_panes`. 183 specs green; rubocop + brakeman clean.
 
 ## Decisions / open questions
 

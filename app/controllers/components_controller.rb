@@ -19,10 +19,14 @@ class ComponentsController < ApplicationController
     form.assign_attributes(component_params)
     form.save
 
-    # Preview only: the user is mid-typing in the builder pane, so leave it
-    # alone. Exception: toggling title_as_label changes which fields the
-    # editors show, and a checkbox click is not typing — re-render the lot.
-    respond_with_panes(component.page, builder: component.previous_changes.key?("title_as_label"))
+    if component.kind == "button"
+      respond_with_button(component)
+    else
+      # Preview only: the user is mid-typing in the builder pane, so leave it
+      # alone. Exception: toggling title_as_label changes which fields the
+      # editors show, and a checkbox click is not typing — re-render the lot.
+      respond_with_panes(component.page, builder: component.previous_changes.key?("title_as_label"))
+    end
   end
 
   def destroy
@@ -35,8 +39,31 @@ class ComponentsController < ApplicationController
 
   private
 
+  # A button's slug field autosubmits like a branch rule: refresh the preview
+  # and the "page does not exist yet" hint, but leave the editor pane alone so
+  # typing in the slug field keeps focus.
+  def respond_with_button(component)
+    respond_to do |format|
+      format.turbo_stream do
+        render turbo_stream: [
+          turbo_stream.replace(
+            helpers.dom_id(component.page, :preview),
+            partial: "pages/preview",
+            locals: { page: component.page, mode: :builder }
+          ),
+          turbo_stream.replace(
+            helpers.dom_id(component, :missing_target),
+            partial: "components/missing_target",
+            locals: { component: component }
+          )
+        ]
+      end
+      format.html { redirect_to edit_page_path(component.page) }
+    end
+  end
+
   def component_params
     params.require(:component).permit(:text, :name, :label, :hint, :options, :title_as_label,
-      :list_style, :list_spaced, :button_style)
+      :list_style, :list_spaced, :button_style, :target_slug)
   end
 end
