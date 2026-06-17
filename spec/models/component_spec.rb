@@ -23,4 +23,15 @@ RSpec.describe Component do
     expect(Component.new(list_style: "bullet")).not_to be_list_ordered
     expect(Component.new(list_style: "none")).not_to be_list_ordered
   end
+
+  it "gives a GOV.UK modifier class for every button style but the default" do
+    expect(Component.new(button_style: "continue").button_modifier_class).to be_nil
+    expect(Component.new(button_style: "secondary").button_modifier_class).to eq("govuk-button--secondary")
+    expect(Component.new(button_style: "warning").button_modifier_class).to eq("govuk-button--warning")
+  end
+
+  it "knows the start button (which renders the arrow icon)" do
+    expect(Component.new(button_style: "start")).to be_start_button
+    expect(Component.new(button_style: "continue")).not_to be_start_button
+  end
 end

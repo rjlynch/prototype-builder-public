@@ -80,7 +80,7 @@ RSpec.describe "Managing pages", :js, type: :system do
       within_preview { expect(page).to have_css("h1", text: title) }
       next if index == 2
 
-      add_component "Add continue button"
+      add_component "Add button"
       within_preview { click_button "Continue" }
       expect(page).to have_css(".app-disclosure__summary", text: "Slug page-#{index + 2}")
     end
