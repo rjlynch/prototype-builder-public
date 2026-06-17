@@ -444,19 +444,39 @@ The backlog now lives in the issue tracker, not this file.
   app had none). Specs: the stub `click_button "Sign in"` is replaced by a
   `sign_in` helper that walks the real confirm step; new request + mailer specs
   cover the flow. 134 specs green; rubocop + brakeman clean.
+* 2026-06-17 — Issue #32 (accounts), PR 3 of 3: sign up, plus closing the
+  nested-controller IDOR (folded in because sign up is what makes a second user
+  possible). (1) Authorization: an `authorize_wizard` helper resolves a record
+  to its wizard and runs WizardPolicy by team membership; every nested builder
+  controller (`components`, `branch_rules`, `component_positions`, `positions`,
+  `successors`, and the builder-mode branch of `answers`) now calls it, so a
+  signed-in user can no longer mutate another team's content by guessing ids.
+  Run mode (the public share link) stays open — `answers` only authorizes in
+  builder mode. A request spec proves a non-member is blocked from each endpoint
+  while run-mode answers still work for anyone. (2) Sign up: a `Signup` model
+  (encrypted email + full_name PII, like User; no uniqueness so duplicate
+  pending signups stay neutral) with `generates_token_for :activation` and an
+  `activate!` that creates a Personal Team + User + Membership and consumes
+  itself (idempotent if the email is already taken). `SignUpsController` takes a
+  name + email form and emails a confirmation link (or a sign-in link if the
+  address is already registered), redirecting to the same neutral "check your
+  email" page either way; `DestroySignupJob` (15-minute delay) cleans up
+  unconfirmed signups. The link opens `ActivationsController#new`, whose button
+  POSTs the token to #create (anti-prefetch, like sessions) → activate, sign in,
+  land on the dashboard; invalid and expired links handled identically. The PR2
+  "no account yet" email now points at sign up (pre-filling the address); landing
+  + sign-in pages gained sign-up links. 164 specs green; rubocop + brakeman clean.
 
 ## Decisions / open questions
 
-* Authorization surface (issue #32, follow-up): PR 1 enforces team access on the
-  entry points — `WizardsController` (index scope + edit/update/create) and
-  `PagesController` (the builder edit/update/destroy). The deeper nested builder
-  controllers (`components`, `branch_rules`, `component_positions`, `successors`,
-  `positions`, `answers`) still load by component/page id without a team check, so
-  a determined user could mutate another team's content by guessing ids. Still
-  open after PR 2 (sign in): only the backfilled user exists until sign up (PR 3)
-  lands, so it stays theoretical. Close it once multiple users can coexist — a
-  shared `authorize_via_wizard` filter resolving each record's wizard → team is
-  the likely shape.
+* Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
+  the entry points (`WizardsController`, `PagesController`); the deeper nested
+  builder controllers (`components`, `branch_rules`, `component_positions`,
+  `successors`, `positions`, `answers`) loaded by id without a team check, an IDOR
+  that was theoretical only while one user existed. PR 3 (which adds sign up, so a
+  second user can exist) added an `authorize_wizard` helper resolving each
+  record's wizard → team and calls it in every nested action; the builder-mode
+  branch of `answers` authorizes too while run mode stays public.
 
 * Reordering and the page title (deferred, will refactor): the title is a Page
   attribute rendered first in the preview, and the title *card* is pinned first
