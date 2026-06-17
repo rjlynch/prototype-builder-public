@@ -7,10 +7,19 @@ class AuthMailer < ApplicationMailer
     mail(to: user.email_address, subject: "Sign in to GOV.UK Prototype Builder")
   end
 
-  # Sent when someone asks to sign in with an email that has no account. We
-  # still respond so the sign-in form can stay neutral about who is registered.
+  # The link that confirms a sign up and creates the account. Self-expiring
+  # (15 minutes) and single-use (consumed when the signup is activated).
+  def activate_signup(signup)
+    @url = new_activation_url(token: signup.generate_token_for(:activation))
+    mail(to: signup.email_address, subject: "Confirm your GOV.UK Prototype Builder account")
+  end
+
+  # Sent when someone asks to sign in with an email that has no account. Points
+  # them at sign up (pre-filling the address). We still respond so the sign-in
+  # form can stay neutral about who is registered.
   def no_account(email_address)
     @email_address = email_address
+    @url = new_sign_up_url(email_address: email_address)
     mail(to: email_address, subject: "No GOV.UK Prototype Builder account yet")
   end
 end

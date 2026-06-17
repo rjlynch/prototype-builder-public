@@ -14,6 +14,10 @@
 
           <%= f.submit "Send sign-in link", class: "govuk-button" %>
         <% end %>
+
+        <p class="govuk-body">
+          Don't have an account? <%= link_to "Create one", new_sign_up_path, class: "govuk-link" %>.
+        </p>
       </div>
     </div>
   </main>
