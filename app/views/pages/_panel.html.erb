@@ -1,0 +1,11 @@
+<div class="<%= page.panel_class %>">
+  <h1 class="govuk-panel__title"><%= page.title %></h1>
+  <% body = page.panel_body_components %>
+  <% if body.any? %>
+    <div class="govuk-panel__body">
+      <% body.each do |component| %>
+        <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

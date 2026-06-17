@@ -3,3 +3,4 @@
   <%= f.text_area :text, rows: 3, class: "govuk-textarea", data: { action: "input->autosubmit#submit input->mirror#refresh", mirror_target: "source" } %>
   <%= render "components/editors/formatting_help" %>
 </div>
+<%= render "components/editors/in_panel", f: f %>

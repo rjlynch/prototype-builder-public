@@ -65,4 +65,39 @@ RSpec.describe Page, type: :model do
       expect(second.show_back_link?).to be(false)
     end
   end
+
+  describe "panels" do
+    def page_with(panel_style:)
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
+      wizard.pages.create!(position: 1, slug: "page-1", title: "Done", panel_style: panel_style)
+    end
+
+    it "knows when a panel is set" do
+      expect(page_with(panel_style: "none")).not_to be_panel
+      expect(page_with(panel_style: "success")).to be_panel
+      expect(page_with(panel_style: "information")).to be_panel
+    end
+
+    it "maps the style to the right wrapper classes" do
+      expect(page_with(panel_style: "success").panel_class).to eq("govuk-panel govuk-panel--confirmation")
+      expect(page_with(panel_style: "information").panel_class).to eq("govuk-panel app-panel--information")
+    end
+
+    it "does not let an input claim the title while a panel owns it" do
+      page = page_with(panel_style: "success")
+      page.components.create!(position: 1, kind: "radios", name: "question-1", title_as_label: true)
+
+      expect(page.heading_component).to be_nil
+    end
+
+    it "collects in-panel paragraphs and subheadings, ignoring other kinds" do
+      page = page_with(panel_style: "success")
+      para = page.components.create!(position: 1, kind: "paragraph", text: "Ref ABC", in_panel: true)
+      sub = page.components.create!(position: 2, kind: "subheading", text: "Next", in_panel: true)
+      page.components.create!(position: 3, kind: "paragraph", text: "Outside", in_panel: false)
+      page.components.create!(position: 4, kind: "button", text: "Continue", in_panel: true)
+
+      expect(page.panel_body_components).to eq([ para, sub ])
+    end
+  end
 end

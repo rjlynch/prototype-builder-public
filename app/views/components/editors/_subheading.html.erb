@@ -2,3 +2,4 @@
   <%= f.label :text, "Subheading text", class: "govuk-label" %>
   <%= f.text_field :text, class: "govuk-input", data: { action: "input->autosubmit#submit input->mirror#refresh", mirror_target: "source" } %>
 </div>
+<%= render "components/editors/in_panel", f: f %>

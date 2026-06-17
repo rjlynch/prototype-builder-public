@@ -88,4 +88,20 @@ RSpec.describe PageForm do
       expect(page.reload.back_link).to be(false)
     end
   end
+
+  describe "the panel style" do
+    it "saves a recognised panel style" do
+      page = build_page
+
+      expect(PageForm.new(page, params: { panel_style: "information" }).save).to be(true)
+      expect(page.reload.panel_style).to eq("information")
+    end
+
+    it "rejects an unknown panel style" do
+      page = build_page
+
+      expect(PageForm.new(page, params: { panel_style: "rainbow" }).save).to be(false)
+      expect(page.reload.panel_style).to eq("none")
+    end
+  end
 end

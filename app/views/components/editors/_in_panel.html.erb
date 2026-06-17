@@ -1,0 +1,13 @@
+<%# Offered only while the page has a panel and this kind can sit inside it. %>
+<% if f.object.component.page.panel? && f.object.component.panel_eligible? %>
+  <div class="govuk-form-group">
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <%= f.check_box :in_panel, id: dom_id(f.object.component, :in_panel),
+              class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+        <%= f.label :in_panel, "Show inside the panel", for: dom_id(f.object.component, :in_panel),
+              class: "govuk-label govuk-checkboxes__label" %>
+      </div>
+    </div>
+  </div>
+<% end %>

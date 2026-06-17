@@ -30,7 +30,7 @@ class PagesController < ApplicationController
   def update
     page = Page.find(params[:id])
     authorize page
-    attrs = params.require(:page).permit(:title, :slug, :heading_size, :caption, :back_link)
+    attrs = params.require(:page).permit(:title, :slug, :heading_size, :caption, :back_link, :panel_style)
     form = PageForm.new(page, params: attrs)
     form.save
 
@@ -54,6 +54,16 @@ class PagesController < ApplicationController
           streams << turbo_stream.replace(
             helpers.dom_id(page, :slug_form),
             partial: "pages/slug_form",
+            locals: { page: page }
+          )
+        end
+        # Toggling the panel changes which components offer an "in the panel"
+        # checkbox, so re-render the builder pane — but only on that change, so
+        # typing in the title never steals focus from the editor cards.
+        if page.previous_changes.key?("panel_style")
+          streams << turbo_stream.replace(
+            helpers.dom_id(page, :builder),
+            partial: "pages/builder",
             locals: { page: page }
           )
         end

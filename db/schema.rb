@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_17_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_17_140000) do
   create_table "branch_rules", force: :cascade do |t|
     t.integer "component_id", null: false
     t.datetime "created_at", null: false
@@ -27,6 +27,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_17_130000) do
     t.string "button_style", default: "continue", null: false
     t.datetime "created_at", null: false
     t.string "hint"
+    t.boolean "in_panel", default: false, null: false
     t.string "kind", null: false
     t.string "label"
     t.boolean "list_spaced", default: false, null: false
@@ -58,6 +59,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_17_130000) do
     t.string "caption", default: "", null: false
     t.datetime "created_at", null: false
     t.string "heading_size", default: "l", null: false
+    t.string "panel_style", default: "none", null: false
     t.integer "position", null: false
     t.string "slug", null: false
     t.string "title", default: "", null: false

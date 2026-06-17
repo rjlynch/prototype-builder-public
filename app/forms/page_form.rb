@@ -20,6 +20,7 @@ class PageForm
   attribute :heading_size, :string
   attribute :caption, :string
   attribute :back_link, :boolean
+  attribute :panel_style, :string
 
   attr_reader :page
 
@@ -27,6 +28,7 @@ class PageForm
   validates :slug, length: { maximum: 200 }
   validates :caption, length: { maximum: 500 }
   validates :heading_size, inclusion: { in: Page::HEADING_SIZES }
+  validates :panel_style, inclusion: { in: Page::PANEL_STYLES }
 
   def initialize(page, params: {})
     @page = page
@@ -37,7 +39,8 @@ class PageForm
         slug: page.slug,
         heading_size: page.heading_size,
         caption: page.caption,
-        back_link: page.back_link
+        back_link: page.back_link,
+        panel_style: page.panel_style
       )
     )
   end
@@ -49,6 +52,7 @@ class PageForm
     page.heading_size = heading_size
     page.caption = caption
     page.back_link = back_link
+    page.panel_style = panel_style
     page.slug = resolve_slug
     page.save!
     true

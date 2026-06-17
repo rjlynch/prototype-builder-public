@@ -4,6 +4,11 @@ class Page < ApplicationRecord
   # standard page heading.
   HEADING_SIZES = %w[ xl l m s ].freeze
 
+  # GOV.UK panel variants: the page H1 (and any in-panel copy) sits in a
+  # coloured box at the top of the page. "success" is the shipped green
+  # confirmation panel; "information" is a custom blue, left-aligned variant.
+  PANEL_STYLES = %w[ none success information ].freeze
+
   belongs_to :wizard
   has_many :components, -> { order(:position) }, dependent: :destroy, inverse_of: :page
 
@@ -14,6 +19,7 @@ class Page < ApplicationRecord
   validates :title, length: { maximum: 500 }
   validates :caption, length: { maximum: 500 }
   validates :heading_size, inclusion: { in: HEADING_SIZES }
+  validates :panel_style, inclusion: { in: PANEL_STYLES }
   validates :slug,
     presence: true,
     format: { with: /\A[a-z0-9][a-z0-9-]*\z/ },
@@ -52,8 +58,11 @@ class Page < ApplicationRecord
 
   # The input that renders the page title as its label/legend (the GOV.UK
   # single-question pattern). First such input wins, so the title is never
-  # rendered twice. Nil when the page renders its own plain H1.
+  # rendered twice. Nil when the page renders its own plain H1, and nil while a
+  # panel owns the title (so inputs fall back to their own labels).
   def heading_component
+    return nil if panel?
+
     components.detect { |component| component.input? && component.title_as_label? }
   end
 
@@ -64,6 +73,21 @@ class Page < ApplicationRecord
   # heading and the options (issue #74).
   def heading_rendered_inline?
     heading_component&.kind == "text_input"
+  end
+
+  # Whether the page H1 sits inside a GOV.UK panel at the top of the page.
+  def panel?
+    panel_style != "none"
+  end
+
+  # The wrapper classes for the panel; "information" is a custom variant.
+  def panel_class
+    panel_style == "information" ? "govuk-panel app-panel--information" : "govuk-panel govuk-panel--confirmation"
+  end
+
+  # Components shown inside the panel body, below the H1, in position order.
+  def panel_body_components
+    components.select { |component| component.in_panel? && component.panel_eligible? }
   end
 
   # CSS class for the page's plain H1.
