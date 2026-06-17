@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_16_110000) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_17_090000) do
   create_table "branch_rules", force: :cascade do |t|
     t.integer "component_id", null: false
     t.datetime "created_at", null: false
@@ -64,6 +64,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_16_110000) do
     t.index ["wizard_id", "position"], name: "index_pages_on_wizard_id_and_position", unique: true
     t.index ["wizard_id", "slug"], name: "index_pages_on_wizard_id_and_slug", unique: true
     t.index ["wizard_id"], name: "index_pages_on_wizard_id"
+  end
+
+  create_table "signups", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email_address", null: false
+    t.string "full_name", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "teams", force: :cascade do |t|
