@@ -541,15 +541,18 @@ The backlog now lives in the issue tracker, not this file.
   riding in each tab became left/right (&larr;/&rarr;) to match the horizontal
   row (#43). The row no longer wraps (#42): a generic `tab-overflow` Stimulus
   controller lays the list out with flex/nowrap, measures it, and when the tabs
-  overflow hides the spill and inserts an arrow "tab" on each side that still
-  has hidden tabs, each linking to the nearest hidden tab. The selected tab is
-  always kept visible, so following an arrow (a real navigation to that page)
-  leaves it in view with an arrow back. No domain concepts in the JS — the
-  arrows' labels ("Show earlier/more pages") come in via Stimulus values from
-  the partial. Measurement is deferred to requestAnimationFrame so a streamed-in
-  nav is sized before it's measured. Capybara now resets the browser window size
-  before each JS example, since the new overflow spec resizes it and the window
-  persists across tests. 197 specs green; rubocop + brakeman clean.
+  overflow hides the spill and reveals an arrow "tab" on each side that still
+  has hidden tabs, pointing each at the nearest hidden tab. The arrows are
+  server-rendered (hidden by default) and the controller only toggles their
+  visibility and sets their href — keeping markup in the partial, in keeping
+  with the app's server-driven grain. They're rendered after the tabs so they
+  don't shift the tabs' nth-child positions; flex `order` floats the "previous"
+  arrow to the front of the visible run. The selected tab is always kept
+  visible, so following an arrow (a real navigation to that page) leaves it in
+  view with an arrow back. Measurement is deferred to requestAnimationFrame so a
+  streamed-in nav is sized before it's measured. Capybara now resets the browser
+  window size before each JS example, since the new overflow spec resizes it and
+  the window persists across tests. 197 specs green; rubocop + brakeman clean.
 
 ## Decisions / open questions
 

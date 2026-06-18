@@ -1,19 +1,20 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Keeps a horizontal list of tabs on a single line. When the tabs don't all
-// fit, it hides the overflow and inserts an arrow "tab" on each side that has
-// hidden tabs; each arrow links to the nearest hidden tab on that side. The
-// selected tab (data-tab-overflow-target="selected") is always kept visible,
-// so following an arrow — which navigates to a hidden tab and reloads — leaves
-// that tab in view with an arrow back the way you came.
+// fit, it hides the overflow and reveals an arrow "tab" on each side that has
+// hidden tabs, pointing each at the nearest hidden tab on that side. The arrow
+// tabs are server-rendered (hidden by default) and live at the ends of the
+// list; hidden tabs collapse out of the way, so a revealed arrow sits flush
+// against the visible run. The selected tab (target="selected") is always kept
+// visible, so following an arrow — a real navigation that reloads — leaves that
+// tab in view with an arrow back the way you came.
 //
 // Generic: it knows nothing about what the tabs point at. Attach
-// data-controller="tab-overflow" to the wrapper, data-tab-overflow-target
-// ="list" to the <ul>, mark the current <li> with target="selected", and pass
-// the arrows' accessible labels via the previous-/next-label values.
+// data-controller="tab-overflow" to the wrapper, target="list" to the <ul>,
+// target="selected" to the current <li>, and target="previous"/"next" to the
+// arrow <li>s.
 export default class extends Controller {
-  static targets = ["list", "selected"]
-  static values = { previousLabel: String, nextLabel: String }
+  static targets = ["list", "selected", "previous", "next"]
 
   connect() {
     this.refresh = this.refresh.bind(this)
@@ -66,15 +67,14 @@ export default class extends Controller {
     tabs.forEach((tab, index) => {
       if (index < lo || index > hi) tab.hidden = true
     })
-    if (lo > 0) this.insertArrow("previous", tabs[lo - 1], tabs[lo])
-    if (hi < last) this.insertArrow("next", tabs[hi + 1], tabs[hi].nextSibling)
+    if (lo > 0) this.showArrow(this.previousTarget, tabs[lo - 1])
+    if (hi < last) this.showArrow(this.nextTarget, tabs[hi + 1])
   }
 
-  // Reverse a previous run: drop the arrows we added, show every tab again.
+  // Reverse a previous run: re-hide the arrows, show every tab again.
   reset() {
-    this.listTarget
-      .querySelectorAll(".app-page-tabs__overflow")
-      .forEach((arrow) => arrow.remove())
+    this.previousTarget.hidden = true
+    this.nextTarget.hidden = true
     this.tabs.forEach((tab) => (tab.hidden = false))
   }
 
@@ -86,35 +86,20 @@ export default class extends Controller {
     )
   }
 
-  insertArrow(direction, target, before) {
-    const link = target.querySelector("a[href]")
-    if (!link) return
+  // Point an arrow at the nearest hidden tab's destination and reveal it.
+  showArrow(arrow, target) {
+    const destination = target.querySelector("a[href]")
+    if (!destination) return
 
-    const item = document.createElement("li")
-    item.className = "govuk-tabs__list-item app-page-tabs__overflow"
-
-    const glyph = direction === "previous" ? "&#9664;" : "&#9654;" // ◀ / ▶
-    const label =
-      direction === "previous" ? this.previousLabelValue : this.nextLabelValue
-
-    const anchor = document.createElement("a")
-    anchor.className = "govuk-tabs__tab"
-    anchor.href = link.href
-    anchor.innerHTML =
-      `<span aria-hidden="true">${glyph}</span>` +
-      `<span class="govuk-visually-hidden">${label}</span>`
-
-    item.appendChild(anchor)
-    this.listTarget.insertBefore(item, before)
+    arrow.querySelector("a").href = destination.href
+    arrow.hidden = false
   }
 
+  // Width of an arrow tab, measured on the real (briefly shown) element.
   measureArrow() {
-    const probe = document.createElement("li")
-    probe.className = "govuk-tabs__list-item app-page-tabs__overflow"
-    probe.innerHTML = '<a class="govuk-tabs__tab" href="#">&#9654;</a>'
-    this.listTarget.appendChild(probe)
-    const width = this.outerWidth(probe)
-    probe.remove()
+    this.previousTarget.hidden = false
+    const width = this.outerWidth(this.previousTarget)
+    this.previousTarget.hidden = true
     return width
   }
 
