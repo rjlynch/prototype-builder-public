@@ -1,8 +1,9 @@
 require "rails_helper"
 
-# The page tabs show only a fixed-size block of pages around the current one,
-# with arrows to the pages on either side. The window is computed server-side
-# from the current page, so each navigation re-renders the right block — no JS.
+# The page tabs show a fixed-size window of pages that slides to keep the
+# current page roughly centred, with arrows to the pages on either side. The
+# window is computed server-side from the current page, so each navigation
+# re-renders the right slice — no JS.
 RSpec.describe "Page tabs windowing", type: :request do
   let(:team) { Team.create!(name: "Mine") }
   let(:user) do
@@ -22,7 +23,7 @@ RSpec.describe "Page tabs windowing", type: :request do
     Capybara.string(response.body).find("nav[aria-label='Pages in this wizard']")
   end
 
-  it "shows the first block with a forward arrow only" do
+  it "clamps to the start with a forward arrow only on the first page" do
     get edit_page_path(pages.first)
 
     expect(nav).to have_css("li", count: 9) # eight page tabs + one arrow
@@ -30,11 +31,19 @@ RSpec.describe "Page tabs windowing", type: :request do
     expect(nav).to have_no_link("Show earlier pages")
   end
 
-  it "shows the next block with a back arrow when the current page sits in it" do
-    get edit_page_path(pages[8]) # page 9 -> second block (pages 9, 10)
+  it "slides with both arrows when the current page is in the middle" do
+    get edit_page_path(pages[4]) # page 5 -> window slides to pages 2..9
 
-    expect(nav).to have_css("li", count: 3) # two page tabs + one arrow
-    expect(nav).to have_link("Show earlier pages", href: edit_page_path(pages[7]))
+    expect(nav).to have_css("li", count: 10) # eight page tabs + two arrows
+    expect(nav).to have_link("Show earlier pages", href: edit_page_path(pages[0]))
+    expect(nav).to have_link("Show more pages", href: edit_page_path(pages[9]))
+  end
+
+  it "clamps to the end with a back arrow only near the last page" do
+    get edit_page_path(pages[8]) # page 9 -> window clamps to pages 3..10
+
+    expect(nav).to have_css("li", count: 9) # eight page tabs + one arrow
+    expect(nav).to have_link("Show earlier pages", href: edit_page_path(pages[1]))
     expect(nav).to have_no_link("Show more pages")
   end
 end
