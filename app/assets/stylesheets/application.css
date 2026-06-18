@@ -73,6 +73,30 @@
   margin-bottom: 0;
 }
 
+/* Lay the tabs out on a single row. The component floats its list items by
+   default; flex keeps them in one non-wrapping line so the tab-overflow
+   controller can hide what spills past the edge and swap in arrow tabs. The
+   selected tab is taller and rides up via a negative margin, so align bottoms.
+   With JS off the row simply overflows the container rather than wrapping. */
+.app-page-tabs .govuk-tabs__list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.app-page-tabs .govuk-tabs__list-item {
+  float: none;
+  flex: 0 0 auto;
+}
+
+/* The arrow tabs the controller inserts point left/right; centre the glyph and
+   match a normal tab's link height so the row stays level. */
+.app-page-tabs__overflow .govuk-tabs__tab {
+  display: flex;
+  align-items: center;
+}
+
 /* Controls riding inside a tab (e.g. reordering arrows). The tab link paints
    a full-bleed ::after overlay to make the whole tab clickable; raise the
    controls above it so they stay independently clickable. */

@@ -21,5 +21,9 @@ RSpec.configure do |config|
 
   config.before(:each, type: :system, js: true) do
     driven_by :headless_chrome
+    # The browser window persists across examples, so a test that resizes it
+    # would otherwise leak that size into later tests. Start each from the
+    # configured size.
+    page.current_window.resize_to(1400, 1000)
   end
 end

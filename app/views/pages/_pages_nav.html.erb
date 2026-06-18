@@ -6,11 +6,16 @@
     selected tab. Per-tab controls reorder the page within the journey
     (drag-to-reorder will replace the arrows later). %>
 <nav id="<%= dom_id(reference_page, :pages_nav) %>"
-     class="govuk-tabs app-page-tabs" aria-label="Pages in this wizard">
-  <ul class="govuk-tabs__list">
+     class="govuk-tabs app-page-tabs" aria-label="Pages in this wizard"
+     data-controller="tab-overflow"
+     data-tab-overflow-previous-label-value="Show earlier pages"
+     data-tab-overflow-next-label-value="Show more pages">
+  <ul class="govuk-tabs__list" data-tab-overflow-target="list">
     <% pages.each do |other| %>
       <% name = other.title.presence || other.slug %>
-      <li class="govuk-tabs__list-item <%= "govuk-tabs__list-item--selected" if current_page.present? && other == current_page %>">
+      <% selected = current_page.present? && other == current_page %>
+      <li class="govuk-tabs__list-item <%= "govuk-tabs__list-item--selected" if selected %>"
+          <%= "data-tab-overflow-target=selected".html_safe if selected %>>
         <%= link_to name.first(5), edit_page_path(other), class: "govuk-tabs__tab" %>
         <span class="app-tab-controls">
           <% if other.position > 1 %>

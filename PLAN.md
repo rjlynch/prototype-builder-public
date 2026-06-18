@@ -537,6 +537,20 @@ The backlog now lives in the issue tracker, not this file.
   user: per-component checkbox over a nested "panel container" builder. 192
   specs green; rubocop + brakeman clean.
 
+* 2026-06-18 — Page tabs on a single line (issues #42, #43). The reorder arrows
+  riding in each tab became left/right (&larr;/&rarr;) to match the horizontal
+  row (#43). The row no longer wraps (#42): a generic `tab-overflow` Stimulus
+  controller lays the list out with flex/nowrap, measures it, and when the tabs
+  overflow hides the spill and inserts an arrow "tab" on each side that still
+  has hidden tabs, each linking to the nearest hidden tab. The selected tab is
+  always kept visible, so following an arrow (a real navigation to that page)
+  leaves it in view with an arrow back. No domain concepts in the JS — the
+  arrows' labels ("Show earlier/more pages") come in via Stimulus values from
+  the partial. Measurement is deferred to requestAnimationFrame so a streamed-in
+  nav is sized before it's measured. Capybara now resets the browser window size
+  before each JS example, since the new overflow spec resizes it and the window
+  persists across tests. 197 specs green; rubocop + brakeman clean.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
