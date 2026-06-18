@@ -1,12 +1,11 @@
 <div class="govuk-form-group">
+  <%# When the radios use the page title as their legend, the H1 is rendered at
+      the top of the page and referenced here with aria-labelledby — so copy can
+      sit between the heading and the options (issue #74). %>
   <fieldset class="govuk-fieldset"
-            <%= "aria-describedby=#{dom_id(component, :preview_hint)}".html_safe if component.hint.present? %>>
-    <% if component.page_heading? %>
-      <legend class="govuk-fieldset__legend govuk-fieldset__legend--<%= component.page.heading_size %>">
-        <%= render "pages/preview_caption", page: component.page %>
-        <h1 class="govuk-fieldset__heading"><%= component.page.title %></h1>
-      </legend>
-    <% elsif component.label.present? %>
+            <%= %(aria-labelledby="#{dom_id(component.page, :heading)}").html_safe if component.page_heading? %>
+            <%= %(aria-describedby="#{dom_id(component, :preview_hint)}").html_safe if component.hint.present? %>>
+    <% if !component.page_heading? && component.label.present? %>
       <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
         <%= component.label %>
       </legend>

@@ -501,6 +501,20 @@ The backlog now lives in the issue tracker, not this file.
   hint, leave the editor pane so the slug field keeps focus) instead of
   `respond_with_panes`. 183 specs green; rubocop + brakeman clean.
 
+* 2026-06-17 — Issue #74 (content between a heading-as-label and its input):
+  previously a radios question using the page title as its legend glued the H1
+  inside the `<legend>`, so no paragraph/list could sit between the heading and
+  the options. Now the page H1 always renders at the top (with an id) and the
+  radios `<fieldset>` references it via `aria-labelledby` instead of embedding
+  it — the fieldset stays labelled for screen readers, and intervening
+  components are ordinary positioned components. New `Page#heading_rendered_inline?`
+  (true only for a text-input heading, which keeps its idiomatic
+  `<h1><label>` wrapper); the preview's top-H1 condition switched from
+  "no heading component" to "heading not rendered inline". No data changes. A
+  new system spec recreates the EYTRP qualifications page (H1 → copy → list →
+  radio options). 184 specs green; rubocop + brakeman clean. (Built on main,
+  independent of the open panel PR #83, which also edits `_preview`.)
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

@@ -57,6 +57,15 @@ class Page < ApplicationRecord
     components.detect { |component| component.input? && component.title_as_label? }
   end
 
+  # Whether the page H1 is rendered inline as an input's own label rather than
+  # as a standalone heading at the top. Only a text input does this (its
+  # `<h1><label>` wrapper). A radios heading instead keeps the H1 at the top and
+  # points its fieldset at it with aria-labelledby, so copy can sit between the
+  # heading and the options (issue #74).
+  def heading_rendered_inline?
+    heading_component&.kind == "text_input"
+  end
+
   # CSS class for the page's plain H1.
   def heading_class
     "govuk-heading-#{heading_size}"
