@@ -61,7 +61,7 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     # The new page sits between First and Second, shifting the rest down
     within_nav do
-      expect(page).to have_css("li:not(.app-page-tabs__overflow)", count: 4)
+      expect(page).to have_css("li", count: 4)
       expect(page).to have_css("li:nth-child(1)", text: "First")
       expect(page).to have_css("li:nth-child(2).govuk-tabs__list-item--selected")
       expect(page).to have_css("li:nth-child(3)", text: "Secon")

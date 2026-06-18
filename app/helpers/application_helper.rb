@@ -1,4 +1,27 @@
 module ApplicationHelper
+  # Default number of items a windowed tab strip shows before the rest become
+  # reachable via prev/next arrows. Override per render with `tab_window`'s
+  # `per:` argument.
+  TAB_WINDOW_SIZE = 8
+
+  TabWindow = Data.define(:items, :previous, :next)
+
+  # Slice `items` into the fixed-size block that contains `current`, returning
+  # the visible block plus the item to step back/forward to (nil at the ends).
+  # Pure array maths — it knows nothing about pages or tabs, so the strip can be
+  # rendered (and re-rendered with a fresh window) on each navigation, no JS.
+  def tab_window(items, current, per: TAB_WINDOW_SIZE)
+    items = items.to_a
+    index = [ items.index(current) || 0, 0 ].max
+    start = (index / per) * per
+
+    TabWindow.new(
+      items: items[start, per],
+      previous: (items[start - 1] if start.positive?),
+      next: items[start + per]
+    )
+  end
+
   def svg_icon(name, css_class: nil)
     icon_paths = {
       "cog" => [

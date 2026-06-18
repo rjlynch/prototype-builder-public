@@ -539,20 +539,18 @@ The backlog now lives in the issue tracker, not this file.
 
 * 2026-06-18 — Page tabs on a single line (issues #42, #43). The reorder arrows
   riding in each tab became left/right (&larr;/&rarr;) to match the horizontal
-  row (#43). The row no longer wraps (#42): a generic `tab-overflow` Stimulus
-  controller lays the list out with flex/nowrap, measures it, and when the tabs
-  overflow hides the spill and reveals an arrow "tab" on each side that still
-  has hidden tabs, pointing each at the nearest hidden tab. The arrows are
-  server-rendered (hidden by default) and the controller only toggles their
-  visibility and sets their href — keeping markup in the partial, in keeping
-  with the app's server-driven grain. They're rendered after the tabs so they
-  don't shift the tabs' nth-child positions; flex `order` floats the "previous"
-  arrow to the front of the visible run. The selected tab is always kept
-  visible, so following an arrow (a real navigation to that page) leaves it in
-  view with an arrow back. Measurement is deferred to requestAnimationFrame so a
-  streamed-in nav is sized before it's measured. Capybara now resets the browser
-  window size before each JS example, since the new overflow spec resizes it and
-  the window persists across tests. 197 specs green; rubocop + brakeman clean.
+  row (#43). The row no longer wraps (#42): instead of measuring widths in JS,
+  the nav shows a fixed-size block of tabs around the current page (a generic
+  `tab_window` helper slices the pages into blocks of `TAB_WINDOW_SIZE`, default
+  8, overridable per render via a `max_tabs` local). When pages sit outside the
+  block, a chevron arrow on that side links to the nearest one (last page of the
+  previous block / first of the next), so each navigation just re-renders the
+  right block — no JavaScript, no Stimulus controller. The arrows are plain
+  links rendered in source order (left before the tabs, right after), and the
+  windowing is covered by a fast helper unit spec plus a request spec instead of
+  a slow resize-the-browser system test. 204 specs green; rubocop + brakeman
+  clean. (Replaced an earlier JS measuring approach — simpler and server-driven,
+  matching the rest of the app.)
 
 ## Decisions / open questions
 
