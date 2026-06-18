@@ -21,8 +21,7 @@
           <% end %>
           <%= form_with url: page_answers_path(page), method: :post do %>
             <%= hidden_field_tag :mode, mode %>
-            <% page.components.each do |component| %>
-              <% next if page.panel? && component.in_panel? %>
+            <% page.body_components.each do |component| %>
               <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
             <% end %>
           <% end %>

@@ -99,5 +99,29 @@ RSpec.describe Page, type: :model do
 
       expect(page.panel_body_components).to eq([ para, sub ])
     end
+
+    it "has no panel body components when no panel is set" do
+      page = page_with(panel_style: "none")
+      page.components.create!(position: 1, kind: "paragraph", text: "Ref ABC", in_panel: true)
+
+      expect(page.panel_body_components).to eq([])
+    end
+
+    it "renders everything except the in-panel components in the body" do
+      page = page_with(panel_style: "success")
+      panelled = page.components.create!(position: 1, kind: "paragraph", text: "Ref ABC", in_panel: true)
+      outside = page.components.create!(position: 2, kind: "paragraph", text: "Outside", in_panel: false)
+      button = page.components.create!(position: 3, kind: "button", text: "Continue")
+
+      expect(page.body_components).to eq([ outside, button ])
+      expect(page.body_components).not_to include(panelled)
+    end
+
+    it "treats every component as body content when no panel is set" do
+      page = page_with(panel_style: "none")
+      para = page.components.create!(position: 1, kind: "paragraph", text: "Ref ABC", in_panel: true)
+
+      expect(page.body_components).to eq([ para ])
+    end
   end
 end

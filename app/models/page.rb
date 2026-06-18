@@ -86,8 +86,18 @@ class Page < ApplicationRecord
   end
 
   # Components shown inside the panel body, below the H1, in position order.
+  # Empty unless a panel is set — only then can a component be "in the panel".
   def panel_body_components
+    return [] unless panel?
+
     components.select { |component| component.in_panel? && component.panel_eligible? }
+  end
+
+  # Components rendered in the page body, in position order: everything except
+  # the ones the panel has pulled up into itself. With no panel this is simply
+  # every component.
+  def body_components
+    components - panel_body_components
   end
 
   # CSS class for the page's plain H1.

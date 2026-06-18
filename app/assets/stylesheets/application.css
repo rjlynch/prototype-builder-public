@@ -183,6 +183,14 @@
   text-align: left;
 }
 
+/* Panels use white text throughout. The in-panel components keep their own
+   dark text colours (govuk-body, govuk-heading-m...), so force them white
+   wherever they sit inside the panel body. */
+.govuk-panel__body,
+.govuk-panel__body * {
+  color: #fff;
+}
+
 .app-autosubmit__status {
   display: block;
   color: #505a5f;
