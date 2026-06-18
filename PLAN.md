@@ -45,6 +45,9 @@ Page              one screen in the journey, ordered
   slug            string, unique within wizard; tracks the title
                   ("What is your name" -> what-is-your-name) until the user
                   customises it; defaults to page-N while untitled
+  panel_style     "none" (default) | "success" (green, centred) |
+                  "information" (blue, left-aligned) — GOV.UK panel holding
+                  the H1 (and any in_panel copy) at the top of the page
 
 Component         one element on a page, ordered
   page_id
@@ -65,6 +68,8 @@ Component         one element on a page, ordered
                   "start" | "warning" (GOV.UK button variants)
   target_slug     buttons: page slug to go to as the "else" when no branch rule
                   matches; blank continues linearly to the next page
+  in_panel        paragraphs/subheadings: render inside the page's panel body
+                  (only meaningful while the page has a panel_style set)
 
 BranchRule        one "if answer X is Y go to page Z" condition on a button
   component_id    the button
@@ -514,6 +519,23 @@ The backlog now lives in the issue tracker, not this file.
   new system spec recreates the EYTRP qualifications page (H1 → copy → list →
   radio options). 184 specs green; rubocop + brakeman clean. (Built on main,
   independent of the open panel PR #83, which also edits `_preview`.)
+
+* 2026-06-17 — Issue #77 (GOV.UK panel): the page H1 can now sit in a coloured
+  panel at the top of the page. New `pages.panel_style` (none/success/
+  information) chosen by radios in the Page card, and `components.in_panel` for
+  paragraphs/subheadings, toggled by an "Show inside the panel" checkbox that
+  only appears once the page has a panel (mirrors the title-as-label toggle).
+  Preview renders `pages/_panel` first (so the panel is always the first thing
+  on the page), containing the H1 + in-panel body components in position order,
+  then the loop skips in-panel components. `Page#heading_component` returns nil
+  while a panel owns the title (inputs fall back to their own labels). "success"
+  reuses the shipped green `govuk-panel--confirmation`; "information" is a custom
+  blue, left-aligned `app-panel--information` modifier (the design system ships
+  no blue variant). `pages#update` re-renders the builder pane when panel_style
+  changes (so the per-component checkboxes appear/disappear) but only on that
+  change, to avoid stealing focus while typing the title. UI chosen with the
+  user: per-component checkbox over a nested "panel container" builder. 192
+  specs green; rubocop + brakeman clean.
 
 ## Decisions / open questions
 

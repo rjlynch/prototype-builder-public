@@ -24,6 +24,11 @@ class Component < ApplicationRecord
     INPUT_KINDS.include?(kind)
   end
 
+  # Kinds that may be placed inside a page's panel (alongside the H1).
+  def panel_eligible?
+    kind.in?(%w[ paragraph subheading ])
+  end
+
   # True when this input supplies the page's H1 (the GOV.UK single-question
   # pattern): the first input on the page with title_as_label set.
   def page_heading?

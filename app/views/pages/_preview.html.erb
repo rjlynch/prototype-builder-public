@@ -6,8 +6,11 @@
         <div class="govuk-grid-column-two-thirds">
           <%# The page H1 sits at the top, with an id so an input using it as its
               label can reference it (aria-labelledby). A text input renders it
-              inline as its own <label>, so it is not repeated here. %>
-          <% if page.title.present? && !page.heading_rendered_inline? %>
+              inline as its own <label>, so it is not repeated here. A panel, when
+              set, owns the H1 instead and renders first. %>
+          <% if page.panel? %>
+            <%= render "pages/panel", page: page, mode: mode %>
+          <% elsif page.title.present? && !page.heading_rendered_inline? %>
             <%= render "pages/preview_caption", page: page %>
             <h1 id="<%= dom_id(page, :heading) %>" class="<%= page.heading_class %>"><%= page.title %></h1>
           <% end %>
@@ -18,7 +21,7 @@
           <% end %>
           <%= form_with url: page_answers_path(page), method: :post do %>
             <%= hidden_field_tag :mode, mode %>
-            <% page.components.each do |component| %>
+            <% page.body_components.each do |component| %>
               <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
             <% end %>
           <% end %>

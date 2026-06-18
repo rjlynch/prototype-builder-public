@@ -94,6 +94,20 @@ RSpec.describe ComponentForm do
     expect(component.reload.target_slug).to eq("check-your-answers")
   end
 
+  it "moves a component into and out of the panel" do
+    component = create_component(kind: "paragraph", text: "Your reference number")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(in_panel: "1")
+    expect(form.save).to be(true)
+    expect(component.reload.in_panel).to be(true)
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(in_panel: "0")
+    expect(form.save).to be(true)
+    expect(component.reload.in_panel).to be(false)
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
