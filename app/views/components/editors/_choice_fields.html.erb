@@ -1,0 +1,34 @@
+<%# Shared editor fields for the choice inputs (radios and checkboxes): a name,
+    an optional label/legend, the title-as-label toggle, a hint and the options
+    list. Each owning editor adds whatever is specific to its kind. %>
+<div class="govuk-form-group">
+  <%= f.label :name, "Name", class: "govuk-label" %>
+  <div class="govuk-hint">Used internally to identify the answer</div>
+  <%= f.text_field :name, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+</div>
+<% unless f.object.component.title_as_label? %>
+  <div class="govuk-form-group">
+    <%= f.label :label, "Label", class: "govuk-label" %>
+    <%= f.text_field :label, class: "govuk-input", data: { action: "input->autosubmit#submit input->mirror#refresh", mirror_target: "source" } %>
+  </div>
+<% end %>
+<% if f.object.component.title_as_label_available? %>
+  <div class="govuk-form-group">
+    <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+      <div class="govuk-checkboxes__item">
+        <%= f.check_box :title_as_label, id: dom_id(f.object.component, :title_as_label),
+              class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+        <%= f.label :title_as_label, "Use the page title as the label", for: dom_id(f.object.component, :title_as_label),
+              class: "govuk-label govuk-checkboxes__label" %>
+      </div>
+    </div>
+  </div>
+<% end %>
+<div class="govuk-form-group">
+  <%= f.label :hint, "Hint", class: "govuk-label" %>
+  <%= f.text_field :hint, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+</div>
+<div class="govuk-form-group">
+  <%= f.label :options, "Options (one per line)", class: "govuk-label" %>
+  <%= f.text_area :options, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit" } %>
+</div>

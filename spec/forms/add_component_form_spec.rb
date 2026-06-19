@@ -7,14 +7,17 @@ RSpec.describe AddComponentForm do
 
     paragraph = AddComponentForm.new(page: page, kind: "paragraph")
     subheading = AddComponentForm.new(page: page, kind: "subheading")
+    checkboxes = AddComponentForm.new(page: page, kind: "checkboxes")
     button = AddComponentForm.new(page: page, kind: "button")
 
     expect(paragraph.save).to be(true)
     expect(subheading.save).to be(true)
+    expect(checkboxes.save).to be(true)
     expect(button.save).to be(true)
     expect(paragraph.component).to have_attributes(position: 1, text: "")
     expect(subheading.component).to have_attributes(position: 2, text: "")
-    expect(button.component).to have_attributes(position: 3, text: "Continue")
+    expect(checkboxes.component).to have_attributes(position: 3, kind: "checkboxes", options: "", name: "question-1")
+    expect(button.component).to have_attributes(position: 4, text: "Continue")
   end
 
   it "generates input names unique within the wizard" do

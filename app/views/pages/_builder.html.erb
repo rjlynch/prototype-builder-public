@@ -21,6 +21,9 @@
     <%= button_to "Add radio buttons", page_components_path(page),
           params: { component: { kind: "radios" } },
           class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add checkboxes", page_components_path(page),
+          params: { component: { kind: "checkboxes" } },
+          class: "govuk-button govuk-button--secondary" %>
     <%= button_to "Add button", page_components_path(page),
           params: { component: { kind: "button" } },
           class: "govuk-button govuk-button--secondary" %>

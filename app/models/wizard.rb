@@ -16,6 +16,19 @@ class Wizard < ApplicationRecord
       .sort
   end
 
+  # Answer keys for checkbox inputs — the groups that submit an array of
+  # values (answers[key][]) rather than a single string, so the answers
+  # controller can permit them as arrays.
+  def checkbox_input_keys
+    Component.where(kind: "checkboxes")
+      .joins(:page)
+      .where(pages: { wizard_id: id })
+      .pluck(:name)
+      .map { |name| name.to_s.parameterize }
+      .uniq
+      .sort
+  end
+
   # [display text, answer key] pairs for branch-rule selects: the key plus
   # the question it belongs to ("question-1 (Are you eligible?)"), so the
   # generated names mean something to the person picking one.

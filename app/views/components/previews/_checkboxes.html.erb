@@ -1,0 +1,38 @@
+<div class="govuk-form-group">
+  <%# Like radios, when the checkboxes use the page title as their legend the H1
+      is rendered at the top of the page and referenced here with
+      aria-labelledby, so copy can sit between the heading and the options. %>
+  <fieldset class="govuk-fieldset"
+            <%= %(aria-labelledby="#{dom_id(component.page, :heading)}").html_safe if component.page_heading? %>
+            <%= %(aria-describedby="#{dom_id(component, :preview_hint)}").html_safe if component.hint.present? %>>
+    <% if !component.page_heading? && component.label.present? %>
+      <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+        <%= component.label %>
+      </legend>
+    <% end %>
+    <% if component.hint.present? %>
+      <div class="govuk-hint" id="<%= dom_id(component, :preview_hint) %>">
+        <%= component.hint %>
+      </div>
+    <% end %>
+    <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+      <%# A checkbox group submits one value per ticked box (answers[key][]).
+          The empty hidden field makes the key present even when nothing is
+          ticked, so clearing every box replaces a previous answer rather than
+          leaving it untouched in the session. %>
+      <input type="hidden" name="answers[<%= component.input_key %>][]" value="">
+      <% component.option_list.each_with_index do |option, index| %>
+        <div class="govuk-checkboxes__item">
+          <input class="govuk-checkboxes__input"
+                 id="<%= dom_id(component, :"preview_option_#{index}") %>"
+                 name="answers[<%= component.input_key %>][]"
+                 type="checkbox"
+                 value="<%= option.parameterize %>">
+          <label class="govuk-label govuk-checkboxes__label" for="<%= dom_id(component, :"preview_option_#{index}") %>">
+            <%= option %>
+          </label>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+</div>

@@ -21,8 +21,17 @@ class BranchRule < ApplicationRecord
   end
 
   # Values are compared parameterised so "Yes" matches "yes" — kinder to
-  # non-technical builders than exact string matching.
+  # non-technical builders than exact string matching. The answer is treated
+  # as a set: a checkbox group supplies several values and the rule matches
+  # when its value is among them; a text or radio answer is a set of one, so
+  # membership there is plain equality.
   def matches?(answers)
-    complete? && answers[input_name].to_s.parameterize == value.parameterize
+    complete? && selected_values(answers[input_name]).include?(value.parameterize)
+  end
+
+  private
+
+  def selected_values(answer)
+    Array(answer).map { |value| value.to_s.parameterize }.reject(&:blank?)
   end
 end

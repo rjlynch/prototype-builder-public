@@ -576,6 +576,23 @@ The backlog now lives in the issue tracker, not this file.
   builder preview and run mode. Covered by a `ComponentForm` set/clear spec and
   a system spec. No model validation needed (plain boolean). 207 specs green.
 
+### Phase 4: checkboxes (issue #75, 2026-06-19)
+
+Three slices, one commit each (see issue #75 for the design write-up):
+
+* 2026-06-19 — Slice 1: checkbox component. New `checkboxes` input kind (added to
+  `Component::KINDS`/`INPUT_KINDS`, so it inherits `input?`, name generation,
+  the `inputs` scope and `input_keys`/`input_choices` for free). Editor reuses a
+  new shared `editors/_choice_fields` partial (extracted from the radios editor,
+  which now renders it + the inline toggle); checkboxes have no inline option.
+  Preview renders GOV.UK checkboxes submitting `answers[key][]`, with an empty
+  hidden field so unticking every box still clears a previous answer. Answers can
+  now be arrays: `AnswersController#answer_params` permits checkbox keys as arrays
+  (`Wizard#checkbox_input_keys`), and `BranchRule#matches?` treats the answer as a
+  set — a checkbox group matches when the rule's value is among the ticked values,
+  while a scalar text/radio answer is a set of one (so equality is unchanged). One
+  ticked value branches today; multi-condition AND is slice 2. 213 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

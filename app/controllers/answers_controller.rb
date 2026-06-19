@@ -28,10 +28,16 @@ class AnswersController < ApplicationController
     session[:answers][wizard.id.to_s] ||= {}
   end
 
-  # Only keys belonging to the wizard's inputs are accepted.
+  # Only keys belonging to the wizard's inputs are accepted. Checkbox groups
+  # submit an array of values (answers[key][]), so they are permitted as
+  # arrays; every other input is a single string.
   def answer_params(page)
+    wizard = page.wizard
+    checkbox_keys = wizard.checkbox_input_keys
+    scalar_keys = wizard.input_keys - checkbox_keys
+
     params.fetch(:answers, ActionController::Parameters.new)
-      .permit(*page.wizard.input_keys)
+      .permit(*scalar_keys, checkbox_keys.index_with { [] })
       .to_h
   end
 end
