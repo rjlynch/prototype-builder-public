@@ -40,7 +40,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     within_preview { click_button "Continue" }
     expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
 
-    # And back again with the down arrow
+    # And back again with the right arrow
     click_button "Move Third later"
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "Secon")

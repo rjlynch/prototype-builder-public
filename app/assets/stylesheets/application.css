@@ -73,6 +73,28 @@
   margin-bottom: 0;
 }
 
+/* Lay the tabs out on a single row. The component floats its list items by
+   default; flex keeps the windowed block of tabs (plus its arrows) on one
+   non-wrapping line. The selected tab is taller and rides up via a negative
+   margin, so align bottoms. */
+.app-page-tabs .govuk-tabs__list {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+}
+
+.app-page-tabs .govuk-tabs__list-item {
+  float: none;
+  flex: 0 0 auto;
+}
+
+/* The arrow tabs hold a single chevron icon; centre it and match a normal
+   tab's link height so the row stays level. */
+.app-page-tabs__overflow .govuk-tabs__tab {
+  display: flex;
+  align-items: center;
+}
+
 /* Controls riding inside a tab (e.g. reordering arrows). The tab link paints
    a full-bleed ::after overlay to make the whole tab clickable; raise the
    controls above it so they stay independently clickable. */

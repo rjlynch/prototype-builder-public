@@ -537,6 +537,21 @@ The backlog now lives in the issue tracker, not this file.
   user: per-component checkbox over a nested "panel container" builder. 192
   specs green; rubocop + brakeman clean.
 
+* 2026-06-18 — Page tabs on a single line (issues #42, #43). The reorder arrows
+  riding in each tab became left/right (&larr;/&rarr;) to match the horizontal
+  row (#43). The row no longer wraps (#42): instead of measuring widths in JS,
+  the nav shows a fixed-size window of tabs that slides to keep the current page
+  roughly centred (a generic `tab_window` helper, window size `TAB_WINDOW_SIZE`,
+  default 8, overridable per render via a `max_tabs` local; clamped at both
+  ends). When pages sit outside the window, a chevron arrow on that side links
+  to the nearest one, so each navigation just re-renders the right slice — no
+  JavaScript, no Stimulus controller. The arrows are plain links rendered in
+  source order (left before the tabs, right after), and the windowing is covered
+  by a fast helper unit spec plus a request spec instead of a slow
+  resize-the-browser system test. 205 specs green; rubocop + brakeman clean.
+  (Replaced an earlier JS measuring approach — simpler and server-driven,
+  matching the rest of the app.)
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
