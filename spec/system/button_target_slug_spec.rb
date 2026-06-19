@@ -21,7 +21,7 @@ RSpec.describe "Button target slug", :js, type: :system do
     # Clicking the button creates the named page (builder mode) and lands there,
     # skipping the linear "page-2" the journey would otherwise have created.
     within_preview { click_button "Continue" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug check-your-answers")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls check-your-answers")
   end
 
   def within_preview(&block)

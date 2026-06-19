@@ -552,6 +552,20 @@ The backlog now lives in the issue tracker, not this file.
   (Replaced an earlier JS measuring approach — simpler and server-driven,
   matching the rest of the app.)
 
+* 2026-06-19 — Page management controls moved out of the tabs and into the page
+  panel (issue #91). The tabs are now just labelled links — the per-tab reorder
+  arrows and add-page `+` are gone. The slug disclosure became a "Page controls"
+  disclosure (`pages/_page_controls`, replacing `_slug_form`): it keeps the slug
+  field and adds a stack of GOV.UK buttons — "Move page back"/"Move page forward"
+  (secondary, dropping off at the journey's ends), "Add page after" (secondary),
+  and "Remove this page" (warning, hidden on the last page). The standalone
+  "Remove this page" link at the top of the title card was removed. Routes and
+  controllers were untouched (`positions`, `successors`, `pages#destroy` already
+  RESTful); only the views, the `update` turbo-stream target rename
+  (`slug_form` → `page_controls`), and the orphaned `app-tab-controls` /
+  `app-link--danger` CSS changed. System specs updated to open the disclosure
+  before reaching its buttons. 205 specs green; rubocop clean.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

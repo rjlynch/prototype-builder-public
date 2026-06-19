@@ -5,9 +5,9 @@
 <% window = tab_window(pages, current_page, per: max_tabs) %>
 
 <%# Each page is a tab linking to its builder. The current page is the selected
-    tab. Per-tab controls reorder the page within the journey (drag-to-reorder
-    will replace the arrows later). Only the block of tabs around the current
-    page is shown; if more pages sit on either side, an arrow leads to them. %>
+    tab; its reorder/insert/remove controls live in the page panel rather than
+    the tab. Only the block of tabs around the current page is shown; if more
+    pages sit on either side, an arrow leads to them. %>
 <nav id="<%= dom_id(reference_page, :pages_nav) %>"
      class="govuk-tabs app-page-tabs" aria-label="Pages in this wizard">
   <ul class="govuk-tabs__list">
@@ -25,29 +25,6 @@
       <% selected = current_page.present? && other == current_page %>
       <li class="govuk-tabs__list-item <%= "govuk-tabs__list-item--selected" if selected %>">
         <%= link_to name.first(5), edit_page_path(other), class: "govuk-tabs__tab" %>
-        <span class="app-tab-controls">
-          <% if other.position > 1 %>
-            <%= button_to page_position_path(other), method: :patch,
-                  params: { position: other.position - 1 },
-                  class: "app-icon-button", form_class: "app-tab-controls__form" do %>
-              <span aria-hidden="true">&larr;</span>
-              <span class="govuk-visually-hidden">Move <%= name %> earlier</span>
-            <% end %>
-          <% end %>
-          <% if other.position < pages.size %>
-            <%= button_to page_position_path(other), method: :patch,
-                  params: { position: other.position + 1 },
-                  class: "app-icon-button", form_class: "app-tab-controls__form" do %>
-              <span aria-hidden="true">&rarr;</span>
-              <span class="govuk-visually-hidden">Move <%= name %> later</span>
-            <% end %>
-          <% end %>
-          <%= button_to page_successor_path(other),
-                class: "app-icon-button", form_class: "app-tab-controls__form" do %>
-            <%= svg_icon("plus") %>
-            <span class="govuk-visually-hidden">Add a page after <%= name %></span>
-          <% end %>
-        </span>
       </li>
     <% end %>
 
