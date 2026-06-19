@@ -18,18 +18,22 @@
         buttons drop off at the ends; remove is hidden when it is the last page. %>
     <div class="app-button-stack">
       <% if page.position > 1 %>
+        <p class="govuk-hint">Swap this page with the one before it, so it comes earlier in the journey.</p>
         <%= button_to "Move page back", page_position_path(page), method: :patch,
               params: { position: page.position - 1 },
               class: "govuk-button govuk-button--secondary" %>
       <% end %>
       <% if page.position < page.wizard.pages.size %>
+        <p class="govuk-hint">Swap this page with the one after it, so it comes later in the journey.</p>
         <%= button_to "Move page forward", page_position_path(page), method: :patch,
               params: { position: page.position + 1 },
               class: "govuk-button govuk-button--secondary" %>
       <% end %>
+      <p class="govuk-hint">Add a new blank page straight after this one and start building it.</p>
       <%= button_to "Add page after", page_successor_path(page),
             class: "govuk-button govuk-button--secondary" %>
       <% if page.wizard.pages.many? %>
+        <p class="govuk-hint">Permanently delete this page from the journey. You’ll be taken to the previous page.</p>
         <%= button_to "Remove this page", page_path(page), method: :delete,
               class: "govuk-button govuk-button--warning",
               form: { data: { turbo_confirm: "Are you sure you want to delete this page" } } %>
