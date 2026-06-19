@@ -48,4 +48,23 @@ RSpec.describe MarkdownHelper, type: :helper do
       end
     end
   end
+
+  describe "#markdown_to_text" do
+    it "returns blank for nil" do
+      expect(helper.markdown_to_text(nil)).to eq("")
+    end
+
+    it "leaves plain text untouched" do
+      expect(helper.markdown_to_text("Universal Credit")).to eq("Universal Credit")
+    end
+
+    it "reduces a link to its visible text" do
+      expect(helper.markdown_to_text("I agree to the [terms](https://example.com)"))
+        .to eq("I agree to the terms")
+    end
+
+    it "reduces bold to its visible text" do
+      expect(helper.markdown_to_text("an **important** option")).to eq("an important option")
+    end
+  end
 end

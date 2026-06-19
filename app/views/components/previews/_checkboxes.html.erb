@@ -27,9 +27,9 @@
                  id="<%= dom_id(component, :"preview_option_#{index}") %>"
                  name="answers[<%= component.input_key %>][]"
                  type="checkbox"
-                 value="<%= option.parameterize %>">
+                 value="<%= markdown_to_text(option).parameterize %>">
           <label class="govuk-label govuk-checkboxes__label" for="<%= dom_id(component, :"preview_option_#{index}") %>">
-            <%= option %>
+            <%= govuk_markdown(option, page: component.page) %>
           </label>
         </div>
       <% end %>

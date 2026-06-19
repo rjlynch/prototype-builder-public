@@ -609,6 +609,16 @@ Three slices, one commit each (see issue #75 for the design write-up):
   always keeps ≥1 condition. Rules still combine first-match-wins (OR). 221
   specs green. (Links in option/checkbox labels — slice 3 — still to come.)
 
+* 2026-06-19 — Slice 3: links in radio/checkbox option labels (the EYTRP
+  consent pattern from issue #75). Option labels now render through the
+  existing `govuk_markdown` helper, so a label can carry a link or bold
+  (`I agree to the [terms](https://...)`). A new `markdown_to_text` helper
+  strips the markup back to plain text, and the radios/checkboxes previews use
+  it to derive the submitted `value` — so the stored value stays a clean slug
+  ("i-agree-to-the-terms") and branch rules still match on the readable words a
+  builder types. The shared `choice_fields` editor gains the "Help with
+  formatting" disclosure under the options field. 227 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

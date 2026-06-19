@@ -31,4 +31,8 @@
 <div class="govuk-form-group">
   <%= f.label :options, "Options (one per line)", class: "govuk-label" %>
   <%= f.text_area :options, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit" } %>
+  <%# Option labels accept the same markdown as body copy, so a label can carry
+      a link (e.g. "I agree to the [terms](...)"). The submitted value uses the
+      plain text, so branch rules still match on the readable words. %>
+  <%= render "components/editors/formatting_help" %>
 </div>
