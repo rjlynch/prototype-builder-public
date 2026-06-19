@@ -62,6 +62,8 @@ Component         one element on a page, ordered
   hint            inputs: hint text
   options         radios: one option per line; submitted value is the
                   parameterised option label
+  inline          radios: lay the options out side by side
+                  (GOV.UK govuk-radios--inline)
   list_style      lists: "none" | "bullet" | "number" (GOV.UK list styles)
   list_spaced     lists: extra spacing between items
   button_style    buttons: "continue" (default) | "secondary" | "inverse" |
@@ -565,6 +567,14 @@ The backlog now lives in the issue tracker, not this file.
   (`slug_form` → `page_controls`), and the orphaned `app-tab-controls` /
   `app-link--danger` CSS changed. System specs updated to open the disclosure
   before reaching its buttons. 205 specs green; rubocop clean.
+
+* 2026-06-19 — Inline radio buttons option (issue #80). New `components.inline`
+  boolean (default false), plumbed through `ComponentForm` and the permitted
+  params, with a "Display the options inline" checkbox in the radios editor
+  (matching the list-spacing checkbox pattern). The radios preview adds the
+  `govuk-radios--inline` modifier when set, so the choice shows in both the
+  builder preview and run mode. Covered by a `ComponentForm` set/clear spec and
+  a system spec. No model validation needed (plain boolean). 207 specs green.
 
 ## Decisions / open questions
 

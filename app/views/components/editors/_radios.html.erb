@@ -29,3 +29,16 @@
   <%= f.label :options, "Options (one per line)", class: "govuk-label" %>
   <%= f.text_area :options, rows: 4, class: "govuk-textarea", data: { action: "input->autosubmit#submit" } %>
 </div>
+<%# NOTE: inline radios are incompatible with conditionally revealed content
+    (a GOV.UK constraint). When conditional reveal is added here, the two
+    options must be mutually exclusive in the editor (see issue #80). %>
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <%= f.check_box :inline, id: dom_id(f.object.component, :inline),
+            class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+      <%= f.label :inline, "Display the options inline", for: dom_id(f.object.component, :inline),
+            class: "govuk-label govuk-checkboxes__label" %>
+    </div>
+  </div>
+</div>
