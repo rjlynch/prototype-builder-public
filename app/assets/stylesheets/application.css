@@ -95,23 +95,6 @@
   align-items: center;
 }
 
-/* Controls riding inside a tab (e.g. reordering arrows). The tab link paints
-   a full-bleed ::after overlay to make the whole tab clickable; raise the
-   controls above it so they stay independently clickable. */
-.app-tab-controls {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  gap: 2px;
-  margin-left: 6px;
-  vertical-align: middle;
-}
-
-.app-tab-controls__form {
-  display: inline-flex;
-  margin: 0;
-}
-
 .app-heading-size {
   margin-top: 10px;
 }
@@ -170,16 +153,6 @@
 
 .app-icon-button--danger {
   color: #d4351c;
-}
-
-.app-link--danger:link,
-.app-link--danger:visited {
-  color: #d4351c;
-}
-
-.app-link--danger:hover,
-.app-link--danger:active {
-  color: #942514;
 }
 
 .app-icon-button:focus {

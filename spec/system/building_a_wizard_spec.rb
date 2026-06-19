@@ -9,8 +9,8 @@ RSpec.describe "Building a wizard", :js, type: :system do
 
     # --- Page 1 ---------------------------------------------------------
     expect(page).to have_no_css("h2", text: "Untitled page")
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-1")
-    find(".app-disclosure__summary", text: "Slug").click
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-1")
+    find(".app-disclosure__summary", text: "Page controls").click
     expect(page).to have_field("Page slug", with: "page-1")
     within_preview do
       expect(page).to have_content("Your page preview appears here")
@@ -81,18 +81,18 @@ RSpec.describe "Building a wizard", :js, type: :system do
     within_preview { click_button "Start now" }
 
     # --- Page 2 ---------------------------------------------------------
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-2")
     expect(page).to have_field("Page title", with: "")
     within_service_nav { expect(page).to have_link("EYTFI claim") } # rename stuck
     # Back to page 1 (the first tab) via the tab menu
     within_nav { first(".govuk-tabs__tab").click }
     expect(page).to have_css(
       ".app-disclosure__summary",
-      text: "Slug claim-an-early-years-teacher-recognition-payment"
+      text: "Page controls claim-an-early-years-teacher-recognition-payment"
     )
     # Forward again from the preview's continue button (the next-page link is gone)
     within_preview { click_button "Start now" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-2")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-2")
     within_preview do
       expect(page).to have_no_css("h1")
     end
@@ -128,7 +128,7 @@ RSpec.describe "Building a wizard", :js, type: :system do
     end
 
     # --- Page 3 ---------------------------------------------------------
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug page-3")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-3")
     expect(page).to have_field("Page title", with: "")
 
     # The renamed wizard shows up on the dashboard

@@ -52,8 +52,8 @@ class PagesController < ApplicationController
         # the user is typing in the slug field itself.
         unless attrs.key?(:slug)
           streams << turbo_stream.replace(
-            helpers.dom_id(page, :slug_form),
-            partial: "pages/slug_form",
+            helpers.dom_id(page, :page_controls),
+            partial: "pages/page_controls",
             locals: { page: page }
           )
         end

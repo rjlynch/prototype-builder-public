@@ -6,29 +6,34 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     # Jump to the middle page via its tab (labels show the first 5 chars)
     within_nav { click_link "Secon" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug second")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls second")
+    open_page_controls
     accept_confirm { click_button "Remove this page" }
 
     # Lands on the previous page; the deleted page is gone from the nav
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls first")
     within_nav { expect(page).to have_no_text("Secon") }
 
     # Linear navigation follows the renumbered positions
     within_nav { click_link "First" }
     within_preview { click_button "Continue" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls third")
 
     # Deleting down to one page removes the option entirely
+    open_page_controls
     accept_confirm { click_button "Remove this page" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug first")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls first")
+    open_page_controls
     expect(page).to have_no_button("Remove this page")
   end
 
-  it "reorders pages from the tabs" do
+  it "reorders pages from the page controls" do
     build_three_page_wizard
 
-    # We are on "Third"; pull it one position earlier
-    click_button "Move Third earlier"
+    # We are on "Third", the last page: it can move back but not forward
+    open_page_controls
+    expect(page).to have_no_button("Move page forward")
+    click_button "Move page back"
 
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "Third")
@@ -38,25 +43,28 @@ RSpec.describe "Managing pages", :js, type: :system do
     # Linear navigation follows the new order
     within_nav { click_link "First" }
     within_preview { click_button "Continue" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Slug third")
+    expect(page).to have_css(".app-disclosure__summary", text: "Page controls third")
 
-    # And back again with the right arrow
-    click_button "Move Third later"
+    # And back again the other way
+    open_page_controls
+    click_button "Move page forward"
     within_nav do
       expect(page).to have_css("li:nth-child(2)", text: "Secon")
       expect(page).to have_css("li:nth-child(3)", text: "Third")
     end
 
-    # No moving off either end of the journey
-    expect(page).to have_no_button("Move First earlier")
-    expect(page).to have_no_button("Move Third later")
+    # No moving off the end of the journey
+    open_page_controls
+    expect(page).to have_no_button("Move page forward")
   end
 
-  it "inserts a new page after one from its tab" do
+  it "inserts a new page after the current one from the page controls" do
     build_three_page_wizard
 
     # Insert after the first page; we land on the new blank page's builder
-    within_nav { click_button "Add a page after First" }
+    within_nav { click_link "First" }
+    open_page_controls
+    click_button "Add page after"
     expect(page).to have_field("Page title", with: "")
 
     # The new page sits between First and Second, shifting the rest down
@@ -73,6 +81,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     sign_in
     click_button "New wizard"
 
+    open_page_controls
     expect(page).to have_no_button("Remove this page") # single page is undeletable
 
     %w[First Second Third].each_with_index do |title, index|
@@ -82,7 +91,7 @@ RSpec.describe "Managing pages", :js, type: :system do
 
       add_component "Add button"
       within_preview { click_button "Continue" }
-      expect(page).to have_css(".app-disclosure__summary", text: "Slug page-#{index + 2}")
+      expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-#{index + 2}")
     end
   end
 
@@ -92,6 +101,16 @@ RSpec.describe "Managing pages", :js, type: :system do
 
   def within_preview(&block)
     within(".app-split-pane__pane--framed", &block)
+  end
+
+  # The page controls (slug, reorder, insert, remove) live in a collapsed
+  # disclosure; open it before reaching for those buttons. "Add page after" is
+  # always rendered, so its visibility tells us whether the disclosure is open.
+  def open_page_controls
+    return if has_button?("Add page after", wait: 0)
+
+    find(".app-disclosure__summary").click
+    expect(page).to have_button("Add page after")
   end
 
   def add_component(button_label)
