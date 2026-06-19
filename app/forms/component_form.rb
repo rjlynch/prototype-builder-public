@@ -22,12 +22,13 @@ class ComponentForm
       list_spaced: component.list_spaced,
       button_style: component.button_style,
       target_slug: component.target_slug,
-      in_panel: component.in_panel
+      in_panel: component.in_panel,
+      inline: component.inline
     )
   end
 
   attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
-    :list_style, :list_spaced, :button_style, :target_slug, :in_panel
+    :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline
 
   validates :text, :name, :label, :hint, :options, :target_slug, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
@@ -42,7 +43,7 @@ class ComponentForm
       text: text, name: name, label: label, hint: hint, options: options,
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
       button_style: button_style, target_slug: target_slug.to_s.parameterize,
-      in_panel: in_panel
+      in_panel: in_panel, inline: inline
     )
     true
   end

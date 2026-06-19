@@ -108,6 +108,20 @@ RSpec.describe ComponentForm do
     expect(component.reload.in_panel).to be(false)
   end
 
+  it "sets and clears the radios inline option" do
+    component = create_component(kind: "radios", name: "question-1", options: "Yes\nNo")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(inline: "1")
+    expect(form.save).to be(true)
+    expect(component.reload.inline).to be(true)
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(inline: "0")
+    expect(form.save).to be(true)
+    expect(component.reload.inline).to be(false)
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")
