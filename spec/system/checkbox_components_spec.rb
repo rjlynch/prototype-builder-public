@@ -22,7 +22,7 @@ RSpec.describe "Checkbox components", :js, type: :system do
 
     add_component "Add button"
     add_rule
-    within_last_condition do
+    within_last_rule do
       select "question-1 (Which benefits do you get?)", from: "When answer to"
       fill_in "Is", with: "Personal Independence Payment"
       fill_in "Go to page", with: "you-may-be-eligible"
@@ -70,8 +70,8 @@ RSpec.describe "Checkbox components", :js, type: :system do
     within(all(".app-card").last, &block)
   end
 
-  def within_last_condition(&block)
-    within(all(".app-condition").last, &block)
+  def within_last_rule(&block)
+    within(all(".app-rule").last, &block)
   end
 
   def add_component(button_label)
@@ -82,8 +82,8 @@ RSpec.describe "Checkbox components", :js, type: :system do
   end
 
   def add_rule
-    count = all(".app-condition", minimum: 0).size
+    count = all(".app-rule", minimum: 0).size
     click_button "Add rule"
-    expect(page).to have_css(".app-condition", count: count + 1)
+    expect(page).to have_css(".app-rule", count: count + 1)
   end
 end

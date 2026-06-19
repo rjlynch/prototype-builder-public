@@ -257,10 +257,24 @@
   margin-bottom: 10px;
 }
 
-/* An indented condition row within a card (e.g. one rule of several). */
+/* One branch rule within a button card: a target page plus one or more
+   ANDed conditions. */
+.app-rule {
+  border-top: 2px solid #b1b4b6;
+  padding-top: 15px;
+  margin-bottom: 25px;
+}
+
+/* An indented condition row within a rule (one of several ANDed together). */
 .app-condition {
   border-left: 4px solid #b1b4b6;
   padding-left: 15px;
+  margin-bottom: 20px;
+}
+
+/* Nudge the "Add condition" link up against its conditions. */
+.app-rule__add-condition {
+  display: inline-block;
   margin-bottom: 20px;
 }
 

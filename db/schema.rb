@@ -10,15 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_19_110702) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_19_120000) do
   create_table "branch_rules", force: :cascade do |t|
     t.integer "component_id", null: false
     t.datetime "created_at", null: false
-    t.string "input_name", default: "", null: false
     t.integer "position", null: false
     t.string "target_slug", default: "", null: false
     t.datetime "updated_at", null: false
-    t.string "value", default: "", null: false
     t.index ["component_id", "position"], name: "index_branch_rules_on_component_id_and_position", unique: true
     t.index ["component_id"], name: "index_branch_rules_on_component_id"
   end
@@ -43,6 +41,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_110702) do
     t.datetime "updated_at", null: false
     t.index ["page_id", "position"], name: "index_components_on_page_id_and_position", unique: true
     t.index ["page_id"], name: "index_components_on_page_id"
+  end
+
+  create_table "conditions", force: :cascade do |t|
+    t.integer "branch_rule_id", null: false
+    t.datetime "created_at", null: false
+    t.string "input_name", default: "", null: false
+    t.integer "position", null: false
+    t.datetime "updated_at", null: false
+    t.string "value", default: "", null: false
+    t.index ["branch_rule_id", "position"], name: "index_conditions_on_branch_rule_id_and_position", unique: true
+    t.index ["branch_rule_id"], name: "index_conditions_on_branch_rule_id"
   end
 
   create_table "memberships", force: :cascade do |t|
@@ -106,6 +115,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_19_110702) do
 
   add_foreign_key "branch_rules", "components"
   add_foreign_key "components", "pages"
+  add_foreign_key "conditions", "branch_rules"
   add_foreign_key "memberships", "teams"
   add_foreign_key "memberships", "users"
   add_foreign_key "pages", "wizards"

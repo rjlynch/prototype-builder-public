@@ -593,6 +593,22 @@ Three slices, one commit each (see issue #75 for the design write-up):
   while a scalar text/radio answer is a set of one (so equality is unchanged). One
   ticked value branches today; multi-condition AND is slice 2. 213 specs green.
 
+* 2026-06-19 — Slice 2: multi-condition (AND) branch rules. Promoted the
+  condition out of `branch_rules` into its own `Condition` model (migration
+  copies each rule's inline `input_name`/`value` into a position-1 condition,
+  then drops those columns; reversible). A `BranchRule` now `has_many`
+  conditions and matches when it has a target and *all* its complete conditions
+  match — incomplete (half-filled) conditions are ignored, mirroring how rules
+  fill in gradually. `Condition#matches?` holds the parameterised set-membership
+  logic (moved from `BranchRule`). New `AddConditionForm`/`ConditionForm` and a
+  `ConditionsController` (create/update/destroy) mirror the branch-rule
+  controllers; `BranchRuleForm` now only owns the target slug. The rule editor
+  renders a stack of `.app-condition` rows ("When answer to" / "And answer to")
+  inside an `.app-rule`, with "Add condition" (AND) and a rule-level "Go to
+  page"; the first condition is removed by removing the whole rule, so a rule
+  always keeps ≥1 condition. Rules still combine first-match-wins (OR). 221
+  specs green. (Links in option/checkbox labels — slice 3 — still to come.)
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

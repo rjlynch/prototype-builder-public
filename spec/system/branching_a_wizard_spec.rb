@@ -25,7 +25,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
 
     # First rule: yes -> congratulations
     add_rule
-    within_last_condition do
+    within_last_rule do
       select "question-1 (Are you eligible?)", from: "When answer to"
       fill_in "Is", with: "yes"
       fill_in "Go to page", with: "congratulations"
@@ -35,7 +35,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
 
     # Second rule: no -> you-are-not-eligible
     add_rule
-    within_last_condition do
+    within_last_rule do
       select "question-1 (Are you eligible?)", from: "When answer to"
       fill_in "Is", with: "no"
       fill_in "Go to page", with: "You are not eligible"
@@ -68,7 +68,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     add_component "Add button"
     add_rule
 
-    within_last_condition do
+    within_last_rule do
       expect(page).to have_text("This wizard has no inputs yet")
       expect(page).to have_no_select("When answer to")
     end
@@ -96,7 +96,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     # Back to the question page (the first tab) via the tab menu
     within_nav { first(".govuk-tabs__tab").click }
     add_rule
-    within_last_condition do
+    within_last_rule do
       select "question-1 (Are you eligible?)", from: "When answer to"
       fill_in "Is", with: "yes"
       fill_in "Go to page", with: "not-yet-created"
@@ -115,8 +115,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     within(all(".app-card").last, &block)
   end
 
-  def within_last_condition(&block)
-    within(all(".app-condition").last, &block)
+  def within_last_rule(&block)
+    within(all(".app-rule").last, &block)
   end
 
   def within_nav(&block)
@@ -133,8 +133,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
   end
 
   def add_rule
-    count = all(".app-condition", minimum: 0).size
+    count = all(".app-rule", minimum: 0).size
     click_button "Add rule"
-    expect(page).to have_css(".app-condition", count: count + 1)
+    expect(page).to have_css(".app-rule", count: count + 1)
   end
 end

@@ -13,6 +13,9 @@ class AddBranchRuleForm
 
     position = (component.branch_rules.maximum(:position) || 0) + 1
     @branch_rule = component.branch_rules.create!(position: position)
+    # Every rule needs at least one condition to be matchable; seed a blank
+    # one so the editor opens ready to fill in.
+    @branch_rule.conditions.create!(position: 1)
     true
   end
 
