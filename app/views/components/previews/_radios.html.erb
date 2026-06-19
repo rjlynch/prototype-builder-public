@@ -15,6 +15,10 @@
         <%= component.hint %>
       </div>
     <% end %>
+    <%# NOTE: GOV.UK inline radios must NOT be combined with conditionally
+        revealed content — the two patterns are mutually exclusive. When
+        conditional reveal lands, guard against both being set on one component
+        (see issue #80). %>
     <div class="govuk-radios<%= " govuk-radios--inline" if component.inline? %>" data-module="govuk-radios">
       <% component.option_list.each_with_index do |option, index| %>
         <div class="govuk-radios__item">
