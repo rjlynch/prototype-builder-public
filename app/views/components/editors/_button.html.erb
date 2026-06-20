@@ -25,6 +25,8 @@
   </div>
   <%= f.text_field :target_slug, class: "govuk-input",
         aria: { describedby: dom_id(f.object.component, :target_slug_hint) },
+        list: dom_id(f.object.component, :slugs),
         data: { action: "input->autosubmit#submit" } %>
+  <%= render "shared/slug_datalist", id: dom_id(f.object.component, :slugs), slugs: f.object.component.page.wizard.page_slugs %>
   <%= render "components/missing_target", component: f.object.component %>
 </div>

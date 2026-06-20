@@ -111,6 +111,38 @@ RSpec.describe "AND branch rules", :js, type: :system do
     expect(second.value).to eq("yes")
   end
 
+  # Issue #104: a fixed-answer question (radios/checkboxes) offers its answers in
+  # the condition's "Is" field as a datalist, and "Go to page" suggests existing
+  # slugs. Both still allow typing a value that isn't listed.
+  it "suggests the selected question's answers and existing page slugs" do
+    sign_in
+    click_button "New wizard"
+
+    add_component "Add radio buttons"
+    within_last_card do
+      fill_in "Label", with: "Are you over 18?"
+      fill_in "Options (one per line)", with: "yes\nno"
+    end
+    within_preview { expect(page).to have_css(".govuk-fieldset__legend", text: "Are you over 18?") }
+
+    add_component "Add button"
+
+    add_rule
+    within_last_rule do
+      within_condition(0) do
+        # No question chosen yet: the answer field is free text (empty datalist).
+        expect(answer_datalist_options).to be_empty
+
+        select "question-1 (Are you over 18?)", from: "When answer to"
+        # The condition controller fills the datalist client-side, no round trip.
+        expect(answer_datalist_options).to eq(%w[yes no])
+      end
+
+      # "Go to page" suggests the wizard's existing slugs.
+      expect(slug_datalist_options).to eq(%w[page-1])
+    end
+  end
+
   it "removes an added condition" do
     sign_in
     click_button "New wizard"
@@ -149,6 +181,17 @@ RSpec.describe "AND branch rules", :js, type: :system do
 
   def within_condition(index, &block)
     within(all(".app-condition")[index], &block)
+  end
+
+  # Datalists are not "visible" to the browser, so query them with visible: :all.
+  def answer_datalist_options
+    find("datalist[data-condition-target='list']", visible: :all)
+      .all("option", visible: :all).map { |option| option[:value] }
+  end
+
+  def slug_datalist_options
+    list_id = find_field("Go to page")[:list]
+    find("##{list_id}", visible: :all).all("option", visible: :all).map { |option| option[:value] }
   end
 
   def within_nav(&block)

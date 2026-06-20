@@ -17,4 +17,29 @@ RSpec.describe Wizard do
       ])
     end
   end
+
+  describe "#answer_options" do
+    it "maps fixed-answer inputs to their options, omitting free-text inputs" do
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
+      page = wizard.pages.create!(position: 1, slug: "page-1", title: "Eligibility")
+      page.components.create!(position: 1, kind: "radios", name: "over-18", options: "yes\nno")
+      page.components.create!(position: 2, kind: "checkboxes", name: "benefits", options: "UC\nPIP")
+      page.components.create!(position: 3, kind: "text_input", name: "full-name")
+
+      expect(wizard.answer_options).to eq(
+        "over-18" => %w[ yes no ],
+        "benefits" => %w[ UC PIP ]
+      )
+    end
+  end
+
+  describe "#page_slugs" do
+    it "lists every page slug in position order" do
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
+      wizard.pages.create!(position: 2, slug: "second")
+      wizard.pages.create!(position: 1, slug: "first")
+
+      expect(wizard.page_slugs).to eq(%w[ first second ])
+    end
+  end
 end

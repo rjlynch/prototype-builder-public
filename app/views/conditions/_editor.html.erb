@@ -1,4 +1,9 @@
-<div id="<%= dom_id(condition, :editor) %>" class="app-condition">
+<%# The condition controller repopulates the answer datalist from this map when
+    the question changes, so a fixed-answer question (radios/checkboxes) offers
+    its answers and a free-text question leaves the field free text. %>
+<div id="<%= dom_id(condition, :editor) %>" class="app-condition"
+     data-controller="condition"
+     data-condition-options-value="<%= condition.branch_rule.component.page.wizard.answer_options.to_json %>">
   <%# Namespace the form so every field (and its label's `for`) gets a
       condition-scoped id. Without this, all conditions share ids like
       "condition_value"; after an autosubmit Turbo restores focus by id and
@@ -12,11 +17,13 @@
             condition.branch_rule.component.page.wizard.input_choices,
             { include_blank: true },
             class: "govuk-select",
-            data: { action: "change->autosubmit#submit" } %>
+            data: { action: "change->autosubmit#submit change->condition#refresh", condition_target: "question" } %>
     </div>
     <div class="govuk-form-group">
       <%= f.label :value, "Is", class: "govuk-label" %>
-      <%= f.text_field :value, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+      <%= f.text_field :value, class: "govuk-input", list: dom_id(condition, :answers),
+            data: { action: "input->autosubmit#submit" } %>
+      <datalist id="<%= dom_id(condition, :answers) %>" data-condition-target="list"></datalist>
     </div>
     <%= render "shared/autosubmit_status" %>
   <% end %>

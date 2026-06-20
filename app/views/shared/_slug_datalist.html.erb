@@ -1,0 +1,7 @@
+<%# Suggestions for a "Go to page" field: every existing page slug, while still
+    letting the author type a new one. The input points at this via `list`. %>
+<datalist id="<%= id %>">
+  <% slugs.each do |slug| %>
+    <option value="<%= slug %>"></option>
+  <% end %>
+</datalist>
