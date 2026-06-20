@@ -1,5 +1,10 @@
 <div id="<%= dom_id(condition, :editor) %>" class="app-condition">
+  <%# Namespace the form so every field (and its label's `for`) gets a
+      condition-scoped id. Without this, all conditions share ids like
+      "condition_value"; after an autosubmit Turbo restores focus by id and
+      lands on the first match, jumping focus to the wrong condition. %>
   <%= form_with model: ConditionForm.from_condition(condition), url: condition_path(condition), method: :patch,
+        namespace: dom_id(condition),
         data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <div class="govuk-form-group">
       <%= f.label :input_name, first ? "When answer to" : "And answer to", class: "govuk-label" %>
