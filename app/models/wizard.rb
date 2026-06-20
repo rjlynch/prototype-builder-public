@@ -41,4 +41,22 @@ class Wizard < ApplicationRecord
     end
     choices.values.sort_by(&:last)
   end
+
+  # Fixed answers per input key, for inputs whose answers come from a set
+  # (radios, checkboxes). The condition editor offers these as a datalist so a
+  # branch answer can be picked the way the question is; text inputs are absent
+  # (left as free text). First component for a key wins, mirroring input_choices.
+  def answer_options
+    components = Component.where(kind: %w[ radios checkboxes ])
+      .joins(:page).where(pages: { wizard_id: id })
+    components.each_with_object({}) do |component, options|
+      options[component.input_key] ||= component.option_list
+    end
+  end
+
+  # Every page slug in the wizard (position order), for the "Go to page"
+  # datalists on buttons and branch rules.
+  def page_slugs
+    pages.pluck(:slug)
+  end
 end

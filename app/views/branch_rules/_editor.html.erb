@@ -22,7 +22,9 @@
           data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">
         <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
-        <%= f.text_field :target_slug, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+        <%= f.text_field :target_slug, class: "govuk-input", list: dom_id(branch_rule, :slugs),
+              data: { action: "input->autosubmit#submit" } %>
+        <%= render "shared/slug_datalist", id: dom_id(branch_rule, :slugs), slugs: branch_rule.component.page.wizard.page_slugs %>
         <%= render "branch_rules/missing_target", branch_rule: branch_rule %>
       </div>
       <%= render "shared/autosubmit_status" %>

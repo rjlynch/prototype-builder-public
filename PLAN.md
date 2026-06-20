@@ -631,6 +631,21 @@ Three slices, one commit each (see issue #75 for the design write-up):
   its label's `for` is scoped. Added a `:js` regression spec that latches any
   focus bounce to another "Is" input. 228 specs green.
 
+### Branch rule conveniences (issue #104, 2026-06-20)
+
+* 2026-06-20 — Made the branch-rule fields pickable, kept deliberately simple.
+  Both "Go to page" fields (branch rule + button) now point at a `<datalist>` of
+  the wizard's page slugs (`Wizard#page_slugs`, shared `slug_datalist` partial) —
+  pure HTML, suggestions only, still accepts a new slug. The condition's "Is"
+  field also uses a datalist rather than swapping to a `<select>`: one mechanism
+  everywhere, allows free text, and avoids re-rendering the editor mid-edit. A
+  small `condition` Stimulus controller fills that datalist from an embedded
+  per-question options map (`Wizard#answer_options`) when the question select
+  changes — client-side, no round trip. Picked datalist-for-the-answer over the
+  literal `<select>` in the issue for simplicity (the 80/20). Dynamic refresh
+  when a question's *own* options change is still deferred (per the issue
+  comment); the embedded map is current as of editor render. 231 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
