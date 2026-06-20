@@ -63,6 +63,54 @@ RSpec.describe "AND branch rules", :js, type: :system do
     expect(page).to have_css(".app-disclosure__summary", text: "Page controls you-may-be-eligible")
   end
 
+  # Regression for #103: each condition's fields must get a condition-scoped id.
+  # When two conditions shared ids like "condition_value", Turbo restored focus
+  # by id after the autosave and bounced focus to the first condition's "Is".
+  it "keeps focus in the condition being edited while autosaving" do
+    sign_in
+    click_button "New wizard"
+
+    add_component "Add radio buttons"
+    within_last_card do
+      fill_in "Label", with: "Are you over 18?"
+      fill_in "Options (one per line)", with: "yes\nno"
+    end
+    within_preview { expect(page).to have_css(".govuk-fieldset__legend", text: "Are you over 18?") }
+
+    add_component "Add button"
+
+    add_rule
+    within_last_rule { click_button "Add condition" }
+    expect(page).to have_css(".app-rule .app-condition", count: 2)
+
+    second = within_last_rule { within_condition(1) { find_field("Is") } }
+    second.click
+
+    # Record whether focus ever bounces to a *different* "Is" input (the bug);
+    # the flag latches so a later check still sees a momentary bounce. Also tag
+    # the current preview so we can wait for its replacement.
+    page.execute_script(<<~JS)
+      window.__focusBounced = false;
+      const typing = document.activeElement;
+      document.addEventListener("focusin", (e) => {
+        if (e.target.matches("input.govuk-input") && e.target !== typing) {
+          window.__focusBounced = true;
+        }
+      });
+      document.querySelector(".app-preview").dataset.stale = "1";
+    JS
+
+    second.send_keys("yes")
+
+    # The autosubmit replaces the preview; waiting for the tagged node to go is a
+    # deterministic anchor for "the round-trip rendered", which is when Turbo's
+    # focus restoration (and any bounce) happens.
+    expect(page).to have_no_css(".app-preview[data-stale]")
+
+    expect(page.evaluate_script("window.__focusBounced")).to be(false)
+    expect(second.value).to eq("yes")
+  end
+
   it "removes an added condition" do
     sign_in
     click_button "New wizard"

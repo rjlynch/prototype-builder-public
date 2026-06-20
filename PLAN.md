@@ -619,6 +619,18 @@ Three slices, one commit each (see issue #75 for the design write-up):
   builder types. The shared `choice_fields` editor gains the "Help with
   formatting" disclosure under the options field. 227 specs green.
 
+### Bugfix: condition editor focus (issue #103, 2026-06-20)
+
+* 2026-06-20 — Focus jumped to the first condition's "Is" field while typing in
+  a second one. Same root cause as the same-kind card fix (3d92ed3):
+  `ConditionForm`'s `model_name` is always "Condition", so every condition's
+  fields shared ids like `condition_value`. After the autosubmit round-trip
+  Turbo restored focus by id and resolved to the first match. Namespaced both
+  the condition form (`dom_id(condition)`) and the rule's "Go to page" form
+  (`dom_id(branch_rule)`, same latent bug across rules) so every field id and
+  its label's `for` is scoped. Added a `:js` regression spec that latches any
+  focus bounce to another "Is" input. 228 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

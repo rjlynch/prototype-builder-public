@@ -14,7 +14,11 @@
     <%= button_to "Add condition", branch_rule_conditions_path(branch_rule),
           class: "app-button-as-link govuk-link app-rule__add-condition" %>
 
+    <%# Namespace the form so the target field (and its label's `for`) gets a
+        rule-scoped id; without this every rule shares "branch_rule_target_slug"
+        and autosubmit focus restore jumps to the first rule. %>
     <%= form_with model: BranchRuleForm.from_branch_rule(branch_rule), url: branch_rule_path(branch_rule), method: :patch,
+          namespace: dom_id(branch_rule),
           data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
       <div class="govuk-form-group">
         <%= f.label :target_slug, "Go to page", class: "govuk-label" %>
