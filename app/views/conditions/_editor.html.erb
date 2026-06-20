@@ -1,0 +1,23 @@
+<div id="<%= dom_id(condition, :editor) %>" class="app-condition">
+  <%= form_with model: ConditionForm.from_condition(condition), url: condition_path(condition), method: :patch,
+        data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
+    <div class="govuk-form-group">
+      <%= f.label :input_name, first ? "When answer to" : "And answer to", class: "govuk-label" %>
+      <%= f.select :input_name,
+            condition.branch_rule.component.page.wizard.input_choices,
+            { include_blank: true },
+            class: "govuk-select",
+            data: { action: "change->autosubmit#submit" } %>
+    </div>
+    <div class="govuk-form-group">
+      <%= f.label :value, "Is", class: "govuk-label" %>
+      <%= f.text_field :value, class: "govuk-input", data: { action: "input->autosubmit#submit" } %>
+    </div>
+    <%= render "shared/autosubmit_status" %>
+  <% end %>
+  <%# The first condition is removed by removing the whole rule, so a rule
+      always keeps at least one condition. %>
+  <% if removable %>
+    <%= button_to "Remove condition", condition_path(condition), method: :delete, class: "app-button-as-link govuk-link" %>
+  <% end %>
+</div>

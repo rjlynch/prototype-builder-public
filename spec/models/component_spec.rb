@@ -40,7 +40,10 @@ RSpec.describe Component do
       wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
       page = wizard.pages.create!(position: 1, slug: "page-1")
       button = page.components.create!(position: 1, kind: "button", text: "Continue", target_slug: target_slug)
-      rules.each_with_index { |rule, i| button.branch_rules.create!(position: i + 1, **rule) }
+      rules.each_with_index do |rule, i|
+        branch_rule = button.branch_rules.create!(position: i + 1, target_slug: rule[:target_slug].to_s)
+        branch_rule.conditions.create!(position: 1, input_name: rule[:input_name].to_s, value: rule[:value].to_s)
+      end
       button
     end
 

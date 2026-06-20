@@ -49,6 +49,6 @@ class BranchRulesController < ApplicationController
   private
 
   def branch_rule_params
-    params.require(:branch_rule).permit(:input_name, :value, :target_slug)
+    params.require(:branch_rule).permit(:target_slug)
   end
 end

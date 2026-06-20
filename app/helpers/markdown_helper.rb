@@ -23,6 +23,17 @@ module MarkdownHelper
     html.html_safe
   end
 
+  # The plain-text form of a markdown string: **bold** and [link](target)
+  # markup are reduced to the visible words they wrap. Used where the markup
+  # can't render but the readable text should still drive things — e.g. a
+  # radio/checkbox option's submitted value, so "I agree to the [terms](...)"
+  # is stored and matched as "i-agree-to-the-terms".
+  def markdown_to_text(text)
+    text.to_s
+      .gsub(/\*\*(.+?)\*\*/, '\1')
+      .gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1')
+  end
+
   private
 
   # Resolves a markdown link target to an href. Full URLs, root-relative paths

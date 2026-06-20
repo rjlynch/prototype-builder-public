@@ -11,6 +11,7 @@ class AddComponentForm
     "list" => { text: "" },
     "text_input" => { label: "", hint: "" },
     "radios" => { label: "", hint: "", options: "" },
+    "checkboxes" => { label: "", hint: "", options: "" },
     "button" => { text: "Continue" }
   }.freeze
 

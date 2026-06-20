@@ -1,6 +1,6 @@
 class Component < ApplicationRecord
-  KINDS = %w[ paragraph subheading list text_input radios button ].freeze
-  INPUT_KINDS = %w[ text_input radios ].freeze
+  KINDS = %w[ paragraph subheading list text_input radios checkboxes button ].freeze
+  INPUT_KINDS = %w[ text_input radios checkboxes ].freeze
   LIST_STYLES = %w[ none bullet number ].freeze
   BUTTON_STYLES = %w[ continue secondary inverse start warning ].freeze
 

@@ -5,10 +5,13 @@ RSpec.describe ContinueForm do
     Wizard.create!(name: "Test wizard", team: personal_team)
   end
 
+  # Each rule is { target_slug:, input_name:, value: } — the single-condition
+  # shape; the condition is created as the rule's first (and only) condition.
   def add_button(page, rules: [], target_slug: "")
     button = page.components.create!(position: 99, kind: "button", text: "Continue", target_slug: target_slug)
     rules.each_with_index do |rule, index|
-      button.branch_rules.create!(position: index + 1, **rule)
+      branch_rule = button.branch_rules.create!(position: index + 1, target_slug: rule[:target_slug].to_s)
+      branch_rule.conditions.create!(position: 1, input_name: rule[:input_name].to_s, value: rule[:value].to_s)
     end
     button
   end

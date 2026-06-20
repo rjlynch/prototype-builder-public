@@ -32,7 +32,8 @@ RSpec.describe "Back links", type: :system do
       start = wizard.pages.create!(position: 1, slug: "start", title: "Start")
       start.components.create!(position: 1, kind: "radios", name: "question-1", options: "yes\nno")
       button = start.components.create!(position: 2, kind: "button", text: "Continue")
-      button.branch_rules.create!(position: 1, input_name: "question-1", value: "yes", target_slug: "finish")
+      button.branch_rules.create!(position: 1, target_slug: "finish")
+        .conditions.create!(position: 1, input_name: "question-1", value: "yes")
       # A page in between that the "yes" answer skips over.
       wizard.pages.create!(position: 2, slug: "skipped", title: "Skipped")
       wizard.pages.create!(position: 3, slug: "finish", title: "Finish")

@@ -30,8 +30,10 @@ RSpec.describe "Sharing a wizard", type: :system do
     question = wizard.pages.create!(position: 1, slug: "are-you-eligible", title: "Are you eligible?")
     question.components.create!(position: 1, kind: "radios", name: "question-1", options: "yes\nno")
     button = question.components.create!(position: 2, kind: "button", text: "Continue")
-    button.branch_rules.create!(position: 1, input_name: "question-1", value: "yes", target_slug: "congratulations")
-    button.branch_rules.create!(position: 2, input_name: "question-1", value: "no", target_slug: "you-are-not-eligible")
+    button.branch_rules.create!(position: 1, target_slug: "congratulations")
+      .conditions.create!(position: 1, input_name: "question-1", value: "yes")
+    button.branch_rules.create!(position: 2, target_slug: "you-are-not-eligible")
+      .conditions.create!(position: 1, input_name: "question-1", value: "no")
     wizard.pages.create!(position: 2, slug: "congratulations", title: "Congratulations")
     wizard.pages.create!(position: 3, slug: "you-are-not-eligible", title: "You are not eligible")
 

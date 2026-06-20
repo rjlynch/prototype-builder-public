@@ -576,6 +576,49 @@ The backlog now lives in the issue tracker, not this file.
   builder preview and run mode. Covered by a `ComponentForm` set/clear spec and
   a system spec. No model validation needed (plain boolean). 207 specs green.
 
+### Phase 4: checkboxes (issue #75, 2026-06-19)
+
+Three slices, one commit each (see issue #75 for the design write-up):
+
+* 2026-06-19 — Slice 1: checkbox component. New `checkboxes` input kind (added to
+  `Component::KINDS`/`INPUT_KINDS`, so it inherits `input?`, name generation,
+  the `inputs` scope and `input_keys`/`input_choices` for free). Editor reuses a
+  new shared `editors/_choice_fields` partial (extracted from the radios editor,
+  which now renders it + the inline toggle); checkboxes have no inline option.
+  Preview renders GOV.UK checkboxes submitting `answers[key][]`, with an empty
+  hidden field so unticking every box still clears a previous answer. Answers can
+  now be arrays: `AnswersController#answer_params` permits checkbox keys as arrays
+  (`Wizard#checkbox_input_keys`), and `BranchRule#matches?` treats the answer as a
+  set — a checkbox group matches when the rule's value is among the ticked values,
+  while a scalar text/radio answer is a set of one (so equality is unchanged). One
+  ticked value branches today; multi-condition AND is slice 2. 213 specs green.
+
+* 2026-06-19 — Slice 2: multi-condition (AND) branch rules. Promoted the
+  condition out of `branch_rules` into its own `Condition` model (migration
+  copies each rule's inline `input_name`/`value` into a position-1 condition,
+  then drops those columns; reversible). A `BranchRule` now `has_many`
+  conditions and matches when it has a target and *all* its complete conditions
+  match — incomplete (half-filled) conditions are ignored, mirroring how rules
+  fill in gradually. `Condition#matches?` holds the parameterised set-membership
+  logic (moved from `BranchRule`). New `AddConditionForm`/`ConditionForm` and a
+  `ConditionsController` (create/update/destroy) mirror the branch-rule
+  controllers; `BranchRuleForm` now only owns the target slug. The rule editor
+  renders a stack of `.app-condition` rows ("When answer to" / "And answer to")
+  inside an `.app-rule`, with "Add condition" (AND) and a rule-level "Go to
+  page"; the first condition is removed by removing the whole rule, so a rule
+  always keeps ≥1 condition. Rules still combine first-match-wins (OR). 221
+  specs green. (Links in option/checkbox labels — slice 3 — still to come.)
+
+* 2026-06-19 — Slice 3: links in radio/checkbox option labels (the EYTRP
+  consent pattern from issue #75). Option labels now render through the
+  existing `govuk_markdown` helper, so a label can carry a link or bold
+  (`I agree to the [terms](https://...)`). A new `markdown_to_text` helper
+  strips the markup back to plain text, and the radios/checkboxes previews use
+  it to derive the submitted `value` — so the stored value stays a clean slug
+  ("i-agree-to-the-terms") and branch rules still match on the readable words a
+  builder types. The shared `choice_fields` editor gains the "Help with
+  formatting" disclosure under the options field. 227 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

@@ -31,7 +31,11 @@ Rails.application.routes.draw do
     resources :branch_rules, only: %i[create]
   end
 
-  resources :branch_rules, only: %i[update destroy]
+  resources :branch_rules, only: %i[update destroy] do
+    resources :conditions, only: %i[create]
+  end
+
+  resources :conditions, only: %i[update destroy]
 
   get "up" => "rails/health#show", as: :rails_health_check
 end
