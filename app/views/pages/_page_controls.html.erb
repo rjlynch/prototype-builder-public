@@ -1,7 +1,7 @@
 <div id="<%= dom_id(page, :page_controls) %>">
   <details class="app-disclosure">
     <summary class="app-disclosure__summary">
-      Page controls <span class="app-disclosure__value"><%= page.slug %></span>
+      Page controls
     </summary>
 
     <%= form_with model: PageForm.new(page), url: page_path(page), method: :patch,
@@ -13,6 +13,8 @@
       </div>
       <%= render "shared/autosubmit_status" %>
     <% end %>
+
+    <%= render "pages/back_link_form", page: page %>
 
     <%# Reordering and inserting/removing the page within the journey. Move
         buttons drop off at the ends; remove is hidden when it is the last page. %>

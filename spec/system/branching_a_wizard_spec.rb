@@ -9,7 +9,6 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     click_button "New wizard"
 
     fill_in "Page title", with: "Are you eligible?"
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls are-you-eligible")
     expect(page).to have_field("Page title", with: "Are you eligible?")
     add_component "Add radio buttons"
     within_last_card do
@@ -49,8 +48,8 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "yes"
       click_button "Continue"
     end
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls congratulations")
     expect(page).to have_field("Page title", with: "")
+    expect(page).to have_field("Page slug", with: "congratulations", visible: :all)
 
     # Back on the question page (the first tab) via the tab menu, answer no
     within_nav { first(".govuk-tabs__tab").click }
@@ -58,7 +57,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
       choose "no"
       click_button "Continue"
     end
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls you-are-not-eligible")
+    expect(page).to have_field("Page slug", with: "you-are-not-eligible", visible: :all)
   end
 
   it "explains that branching needs an input first" do
@@ -91,7 +90,7 @@ RSpec.describe "Branching a wizard", :js, type: :system do
     add_component "Add button"
     within_preview { click_button "Continue" }
     fill_in "Page title", with: "Existing page"
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls existing-page")
+    expect(page).to have_field("Page slug", with: "existing-page", visible: :all)
 
     # Back to the question page (the first tab) via the tab menu
     within_nav { first(".govuk-tabs__tab").click }

@@ -62,6 +62,9 @@ RSpec.describe "Back links", type: :system do
 
       within_preview { expect(page).to have_link("Back") }
 
+      # The back link toggle lives in the "Page controls" disclosure.
+      find(".app-disclosure__summary", text: "Page controls").click
+
       uncheck "Show a back link on this page"
       within_preview { expect(page).to have_no_link("Back") }
 
