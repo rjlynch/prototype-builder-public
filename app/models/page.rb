@@ -100,6 +100,13 @@ class Page < ApplicationRecord
     components - panel_body_components
   end
 
+  # Whether any input on the page submits a file, so the run/preview form needs
+  # a multipart encoding (the raw <input type="file"> markup doesn't trigger
+  # Rails' automatic detection).
+  def accepts_uploads?
+    components.any? { |component| component.kind == "file_upload" }
+  end
+
   # CSS class for the page's plain H1.
   def heading_class
     "govuk-heading-#{heading_size}"

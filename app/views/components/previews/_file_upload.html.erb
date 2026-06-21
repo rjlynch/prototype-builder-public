@@ -1,0 +1,21 @@
+<div class="govuk-form-group">
+  <label class="govuk-label" for="<%= dom_id(component, :preview_input) %>">
+    <%= component.label %>
+  </label>
+  <% if component.hint.present? %>
+    <div class="govuk-hint" id="<%= dom_id(component, :preview_hint) %>">
+      <%= component.hint %>
+    </div>
+  <% end %>
+  <%# The improved (JS-enhanced) file upload: govuk-frontend's initAll finds the
+      data-module wrapper and replaces the input with a button + drop zone. It
+      degrades to a plain file input when the JS hasn't run (e.g. mid-edit in the
+      builder, before the next full load). %>
+  <div class="govuk-drop-zone" data-module="govuk-file-upload">
+    <input class="govuk-file-upload"
+           id="<%= dom_id(component, :preview_input) %>"
+           name="answers[<%= component.input_key %>]"
+           type="file"
+           <%= "aria-describedby=#{dom_id(component, :preview_hint)}".html_safe if component.hint.present? %>>
+  </div>
+</div>

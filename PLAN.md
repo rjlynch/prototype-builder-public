@@ -646,6 +646,40 @@ Three slices, one commit each (see issue #75 for the design write-up):
   when a question's *own* options change is still deferred (per the issue
   comment); the embedded map is current as of editor render. 231 specs green.
 
+### File upload field, part 1: the upload input (issue #99, 2026-06-21)
+
+* 2026-06-21 — Added a `file_upload` input component: the JS-enhanced
+  ("improved") GOV.UK file upload. The whole field is progressive enhancement
+  over a plain `<input type="file">` — govuk-frontend v6.2.0 (already vendored)
+  ships the `FileUpload` module and `initAll` already runs on `turbo:load`, so
+  the preview just renders the base markup (`.govuk-drop-zone[data-module=
+  govuk-file-upload]` wrapping the input) and the component enhances itself on
+  any full page load (i.e. in run mode; the builder preview re-renders via
+  Turbo streams without a `turbo:load`, so it shows the unenhanced input until
+  reload — the same limitation every govuk JS component has in the live
+  preview).
+
+  The one real design problem: answers live in the session cookie
+  (`session[:answers][wizard][key]`), and a file can't. Solution: in
+  `AnswersController#store_uploads`, each submitted `UploadedFile` (a permitted
+  scalar) is persisted with `ActiveStorage::Blob.create_and_upload!` and only
+  its `signed_id` (an opaque string) is kept as the answer — so later pages can
+  resolve the blob and play the file back. This needed Active Storage's tables,
+  which the app had referenced (`active_storage/engine`, `config/storage.yml`)
+  but never installed; `active_storage:install` migration added. Chose the
+  signed-id-in-session route over a persisted answers/Submission model: it slots
+  into the existing session-answers mechanism with no new domain model (the
+  "simplest approach" rule). `Page#accepts_uploads?` sets `multipart: true` on
+  the run/preview form (raw `<input type=file>` markup doesn't trigger Rails'
+  auto-detection). Deferred `title_as_label` for file uploads to avoid the
+  double-H1 case (the heading isn't rendered inline for non-text inputs).
+
+  Open for part 2 (the playback `file` component): render the stored blob —
+  images inline (constrained to container width), other files as a download
+  link, with a toggle to force a download link for images too. Also unhandled
+  (acceptable for ephemeral prototypes): orphan blobs are never purged, and an
+  empty re-submit overwrites a previously uploaded file with "". 235 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

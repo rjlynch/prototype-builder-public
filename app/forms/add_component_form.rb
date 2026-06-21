@@ -12,6 +12,7 @@ class AddComponentForm
     "text_input" => { label: "", hint: "" },
     "radios" => { label: "", hint: "", options: "" },
     "checkboxes" => { label: "", hint: "", options: "" },
+    "file_upload" => { label: "", hint: "" },
     "button" => { text: "Continue" }
   }.freeze
 

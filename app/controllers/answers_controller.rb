@@ -30,14 +30,33 @@ class AnswersController < ApplicationController
 
   # Only keys belonging to the wizard's inputs are accepted. Checkbox groups
   # submit an array of values (answers[key][]), so they are permitted as
-  # arrays; every other input is a single string.
+  # arrays; every other input is a single string (an uploaded file counts as a
+  # permitted scalar, and is swapped for its blob's signed id below).
   def answer_params(page)
     wizard = page.wizard
     checkbox_keys = wizard.checkbox_input_keys
     scalar_keys = wizard.input_keys - checkbox_keys
 
-    params.fetch(:answers, ActionController::Parameters.new)
+    permitted = params.fetch(:answers, ActionController::Parameters.new)
       .permit(*scalar_keys, checkbox_keys.index_with { [] })
       .to_h
+
+    store_uploads(permitted)
+  end
+
+  # File inputs submit an UploadedFile, which can't be serialised into the
+  # session cookie. Persist each via Active Storage and keep only its signed id
+  # (an opaque string) as the answer, so later pages can resolve the blob and
+  # play the file back. Empty file submissions arrive as "" and pass through.
+  def store_uploads(answers)
+    answers.transform_values do |value|
+      next value unless value.respond_to?(:original_filename)
+
+      ActiveStorage::Blob.create_and_upload!(
+        io: value,
+        filename: value.original_filename,
+        content_type: value.content_type
+      ).signed_id
+    end
   end
 end
