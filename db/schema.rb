@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_21_205024) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_21_211215) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -52,6 +52,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_205024) do
   create_table "components", force: :cascade do |t|
     t.string "button_style", default: "continue", null: false
     t.datetime "created_at", null: false
+    t.boolean "display_as_link", default: false, null: false
     t.string "hint"
     t.boolean "in_panel", default: false, null: false
     t.boolean "inline", default: false, null: false
@@ -63,6 +64,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_21_205024) do
     t.text "options"
     t.integer "page_id", null: false
     t.integer "position", null: false
+    t.string "source_key", default: "", null: false
     t.string "target_slug", default: "", null: false
     t.text "text"
     t.boolean "title_as_label", default: false, null: false

@@ -1,4 +1,4 @@
 <% content_for :title, page.title.presence || page.wizard.name %>
 <main id="main-content">
-  <%= render "pages/preview", page: page, mode: :run %>
+  <%= render "pages/preview", page: page, mode: :run, answers: answers %>
 </main>

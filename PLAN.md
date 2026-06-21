@@ -680,6 +680,31 @@ Three slices, one commit each (see issue #75 for the design write-up):
   (acceptable for ephemeral prototypes): orphan blobs are never purged, and an
   empty re-submit overwrites a previously uploaded file with "". 235 specs green.
 
+### File upload field, part 2: the playback component (issue #99, 2026-06-21)
+
+* 2026-06-21 — Added a `file` display component that plays an upload back on a
+  later page. It points at a `file_upload` input by key (`source_key`, chosen
+  from `Wizard#file_upload_choices` in a `<select>`, mirroring the branch-rule
+  pickers) and resolves the answer — the blob's signed id — to the blob via
+  `Component#uploaded_blob(answers)` (`ActiveStorage::Blob.find_signed`, nil-safe
+  for missing/tampered ids). Images render inline capped to the container
+  (`image_tag` + `.app-uploaded-image { max-width: 100% }`); everything else, and
+  images when the `display_as_link` toggle is set, render as a download link
+  (`rails_blob_path(..., disposition: "attachment")`).
+
+  This is the first feature to **play answers back into rendered output**, so it
+  introduced answer threading: `pages/_preview` now takes an `answers:` local
+  (defaulting to `{}`) and passes it to each component preview; `pages#show` (run
+  mode) fills it from `session.dig(:answers, wizard_id)`. Builder-mode renders
+  leave it empty, so the file component shows a placeholder describing what will
+  appear (and prompting you to pick an upload) rather than a real file. Kept the
+  threading to one local on the shared partial — the sanctioned "locals to all
+  views" route — rather than reading the session in a view/helper.
+
+  Naming to keep the two halves distinct: input kind `file_upload` / "Add file
+  upload" / "File upload"; playback kind `file` / "Add uploaded file" /
+  "Uploaded file". 243 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on

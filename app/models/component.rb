@@ -1,5 +1,5 @@
 class Component < ApplicationRecord
-  KINDS = %w[ paragraph subheading list text_input radios checkboxes file_upload button ].freeze
+  KINDS = %w[ paragraph subheading list text_input radios checkboxes file_upload file button ].freeze
   INPUT_KINDS = %w[ text_input radios checkboxes file_upload ].freeze
   LIST_STYLES = %w[ none bullet number ].freeze
   BUTTON_STYLES = %w[ continue secondary inverse start warning ].freeze
@@ -12,7 +12,7 @@ class Component < ApplicationRecord
   validates :kind, inclusion: { in: KINDS }
   validates :list_style, inclusion: { in: LIST_STYLES }
   validates :button_style, inclusion: { in: BUTTON_STYLES }
-  validates :target_slug, length: { maximum: 5_000 }
+  validates :target_slug, :source_key, length: { maximum: 5_000 }
   validates :name, presence: true, if: :input?
   validates :position,
     presence: true,
@@ -44,14 +44,23 @@ class Component < ApplicationRecord
   # One line identifying the component in a collapsed editor card.
   def summary_text
     return page.title if page_heading?
+    return source_key.presence || "No file selected" if kind == "file"
 
     input? ? label : text
   end
 
   def display_name
     return "Button" if kind == "button"
+    return "Uploaded file" if kind == "file"
 
     kind.humanize
+  end
+
+  # The uploaded file this `file` component plays back, resolved from the
+  # journey's answers (each file answer is the blob's signed id). Nil when the
+  # referenced input has no upload yet, or when nothing's been selected.
+  def uploaded_blob(answers)
+    ActiveStorage::Blob.find_signed(answers[source_key])
   end
 
   # The GOV.UK modifier class for this button's style ("continue" is the

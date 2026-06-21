@@ -64,6 +64,7 @@ class ComponentsController < ApplicationController
 
   def component_params
     params.require(:component).permit(:text, :name, :label, :hint, :options, :title_as_label,
-      :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline)
+      :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline,
+      :source_key, :display_as_link)
   end
 end

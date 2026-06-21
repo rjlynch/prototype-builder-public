@@ -1,0 +1,20 @@
+<% choices = f.object.component.page.wizard.file_upload_choices %>
+<div class="govuk-form-group">
+  <%= f.label :source_key, "Show the file uploaded for", class: "govuk-label" %>
+  <% if choices.any? %>
+    <%= f.select :source_key, choices, { include_blank: "Select a file upload" },
+          class: "govuk-select", data: { action: "change->autosubmit#submit" } %>
+  <% else %>
+    <p class="govuk-hint">Add a file upload field on an earlier page first.</p>
+  <% end %>
+</div>
+<div class="govuk-form-group">
+  <div class="govuk-checkboxes govuk-checkboxes--small" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <%= f.check_box :display_as_link,
+            class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+      <%= f.label :display_as_link, "Show as a download link instead of inline",
+            class: "govuk-label govuk-checkboxes__label" %>
+    </div>
+  </div>
+</div>
