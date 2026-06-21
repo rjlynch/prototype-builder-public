@@ -48,9 +48,11 @@ class PagesController < ApplicationController
             locals: { page: page }
           )
         ]
-        # Refresh the slug field when the title changed it — but never while
-        # the user is typing in the slug field itself.
-        unless attrs.key?(:slug)
+        # Refresh the page controls when the title changed the slug, so the slug
+        # field tracks along. Skip it while the user is typing in the slug field
+        # itself (preserve focus), and on edits that leave the slug untouched
+        # (e.g. toggling the back link) so the disclosure does not collapse.
+        if page.previous_changes.key?("slug") && !attrs.key?(:slug)
           streams << turbo_stream.replace(
             helpers.dom_id(page, :page_controls),
             partial: "pages/page_controls",

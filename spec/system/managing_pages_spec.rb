@@ -6,23 +6,23 @@ RSpec.describe "Managing pages", :js, type: :system do
 
     # Jump to the middle page via its tab (labels show the first 5 chars)
     within_nav { click_link "Secon" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls second")
+    expect(page).to have_field("Page title", with: "Second")
     open_page_controls
     accept_confirm { click_button "Remove this page" }
 
     # Lands on the previous page; the deleted page is gone from the nav
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls first")
+    expect(page).to have_field("Page title", with: "First")
     within_nav { expect(page).to have_no_text("Secon") }
 
     # Linear navigation follows the renumbered positions
     within_nav { click_link "First" }
     within_preview { click_button "Continue" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls third")
+    expect(page).to have_field("Page title", with: "Third")
 
     # Deleting down to one page removes the option entirely
     open_page_controls
     accept_confirm { click_button "Remove this page" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls first")
+    expect(page).to have_field("Page title", with: "First")
     open_page_controls
     expect(page).to have_no_button("Remove this page")
   end
@@ -43,7 +43,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     # Linear navigation follows the new order
     within_nav { click_link "First" }
     within_preview { click_button "Continue" }
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls third")
+    expect(page).to have_field("Page title", with: "Third")
 
     # And back again the other way
     open_page_controls
@@ -91,7 +91,7 @@ RSpec.describe "Managing pages", :js, type: :system do
 
       add_component "Add button"
       within_preview { click_button "Continue" }
-      expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-#{index + 2}")
+      expect(page).to have_field("Page title", with: "")
     end
   end
 
@@ -103,7 +103,7 @@ RSpec.describe "Managing pages", :js, type: :system do
     within(".app-split-pane__pane--framed", &block)
   end
 
-  # The page controls (slug, reorder, insert, remove) live in a collapsed
+  # The page controls (slug, back link, reorder, insert, remove) live in a collapsed
   # disclosure; open it before reaching for those buttons. "Add page after" is
   # always rendered, so its visibility tells us whether the disclosure is open.
   def open_page_controls

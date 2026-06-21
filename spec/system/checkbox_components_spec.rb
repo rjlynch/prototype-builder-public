@@ -36,7 +36,7 @@ RSpec.describe "Checkbox components", :js, type: :system do
       check "Personal Independence Payment"
       click_button "Continue"
     end
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls you-may-be-eligible")
+    expect(page).to have_field("Page slug", with: "you-may-be-eligible", visible: :all)
   end
 
   it "carries the checkboxes through to run mode" do

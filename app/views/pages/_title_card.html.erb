@@ -1,7 +1,7 @@
 <%# The page's own settings, as a collapsible card alongside the component
-    editors. The caption sits inside the form (always visible while the card
-    is open); the slug and the reorder/insert/remove controls stay tucked in
-    the "Page controls" disclosure. %>
+    editors. The caption sits above the panel selector (always visible while
+    the card is open); the slug, back link toggle, and the reorder/insert/remove
+    controls stay tucked in the "Page controls" disclosure. %>
 <details id="<%= dom_id(page, :title_card) %>" class="app-card" open
          data-controller="persisted-details mirror" data-action="toggle->persisted-details#store">
   <summary class="app-card__summary">
@@ -22,6 +22,13 @@
       <%= f.select :heading_size, Page::HEADING_SIZES.map { |size| [size_labels[size], size] },
             {}, class: "govuk-select", data: { action: "change->autosubmit#submit" } %>
     </div>
+    <%= render "shared/autosubmit_status" %>
+  <% end %>
+
+  <%= render "pages/caption_form", page: page %>
+
+  <%= form_with model: PageForm.new(page), url: page_path(page), method: :patch,
+        data: { controller: "autosubmit", action: "turbo:submit-end->autosubmit#saved" } do |f| %>
     <div class="govuk-form-group">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Panel</legend>
@@ -40,7 +47,5 @@
     <%= render "shared/autosubmit_status" %>
   <% end %>
 
-  <%= render "pages/caption_form", page: page %>
-  <%= render "pages/back_link_form", page: page %>
   <%= render "pages/page_controls", page: page %>
 </details>

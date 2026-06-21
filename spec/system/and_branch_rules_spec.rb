@@ -51,7 +51,7 @@ RSpec.describe "AND branch rules", :js, type: :system do
       choose "yes"
       click_button "Continue"
     end
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls page-2")
+    expect(page).to have_field("Page slug", with: "page-2", visible: :all)
 
     # Back to the first page; satisfy both conditions -> the rule fires.
     within_nav { first(".govuk-tabs__tab").click }
@@ -60,7 +60,7 @@ RSpec.describe "AND branch rules", :js, type: :system do
       check "Personal Independence Payment"
       click_button "Continue"
     end
-    expect(page).to have_css(".app-disclosure__summary", text: "Page controls you-may-be-eligible")
+    expect(page).to have_field("Page slug", with: "you-may-be-eligible", visible: :all)
   end
 
   # Regression for #103: each condition's fields must get a condition-scoped id.
