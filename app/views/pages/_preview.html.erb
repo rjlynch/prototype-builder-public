@@ -19,7 +19,7 @@
               Your page preview appears here — start by adding a title.
             </p>
           <% end %>
-          <%= form_with url: page_answers_path(page), method: :post do %>
+          <%= form_with url: page_answers_path(page), method: :post, multipart: page.accepts_uploads? do %>
             <%= hidden_field_tag :mode, mode %>
             <% page.body_components.each do |component| %>
               <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
