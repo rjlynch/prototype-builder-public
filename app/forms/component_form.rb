@@ -26,9 +26,7 @@ class ComponentForm
       inline: component.inline,
       source_key: component.source_key,
       display_as_link: component.display_as_link,
-      # Only the summary list selects questions; for every other kind this stays
-      # nil so `save` keeps writing the kind's own `text` (see #text_value).
-      summary_keys: (component.summary_keys if component.kind == "check_answers")
+      summary_keys: component.summary_keys
     )
   end
 
@@ -46,11 +44,12 @@ class ComponentForm
     return false unless valid?
 
     component.update!(
-      text: text_value, name: name, label: label, hint: hint, options: options,
+      text: text, name: name, label: label, hint: hint, options: options,
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
       button_style: button_style, target_slug: target_slug.to_s.parameterize,
       in_panel: in_panel, inline: inline,
-      source_key: source_key, display_as_link: display_as_link
+      source_key: source_key, display_as_link: display_as_link,
+      summary_keys: summary_keys_value
     )
     true
   end
@@ -58,12 +57,10 @@ class ComponentForm
   private
 
   # The summary list submits its chosen question keys as `summary_keys` (an
-  # array, with an empty entry so clearing every box still submits); they are
-  # stored one per line in `text`, reusing the list store. Every other kind
-  # leaves summary_keys nil and writes its own `text` through unchanged.
-  def text_value
-    return text if summary_keys.nil?
-
+  # array, with an empty entry so clearing every box still submits a value);
+  # they are stored one per line. Other kinds carry the component's existing
+  # value (a string) straight through — Array() wraps it untouched.
+  def summary_keys_value
     Array(summary_keys).reject(&:blank?).join("\n")
   end
 

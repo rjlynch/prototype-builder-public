@@ -6,7 +6,7 @@
     that page's editor instead. The builder has no real answers, so it previews
     the structure with placeholder values. %>
 <% inputs = component.page.wizard.input_index %>
-<% rows = component.summary_keys.filter_map { |key| inputs[key] } %>
+<% rows = component.summary_input_keys.filter_map { |key| inputs[key] } %>
 <% if rows.any? %>
   <dl class="govuk-summary-list">
     <% rows.each do |input| %>

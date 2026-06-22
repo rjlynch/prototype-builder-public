@@ -14,7 +14,7 @@ class AddComponentForm
     "checkboxes" => { label: "", hint: "", options: "" },
     "file_upload" => { label: "", hint: "" },
     "file" => {},
-    "check_answers" => { text: "" },
+    "check_answers" => {},
     "button" => { text: "Continue" }
   }.freeze
 

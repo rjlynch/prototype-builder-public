@@ -91,11 +91,11 @@ RSpec.describe Component do
     end
   end
 
-  describe "#summary_keys" do
-    it "reads the chosen input keys, one per line in text" do
-      component = Component.new(kind: "check_answers", text: "question-1\nquestion-2\n")
+  describe "#summary_input_keys" do
+    it "reads the chosen input keys, one per line" do
+      component = Component.new(kind: "check_answers", summary_keys: "question-1\nquestion-2\n")
 
-      expect(component.summary_keys).to eq([ "question-1", "question-2" ])
+      expect(component.summary_input_keys).to eq([ "question-1", "question-2" ])
     end
   end
 

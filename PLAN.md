@@ -56,8 +56,8 @@ Component         one element on a page, ordered
                   "text_input" | "radios" | "checkboxes" | "file_upload" |
                   "file" | "check_answers" | "button"
   text            paragraph body / subheading / button label / list items
-                  (lists: one item per line); check_answers: the input keys
-                  it summarises, one per line (reuses the list parser)
+                  (lists: one item per line)
+  summary_keys    check_answers: the input keys it summarises, one per line
   name            inputs: question name; required, generated unique per
                   wizard (question-N); parameterised form = "input key"
   label           inputs: visible label (radios: fieldset legend)
@@ -726,8 +726,12 @@ Three slices, one commit each (see issue #75 for the design write-up):
   Builder UX (the open question in the issue): the editor is a checklist of the
   wizard's earlier inputs (`Wizard#input_index` keyed by input key, journey
   order). Tick which questions this list shows; the ticked keys are stored one
-  per line in the reused `text` column (mirroring `list`, parsed by
-  `list_items` — no migration). Each row is fully derived: key = the source
+  per line in a dedicated `summary_keys` column (`Component#summary_input_keys`
+  parses it), matching the table's other per-kind config columns (`options`,
+  `source_key`, `list_style`). An earlier cut reused `text`, but that needed a
+  `text_value` branch and a kind guard in `ComponentForm` to stop other kinds'
+  body copy being treated as keys; the column drops both. Each row is fully
+  derived: key = the source
   input's label (or its page title), value = that input's stored answer
   formatted for display by `Component#summary_answer` (radio/checkbox values
   map back from their parameterised stored form to the option label the user

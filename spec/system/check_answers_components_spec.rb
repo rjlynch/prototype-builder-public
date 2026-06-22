@@ -16,7 +16,7 @@ RSpec.describe "Check answers components", :js, type: :system do
     name.components.create!(position: 2, kind: "button", text: "Continue")
     colour.components.create!(position: 1, kind: "radios", name: "question-2", label: "Favourite colour", options: "Red\nBlue")
     colour.components.create!(position: 2, kind: "button", text: "Continue")
-    summary.components.create!(position: 1, kind: "check_answers", text: "question-1\nquestion-2")
+    summary.components.create!(position: 1, kind: "check_answers", summary_keys: "question-1\nquestion-2")
     summary.components.create!(position: 2, kind: "button", text: "Accept and send")
     [ name, colour, summary ]
   end

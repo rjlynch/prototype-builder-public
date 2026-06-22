@@ -45,7 +45,7 @@ class Component < ApplicationRecord
   def summary_text
     return page.title if page_heading?
     return source_key.presence || "No file selected" if kind == "file"
-    return summary_keys.any? ? summary_keys.join(", ") : "No questions selected" if kind == "check_answers"
+    return summary_input_keys.any? ? summary_input_keys.join(", ") : "No questions selected" if kind == "check_answers"
 
     input? ? label : text
   end
@@ -97,9 +97,9 @@ class Component < ApplicationRecord
   end
 
   # check_answers: the input keys this summary list plays back, one per line in
-  # the reused `text` column (same store and parser as a list's items).
-  def summary_keys
-    list_items
+  # the summary_keys column.
+  def summary_input_keys
+    summary_keys.to_s.lines.map(&:strip).reject(&:empty?)
   end
 
   # This input's stored answer formatted for a summary-list value: the option
