@@ -27,6 +27,9 @@
     <%= button_to "Add file upload", page_components_path(page),
           params: { component: { kind: "file_upload" } },
           class: "govuk-button govuk-button--secondary" %>
+    <%= button_to "Add uploaded file", page_components_path(page),
+          params: { component: { kind: "file" } },
+          class: "govuk-button govuk-button--secondary" %>
     <%= button_to "Add button", page_components_path(page),
           params: { component: { kind: "button" } },
           class: "govuk-button govuk-button--secondary" %>

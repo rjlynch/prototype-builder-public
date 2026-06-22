@@ -165,6 +165,13 @@
   color: #505a5f;
 }
 
+/* A played-back uploaded image, capped to the width of its container so large
+   uploads don't overflow the page. */
+.app-uploaded-image {
+  max-width: 100%;
+  height: auto;
+}
+
 .app-warning {
   color: #d4351c;
 }

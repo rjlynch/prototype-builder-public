@@ -1,0 +1,24 @@
+<%# Plays back a file uploaded earlier in the journey. Images render inline,
+    capped to the container width; anything else (and images, when the toggle is
+    set) renders as a download link. In the builder there is no real upload, so
+    we show a placeholder describing what will appear. %>
+<% blob = component.uploaded_blob(answers) %>
+<% if blob %>
+  <div class="govuk-form-group">
+    <% if blob.image? && !component.display_as_link? %>
+      <%= image_tag rails_blob_path(blob), alt: blob.filename.to_s, class: "app-uploaded-image" %>
+    <% else %>
+      <%= link_to blob.filename.to_s, rails_blob_path(blob, disposition: "attachment"), class: "govuk-link" %>
+    <% end %>
+  </div>
+<% elsif mode == :builder %>
+  <div class="govuk-form-group">
+    <p class="govuk-body app-empty-state">
+      <% if component.source_key.blank? %>
+        Choose which uploaded file to show in this component’s settings.
+      <% else %>
+        The file uploaded for “<%= component.source_key %>” appears here.
+      <% end %>
+    </p>
+  </div>
+<% end %>

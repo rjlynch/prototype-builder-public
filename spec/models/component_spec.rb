@@ -64,6 +64,33 @@ RSpec.describe Component do
     end
   end
 
+  describe "#uploaded_blob" do
+    def file_component(source_key:)
+      wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
+      page = wizard.pages.create!(position: 1, slug: "page-1")
+      page.components.create!(position: 1, kind: "file", source_key: source_key)
+    end
+
+    it "resolves the blob from the signed id stored as the answer" do
+      blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("hi"), filename: "photo.png", content_type: "image/png")
+      component = file_component(source_key: "question-1")
+
+      expect(component.uploaded_blob("question-1" => blob.signed_id)).to eq(blob)
+    end
+
+    it "is nil when the referenced input has no answer" do
+      component = file_component(source_key: "question-1")
+
+      expect(component.uploaded_blob({})).to be_nil
+    end
+
+    it "is nil when the answer is not a valid signed id" do
+      component = file_component(source_key: "question-1")
+
+      expect(component.uploaded_blob("question-1" => "not-a-signed-id")).to be_nil
+    end
+  end
+
   describe "#missing_target?" do
     def button(target_slug:)
       wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)

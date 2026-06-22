@@ -122,6 +122,17 @@ RSpec.describe ComponentForm do
     expect(component.reload.inline).to be(false)
   end
 
+  it "saves the file component's source key and display-as-link toggle" do
+    component = create_component(kind: "file")
+
+    form = ComponentForm.from_component(component)
+    form.assign_attributes(source_key: "question-1", display_as_link: "1")
+
+    expect(form.save).to be(true)
+    expect(component.reload.source_key).to eq("question-1")
+    expect(component.display_as_link).to be(true)
+  end
+
   def create_component(**attributes)
     wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)
     page = wizard.pages.create!(position: 1, slug: "page-1")

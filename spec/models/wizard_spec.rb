@@ -18,6 +18,21 @@ RSpec.describe Wizard do
     end
   end
 
+  describe "#file_upload_choices" do
+    it "lists only file upload inputs, labelled with their question" do
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
+      page = wizard.pages.create!(position: 1, slug: "page-1", title: "Evidence")
+      page.components.create!(position: 1, kind: "file_upload", name: "question-1", label: "Upload your passport")
+      page.components.create!(position: 2, kind: "text_input", name: "question-2", label: "Your name")
+      page.components.create!(position: 3, kind: "file_upload", name: "question-3") # falls back to page title
+
+      expect(wizard.file_upload_choices).to eq([
+        [ "question-1 (Upload your passport)", "question-1" ],
+        [ "question-3 (Evidence)", "question-3" ]
+      ])
+    end
+  end
+
   describe "#answer_options" do
     it "maps fixed-answer inputs to their options, omitting free-text inputs" do
       wizard = Wizard.create!(name: "Test wizard", team: personal_team)

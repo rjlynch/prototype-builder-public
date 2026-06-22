@@ -42,6 +42,20 @@ class Wizard < ApplicationRecord
     choices.values.sort_by(&:last)
   end
 
+  # [display text, answer key] pairs for the file-playback component's select:
+  # only the wizard's file upload inputs, each labelled with the question it
+  # belongs to. Mirrors input_choices but narrowed to uploads.
+  def file_upload_choices
+    uploads = Component.where(kind: "file_upload").includes(:page)
+      .where(pages: { wizard_id: id }).references(:page)
+    choices = uploads.each_with_object({}) do |input, seen|
+      key = input.input_key
+      context = input.label.presence || input.page.title.presence
+      seen[key] ||= [ context ? "#{key} (#{context})" : key, key ]
+    end
+    choices.values.sort_by(&:last)
+  end
+
   # Fixed answers per input key, for inputs whose answers come from a set
   # (radios, checkboxes). The condition editor offers these as a datalist so a
   # branch answer can be picked the way the question is; text inputs are absent

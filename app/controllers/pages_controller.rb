@@ -5,7 +5,8 @@ class PagesController < ApplicationController
   # button. No builder chrome.
   def show
     page = Page.find(params[:id])
-    render :show, locals: { page: page }, layout: "run"
+    answers = session.dig(:answers, page.wizard.id.to_s) || {}
+    render :show, locals: { page: page, answers: answers }, layout: "run"
   end
 
   # The page builder: left pane of controls, right pane of live preview.

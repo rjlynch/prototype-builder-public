@@ -23,14 +23,17 @@ class ComponentForm
       button_style: component.button_style,
       target_slug: component.target_slug,
       in_panel: component.in_panel,
-      inline: component.inline
+      inline: component.inline,
+      source_key: component.source_key,
+      display_as_link: component.display_as_link
     )
   end
 
   attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
-    :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline
+    :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline,
+    :source_key, :display_as_link
 
-  validates :text, :name, :label, :hint, :options, :target_slug, length: { maximum: 5_000 }
+  validates :text, :name, :label, :hint, :options, :target_slug, :source_key, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
   validates :list_style, inclusion: { in: Component::LIST_STYLES }
   validates :button_style, inclusion: { in: Component::BUTTON_STYLES }
@@ -43,7 +46,8 @@ class ComponentForm
       text: text, name: name, label: label, hint: hint, options: options,
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
       button_style: button_style, target_slug: target_slug.to_s.parameterize,
-      in_panel: in_panel, inline: inline
+      in_panel: in_panel, inline: inline,
+      source_key: source_key, display_as_link: display_as_link
     )
     true
   end

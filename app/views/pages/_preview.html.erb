@@ -1,3 +1,7 @@
+<%# answers: the journey's stored answers, threaded through so playback
+    components (e.g. a file) can render what was entered earlier. Empty in the
+    builder, where there are no real answers. %>
+<% answers = local_assigns.fetch(:answers, {}) %>
 <div id="<%= dom_id(page, :preview) %>" class="app-preview">
   <div class="govuk-width-container">
     <%= render "pages/back_link", page: page %>
@@ -22,7 +26,7 @@
           <%= form_with url: page_answers_path(page), method: :post, multipart: page.accepts_uploads? do %>
             <%= hidden_field_tag :mode, mode %>
             <% page.body_components.each do |component| %>
-              <%= render "components/previews/#{component.kind}", component: component, mode: mode %>
+              <%= render "components/previews/#{component.kind}", component: component, mode: mode, answers: answers %>
             <% end %>
           <% end %>
         </div>
