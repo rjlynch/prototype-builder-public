@@ -66,6 +66,11 @@ RSpec.describe "Check answers components", :js, type: :system do
     within_preview do
       expect(page).to have_css(".govuk-summary-list__key", text: "Your name")
       expect(page).to have_content("Answer to “question-1”")
+      # In the builder the Change link goes to the question's editor, not its
+      # public page.
+      within(".govuk-summary-list__row", text: "Your name") do
+        expect(page).to have_link("Change", href: edit_page_path(name))
+      end
     end
   end
 

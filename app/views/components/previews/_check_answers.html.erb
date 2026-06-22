@@ -1,15 +1,17 @@
 <%# A GOV.UK summary list that plays earlier answers back for review. Each row
     is derived from a chosen input key: the question (its label or page title)
-    is the key, its stored answer the value. In run mode every row offers a
-    Change link back to the question's page, carrying return_to=<this slug> so
-    Continue there comes back here. The builder has no real answers, so it
-    previews the structure with placeholder values and no Change links. %>
+    is the key, its stored answer the value. Every row offers a Change link to
+    the question's page — in run mode to its public page, carrying
+    return_to=<this slug> so Continue there comes back here; in the builder to
+    that page's editor instead. The builder has no real answers, so it previews
+    the structure with placeholder values. %>
 <% inputs = component.page.wizard.input_index %>
 <% rows = component.summary_keys.filter_map { |key| inputs[key] } %>
 <% if rows.any? %>
   <dl class="govuk-summary-list">
     <% rows.each do |input| %>
       <% question = input.label.presence || input.page.title.presence || input.input_key %>
+      <% change_path = mode == :run ? page_path(input.page, return_to: component.page.slug) : edit_page_path(input.page) %>
       <div class="govuk-summary-list__row">
         <dt class="govuk-summary-list__key"><%= question %></dt>
         <dd class="govuk-summary-list__value">
@@ -19,13 +21,11 @@
             <span class="app-empty-state">Answer to “<%= input.input_key %>”</span>
           <% end %>
         </dd>
-        <% if mode == :run %>
-          <dd class="govuk-summary-list__actions">
-            <%= link_to page_path(input.page, return_to: component.page.slug), class: "govuk-link" do %>
-              Change<span class="govuk-visually-hidden"> <%= question.to_s.downcase %></span>
-            <% end %>
-          </dd>
-        <% end %>
+        <dd class="govuk-summary-list__actions">
+          <%= link_to change_path, class: "govuk-link" do %>
+            Change<span class="govuk-visually-hidden"> <%= question.to_s.downcase %></span>
+          <% end %>
+        </dd>
       </div>
     <% end %>
   </dl>

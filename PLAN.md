@@ -735,9 +735,11 @@ Three slices, one commit each (see issue #75 for the design write-up):
   answered"). In the builder, answers are empty, so it shows a placeholder
   listing the chosen questions (like `file`'s empty state).
 
-  Change links + the round trip (the issue's "redirect param?"): each row's
-  Change link (run mode only) points at the source input's page with
-  `?return_to=<cya-slug>`. `pages/_preview` threads an optional `return_to`
+  Change links + the round trip (the issue's "redirect param?"): each row has a
+  Change link to the source input's page — in run mode to its public page with
+  `?return_to=<cya-slug>`, in the builder to that page's editor
+  (`edit_page_path`) instead, so a builder can jump straight to the question.
+  `pages/_preview` threads an optional `return_to`
   local into a hidden field beside `mode`; `AnswersController#create` redirects
   to that slug (when it resolves to a page in the wizard) instead of the
   computed branch/linear destination. No new routes, no session flag — one
