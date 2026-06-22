@@ -29,6 +29,17 @@ class Wizard < ApplicationRecord
       .sort
   end
 
+  # input_key => the first input component carrying that key, in journey order
+  # (page then component position). The check_answers summary uses it to resolve
+  # each chosen key to its question: the component's label is the row key, its
+  # page the Change-link target, and it formats its own stored answer.
+  def input_index
+    Component.inputs.includes(:page)
+      .where(pages: { wizard_id: id }).references(:page)
+      .sort_by { |component| [ component.page.position, component.position ] }
+      .each_with_object({}) { |component, index| index[component.input_key] ||= component }
+  end
+
   # [display text, answer key] pairs for branch-rule selects: the key plus
   # the question it belongs to ("question-1 (Are you eligible?)"), so the
   # generated names mean something to the person picking one.

@@ -1,5 +1,5 @@
 class Component < ApplicationRecord
-  KINDS = %w[ paragraph subheading list text_input radios checkboxes file_upload file button ].freeze
+  KINDS = %w[ paragraph subheading list text_input radios checkboxes file_upload file check_answers button ].freeze
   INPUT_KINDS = %w[ text_input radios checkboxes file_upload ].freeze
   LIST_STYLES = %w[ none bullet number ].freeze
   BUTTON_STYLES = %w[ continue secondary inverse start warning ].freeze
@@ -45,6 +45,7 @@ class Component < ApplicationRecord
   def summary_text
     return page.title if page_heading?
     return source_key.presence || "No file selected" if kind == "file"
+    return summary_keys.any? ? summary_keys.join(", ") : "No questions selected" if kind == "check_answers"
 
     input? ? label : text
   end
@@ -52,6 +53,7 @@ class Component < ApplicationRecord
   def display_name
     return "Button" if kind == "button"
     return "Uploaded file" if kind == "file"
+    return "Check your answers" if kind == "check_answers"
 
     kind.humanize
   end
@@ -94,6 +96,32 @@ class Component < ApplicationRecord
     list_style == "number"
   end
 
+  # check_answers: the input keys this summary list plays back, one per line in
+  # the reused `text` column (same store and parser as a list's items).
+  def summary_keys
+    list_items
+  end
+
+  # This input's stored answer formatted for a summary-list value: the option
+  # label the user saw for radios/checkboxes (values are stored parameterised),
+  # the uploaded file's name for an upload, the entered text otherwise. A blank
+  # or missing answer reads "Not answered".
+  def summary_answer(answers)
+    value = answers[input_key]
+    return "Not answered" if value.blank?
+
+    case kind
+    when "radios"
+      option_label(value)
+    when "checkboxes"
+      Array(value).reject(&:blank?).map { |entry| option_label(entry) }.join(", ")
+    when "file_upload"
+      ActiveStorage::Blob.find_signed(value)&.filename.to_s.presence || "Not answered"
+    else
+      value
+    end
+  end
+
   # Where this button sends the user, given everything answered so far: the
   # first matching rule's target wins; otherwise the button's own specified
   # slug (the "else" branch); nil falls through to the next page linearly.
@@ -110,6 +138,24 @@ class Component < ApplicationRecord
   end
 
   private
+
+  # Maps a stored answer value back to the option label the user saw. Radio and
+  # checkbox values are stored parameterised (markdown stripped), so reverse
+  # that to show the readable option; falls back to the raw value when nothing
+  # matches (e.g. the option was edited after the answer was given).
+  def option_label(value)
+    match = option_list.find { |option| plain_text(option).parameterize == value }
+    match ? plain_text(match) : value
+  end
+
+  # The plain-text form of an option's markdown (**bold**/[links] reduced to the
+  # words they wrap) — mirrors MarkdownHelper#markdown_to_text, duplicated here
+  # so the model can format answers without reaching into a view helper.
+  def plain_text(text)
+    text.to_s
+      .gsub(/\*\*(.+?)\*\*/, '\1')
+      .gsub(/\[([^\]]+)\]\(([^)]+)\)/, '\1')
+  end
 
   # Only one input per page may render the title as its label/legend —
   # a page has one H1.
