@@ -99,6 +99,15 @@ RSpec.describe Component do
     end
   end
 
+  describe "#option_labels" do
+    it "reduces markdown markup to the plain text the option is stored and matched as" do
+      component = Component.new(kind: "checkboxes",
+        options: "I agree to the [terms](example.com)\nI work **full time**")
+
+      expect(component.option_labels).to eq([ "I agree to the terms", "I work full time" ])
+    end
+  end
+
   describe "#summary_answer" do
     def input(kind:, options: "")
       Component.new(kind: kind, name: "question-1", options: options)

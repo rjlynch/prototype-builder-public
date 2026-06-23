@@ -46,6 +46,17 @@ RSpec.describe Wizard do
         "benefits" => %w[ UC PIP ]
       )
     end
+
+    it "offers options as plain text, stripping markdown so a picked answer matches the stored value" do
+      wizard = Wizard.create!(name: "Test wizard", team: personal_team)
+      page = wizard.pages.create!(position: 1, slug: "page-1", title: "Eligibility")
+      page.components.create!(position: 1, kind: "checkboxes", name: "declarations",
+        options: "I agree to the [terms](example.com)\nI work **full time**")
+
+      expect(wizard.answer_options).to eq(
+        "declarations" => [ "I agree to the terms", "I work full time" ]
+      )
+    end
   end
 
   describe "#page_slugs" do

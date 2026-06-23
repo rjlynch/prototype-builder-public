@@ -71,11 +71,13 @@ class Wizard < ApplicationRecord
   # (radios, checkboxes). The condition editor offers these as a datalist so a
   # branch answer can be picked the way the question is; text inputs are absent
   # (left as free text). First component for a key wins, mirroring input_choices.
+  # Options are the plain-text labels (markdown stripped) so a picked answer
+  # matches the stored value, which is itself parameterised from this text.
   def answer_options
     components = Component.where(kind: %w[ radios checkboxes ])
       .joins(:page).where(pages: { wizard_id: id })
     components.each_with_object({}) do |component, options|
-      options[component.input_key] ||= component.option_list
+      options[component.input_key] ||= component.option_labels
     end
   end
 
