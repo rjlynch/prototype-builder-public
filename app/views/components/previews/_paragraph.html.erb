@@ -1,1 +1,2 @@
-<p class="govuk-body"><%= govuk_markdown(component.text, page: component.page) %></p>
+<%# Inside the panel, drop govuk-body so the larger govuk-panel__body text applies. %>
+<p class="<%= "govuk-body" unless component.in_panel? %>"><%= govuk_markdown(component.text, page: component.page) %></p>
