@@ -86,6 +86,13 @@ class Component < ApplicationRecord
     options.to_s.lines.map(&:strip).reject(&:empty?)
   end
 
+  # The options as the plain text they're stored and matched as — markdown
+  # markup reduced to the words it wraps. A branch-rule answer must match this
+  # (not the raw markdown), so the condition editor's datalist offers these.
+  def option_labels
+    option_list.map { |option| plain_text(option) }
+  end
+
   # List items, one per line in the text column.
   def list_items
     text.to_s.lines.map(&:strip).reject(&:empty?)
