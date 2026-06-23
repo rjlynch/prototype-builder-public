@@ -21,6 +21,11 @@
         (see issue #80). %>
     <div class="govuk-radios<%= " govuk-radios--inline" if component.inline? %>" data-module="govuk-radios">
       <% component.option_list.each_with_index do |option, index| %>
+        <%# An "or" divider sits before the last option when enabled, per the
+            GOV.UK text-divider pattern. %>
+        <% if component.divider_before?(index) %>
+          <div class="govuk-radios__divider">or</div>
+        <% end %>
         <div class="govuk-radios__item">
           <input class="govuk-radios__input"
                  id="<%= dom_id(component, :"preview_option_#{index}") %>"

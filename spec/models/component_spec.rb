@@ -108,6 +108,29 @@ RSpec.describe Component do
     end
   end
 
+  describe "#divider_before?" do
+    it "marks the last option when the divider is enabled" do
+      component = Component.new(kind: "radios", show_divider: true, options: "Yes\nNo\nMaybe")
+
+      expect(component.divider_before?(0)).to be(false)
+      expect(component.divider_before?(1)).to be(false)
+      expect(component.divider_before?(2)).to be(true)
+    end
+
+    it "is false for every option when the divider is disabled" do
+      component = Component.new(kind: "radios", show_divider: false, options: "Yes\nNo")
+
+      expect(component.divider_before?(0)).to be(false)
+      expect(component.divider_before?(1)).to be(false)
+    end
+
+    it "is false when there is only a single option to divide" do
+      component = Component.new(kind: "radios", show_divider: true, options: "Yes")
+
+      expect(component.divider_before?(0)).to be(false)
+    end
+  end
+
   describe "#summary_answer" do
     def input(kind:, options: "")
       Component.new(kind: kind, name: "question-1", options: options)

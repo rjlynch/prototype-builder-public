@@ -10,5 +10,13 @@
       <%= f.label :inline, "Display the options inline", for: dom_id(f.object.component, :inline),
             class: "govuk-label govuk-checkboxes__label" %>
     </div>
+    <%# An "or" divider before the last option, per the GOV.UK text-divider
+        pattern. https://design-system.service.gov.uk/components/radios/#radio-items-with-a-text-divider %>
+    <div class="govuk-checkboxes__item">
+      <%= f.check_box :show_divider, id: dom_id(f.object.component, :show_divider),
+            class: "govuk-checkboxes__input", data: { action: "change->autosubmit#submit" } %>
+      <%= f.label :show_divider, "Show divider", for: dom_id(f.object.component, :show_divider),
+            class: "govuk-label govuk-checkboxes__label" %>
+    </div>
   </div>
 </div>
