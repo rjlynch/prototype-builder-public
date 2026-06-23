@@ -53,9 +53,11 @@ Component         one element on a page, ordered
   page_id
   position        integer, 1-based, unique within page
   kind            string enum: "paragraph" | "subheading" | "list" |
-                  "text_input" | "radios" | "button"
+                  "text_input" | "radios" | "checkboxes" | "file_upload" |
+                  "file" | "check_answers" | "button"
   text            paragraph body / subheading / button label / list items
                   (lists: one item per line)
+  summary_keys    check_answers: the input keys it summarises, one per line
   name            inputs: question name; required, generated unique per
                   wizard (question-N); parameterised form = "input key"
   label           inputs: visible label (radios: fieldset legend)
@@ -704,6 +706,55 @@ Three slices, one commit each (see issue #75 for the design write-up):
   Naming to keep the two halves distinct: input kind `file_upload` / "Add file
   upload" / "File upload"; playback kind `file` / "Add uploaded file" /
   "Uploaded file". 243 specs green.
+
+### Check your answers component (issue #116, 2026-06-22)
+
+* 2026-06-22 — Added a `check_answers` component: a GOV.UK summary list that
+  plays earlier answers back for review at the end of a journey. Not a "CYA
+  page type" — the EYTRP screen is several summary lists, each under its own
+  heading, plus copy and a declaration checkbox, so it composes from existing
+  primitives (`subheading` + `check_answers` + `paragraph` + `checkboxes` +
+  `button`). The component is deliberately single-purpose: headings are the
+  existing `subheading` component, not baked in, so a page can carry as many
+  list-under-heading pairs as it needs.
+
+  Named `check_answers` (display "Check your answers") rather than the GOV.UK
+  primitive name `summary_list` — that name is reserved for a likely later
+  generic, type-the-rows-yourself component; this one is specifically the
+  answers-playback use.
+
+  Builder UX (the open question in the issue): the editor is a checklist of the
+  wizard's earlier inputs (`Wizard#input_index` keyed by input key, journey
+  order). Tick which questions this list shows; the ticked keys are stored one
+  per line in a dedicated `summary_keys` column (`Component#summary_input_keys`
+  parses it), matching the table's other per-kind config columns (`options`,
+  `source_key`, `list_style`). An earlier cut reused `text`, but that needed a
+  `text_value` branch and a kind guard in `ComponentForm` to stop other kinds'
+  body copy being treated as keys; the column drops both. Each row is fully
+  derived: key = the source
+  input's label (or its page title), value = that input's stored answer
+  formatted for display by `Component#summary_answer` (radio/checkbox values
+  map back from their parameterised stored form to the option label the user
+  saw; an upload shows its blob filename; text passes through; blank reads "Not
+  answered"). In the builder, answers are empty, so it shows a placeholder
+  listing the chosen questions (like `file`'s empty state).
+
+  Change links + the round trip (the issue's "redirect param?"): each row has a
+  Change link to the source input's page — in run mode to its public page with
+  `?return_to=<cya-slug>`, in the builder to that page's editor
+  (`edit_page_path`) instead, so a builder can jump straight to the question.
+  `pages/_preview` threads an optional `return_to`
+  local into a hidden field beside `mode`; `AnswersController#create` redirects
+  to that slug (when it resolves to a page in the wizard) instead of the
+  computed branch/linear destination. No new routes, no session flag — one
+  query param on the form that was already there. Kept the answer-display logic
+  on `Component` (where `option_list`/`uploaded_blob` already live) rather than
+  a helper, per the no-domain-concepts-in-helpers rule.
+
+  Deferred: a "let users change their answers" toggle (MVP always shows Change
+  links in run mode); rendering checkbox values as a bulleted `<ul>` rather
+  than a comma-joined string; a generic typed-rows `summary_list` component.
+  254 specs green.
 
 ## Decisions / open questions
 

@@ -91,6 +91,47 @@ RSpec.describe Component do
     end
   end
 
+  describe "#summary_input_keys" do
+    it "reads the chosen input keys, one per line" do
+      component = Component.new(kind: "check_answers", summary_keys: "question-1\nquestion-2\n")
+
+      expect(component.summary_input_keys).to eq([ "question-1", "question-2" ])
+    end
+  end
+
+  describe "#summary_answer" do
+    def input(kind:, options: "")
+      Component.new(kind: kind, name: "question-1", options: options)
+    end
+
+    it "passes a text answer through" do
+      expect(input(kind: "text_input").summary_answer("question-1" => "Ada")).to eq("Ada")
+    end
+
+    it "maps a radio answer back to the option label the user saw" do
+      radios = input(kind: "radios", options: "Yes\nNo, not yet")
+
+      expect(radios.summary_answer("question-1" => "no-not-yet")).to eq("No, not yet")
+    end
+
+    it "joins the chosen checkbox labels" do
+      checkboxes = input(kind: "checkboxes", options: "Email\nText message\nPhone")
+
+      expect(checkboxes.summary_answer("question-1" => [ "", "email", "phone" ])).to eq("Email, Phone")
+    end
+
+    it "shows an uploaded file's name" do
+      blob = ActiveStorage::Blob.create_and_upload!(io: StringIO.new("hi"), filename: "cv.pdf", content_type: "application/pdf")
+      upload = input(kind: "file_upload")
+
+      expect(upload.summary_answer("question-1" => blob.signed_id)).to eq("cv.pdf")
+    end
+
+    it "reads 'Not answered' when nothing is stored" do
+      expect(input(kind: "text_input").summary_answer({})).to eq("Not answered")
+    end
+  end
+
   describe "#missing_target?" do
     def button(target_slug:)
       wizard = Wizard.create!(name: "Untitled wizard", team: personal_team)

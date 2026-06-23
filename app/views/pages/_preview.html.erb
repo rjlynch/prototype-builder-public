@@ -2,6 +2,10 @@
     components (e.g. a file) can render what was entered earlier. Empty in the
     builder, where there are no real answers. %>
 <% answers = local_assigns.fetch(:answers, {}) %>
+<%# When the user arrived here from a check-answers Change link, return_to holds
+    the summary page's slug; carried as a hidden field so the answers controller
+    sends them back to it on Continue rather than following normal navigation. %>
+<% return_to = local_assigns.fetch(:return_to, nil) %>
 <div id="<%= dom_id(page, :preview) %>" class="app-preview">
   <div class="govuk-width-container">
     <%= render "pages/back_link", page: page %>
@@ -25,6 +29,7 @@
           <% end %>
           <%= form_with url: page_answers_path(page), method: :post, multipart: page.accepts_uploads? do %>
             <%= hidden_field_tag :mode, mode %>
+            <%= hidden_field_tag :return_to, return_to if return_to.present? %>
             <% page.body_components.each do |component| %>
               <%= render "components/previews/#{component.kind}", component: component, mode: mode, answers: answers %>
             <% end %>

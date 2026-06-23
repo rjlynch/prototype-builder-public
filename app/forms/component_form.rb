@@ -25,13 +25,14 @@ class ComponentForm
       in_panel: component.in_panel,
       inline: component.inline,
       source_key: component.source_key,
-      display_as_link: component.display_as_link
+      display_as_link: component.display_as_link,
+      summary_keys: component.summary_keys
     )
   end
 
   attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
     :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline,
-    :source_key, :display_as_link
+    :source_key, :display_as_link, :summary_keys
 
   validates :text, :name, :label, :hint, :options, :target_slug, :source_key, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
@@ -47,12 +48,21 @@ class ComponentForm
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
       button_style: button_style, target_slug: target_slug.to_s.parameterize,
       in_panel: in_panel, inline: inline,
-      source_key: source_key, display_as_link: display_as_link
+      source_key: source_key, display_as_link: display_as_link,
+      summary_keys: summary_keys_value
     )
     true
   end
 
   private
+
+  # The summary list submits its chosen question keys as `summary_keys` (an
+  # array, with an empty entry so clearing every box still submits a value);
+  # they are stored one per line. Other kinds carry the component's existing
+  # value (a string) straight through — Array() wraps it untouched.
+  def summary_keys_value
+    Array(summary_keys).reject(&:blank?).join("\n")
+  end
 
   def wants_title_as_label?
     ActiveModel::Type::Boolean.new.cast(title_as_label)

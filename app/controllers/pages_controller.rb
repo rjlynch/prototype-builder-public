@@ -6,7 +6,7 @@ class PagesController < ApplicationController
   def show
     page = Page.find(params[:id])
     answers = session.dig(:answers, page.wizard.id.to_s) || {}
-    render :show, locals: { page: page, answers: answers }, layout: "run"
+    render :show, locals: { page: page, answers: answers, return_to: params[:return_to] }, layout: "run"
   end
 
   # The page builder: left pane of controls, right pane of live preview.

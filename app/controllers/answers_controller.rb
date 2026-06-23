@@ -17,11 +17,20 @@ class AnswersController < ApplicationController
     form = ContinueForm.new(page: page, button: button, answers: answers, create_missing: builder)
     form.save
 
-    destination = form.destination || page
+    destination = return_page(page.wizard) || form.destination || page
     redirect_to builder ? edit_page_path(destination) : page_path(destination)
   end
 
   private
+
+  # When the user came from a check-answers Change link, return_to carries the
+  # summary page's slug — send them straight back to it (overriding normal
+  # branch/linear navigation) once the changed answer is saved. Ignored when the
+  # slug names no page in the wizard.
+  def return_page(wizard)
+    slug = params[:return_to].presence
+    wizard.pages.find_by(slug: slug) if slug
+  end
 
   def stored_answers(wizard)
     session[:answers] ||= {}
