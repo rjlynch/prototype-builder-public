@@ -24,6 +24,7 @@ class ComponentForm
       target_slug: component.target_slug,
       in_panel: component.in_panel,
       inline: component.inline,
+      show_divider: component.show_divider,
       source_key: component.source_key,
       display_as_link: component.display_as_link,
       summary_keys: component.summary_keys
@@ -32,7 +33,7 @@ class ComponentForm
 
   attr_accessor :component, :text, :name, :label, :hint, :options, :title_as_label,
     :list_style, :list_spaced, :button_style, :target_slug, :in_panel, :inline,
-    :source_key, :display_as_link, :summary_keys
+    :show_divider, :source_key, :display_as_link, :summary_keys
 
   validates :text, :name, :label, :hint, :options, :target_slug, :source_key, length: { maximum: 5_000 }
   validates :name, presence: true, if: -> { component&.input? }
@@ -47,7 +48,7 @@ class ComponentForm
       text: text, name: name, label: label, hint: hint, options: options,
       title_as_label: title_as_label, list_style: list_style, list_spaced: list_spaced,
       button_style: button_style, target_slug: target_slug.to_s.parameterize,
-      in_panel: in_panel, inline: inline,
+      in_panel: in_panel, inline: inline, show_divider: show_divider,
       source_key: source_key, display_as_link: display_as_link,
       summary_keys: summary_keys_value
     )

@@ -86,6 +86,13 @@ class Component < ApplicationRecord
     options.to_s.lines.map(&:strip).reject(&:empty?)
   end
 
+  # Whether an "or" text divider should be rendered before the option at the
+  # given index: only the last option, only when the divider is enabled, and
+  # only when there are at least two options to divide.
+  def divider_before?(index)
+    show_divider? && option_list.size > 1 && index == option_list.size - 1
+  end
+
   # The options as the plain text they're stored and matched as — markdown
   # markup reduced to the words it wraps. A branch-rule answer must match this
   # (not the raw markdown), so the condition editor's datalist offers these.

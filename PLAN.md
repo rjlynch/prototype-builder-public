@@ -756,6 +756,19 @@ Three slices, one commit each (see issue #75 for the design write-up):
   than a comma-joined string; a generic typed-rows `summary_list` component.
   254 specs green.
 
+### Radio text divider (issue #120, 2026-06-23)
+
+* 2026-06-23 — "Or" divider before the last radio option (the EYTRP gender
+  question pattern). New `components.show_divider` boolean (default false),
+  plumbed through `ComponentForm` and the permitted params, with a "Show
+  divider" checkbox in the radios editor beside the inline toggle (same pattern
+  as issue #80). The radios preview renders a `govuk-radios__divider` ("or")
+  before the last option, gated by `Component#divider_before?(index)` — only the
+  last option, only when ticked, and only with at least two options to divide,
+  so it shows in both the builder preview and run mode. Covered by a
+  `#divider_before?` model spec and a system spec. No model validation needed
+  (plain boolean). 260 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
