@@ -25,6 +25,8 @@ RSpec.describe "Panel component", :js, type: :system do
     end
     within_preview do
       expect(page).to have_css(".govuk-panel__body", text: "Your reference number HDJ2123F")
+      # The panel body sizes its own text, so the paragraph drops govuk-body (#122)
+      expect(page).to have_css(".govuk-panel__body p:not(.govuk-body)", text: "Your reference number HDJ2123F")
     end
 
     # A subheading left unchecked stays outside the panel

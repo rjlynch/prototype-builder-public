@@ -769,6 +769,16 @@ Three slices, one commit each (see issue #75 for the design write-up):
   `#divider_before?` model spec and a system spec. No model validation needed
   (plain boolean). 260 specs green.
 
+### Paragraph text size in panel (issue #122, 2026-06-23)
+
+* 2026-06-23 — Paragraphs marked "in the panel" rendered too small because they
+  kept the `govuk-body` class, overriding the larger `govuk-panel__body` text.
+  Fixed in the paragraph preview partial by dropping `govuk-body` when
+  `component.in_panel?` (the component is only in the panel body in that case).
+  View-only change, no migration or model logic. Covered by an extra assertion
+  in the panel system spec (`p:not(.govuk-body)` inside `.govuk-panel__body`).
+  260 specs green.
+
 ## Decisions / open questions
 
 * Authorization surface (issue #32): CLOSED in PR 3. PR 1 enforced team access on
