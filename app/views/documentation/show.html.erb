@@ -1,0 +1,185 @@
+<div class="govuk-width-container">
+  <main class="govuk-main-wrapper" id="main-content">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <span class="govuk-caption-xl">Documentation</span>
+        <h1 class="govuk-heading-xl">Build a prototype</h1>
+
+        <p class="govuk-body">
+          Prototype Builder helps you create GOV.UK-style journeys without writing code.
+          Use it to make page-by-page prototypes for research, feedback and service design.
+        </p>
+
+        <nav aria-labelledby="contents-heading">
+          <h2 class="govuk-heading-m" id="contents-heading">Contents</h2>
+          <ol class="govuk-list govuk-list--number">
+            <li><a class="govuk-link" href="#wizard-overview-page">Wizard overview page</a></li>
+            <li><a class="govuk-link" href="#page-editor">Page editor</a></li>
+            <li><a class="govuk-link" href="#paragraphs">Paragraphs</a></li>
+            <li><a class="govuk-link" href="#shared-component-controls">Shared component controls</a></li>
+            <li><a class="govuk-link" href="#buttons">Buttons</a></li>
+            <li><a class="govuk-link" href="#subheadings">Subheadings</a></li>
+            <li><a class="govuk-link" href="#lists">Lists</a></li>
+            <li><a class="govuk-link" href="#text-inputs">Text inputs</a></li>
+            <li><a class="govuk-link" href="#radio-inputs">Radio inputs</a></li>
+            <li><a class="govuk-link" href="#checkbox-inputs">Checkbox inputs</a></li>
+            <li><a class="govuk-link" href="#files">File upload and uploaded file</a></li>
+            <li><a class="govuk-link" href="#check-answers-table">Check answers table</a></li>
+            <li><a class="govuk-link" href="#branch-rules">Branch rules</a></li>
+          </ol>
+        </nav>
+
+        <section aria-labelledby="wizard-overview-page">
+          <h2 class="govuk-heading-l" id="wizard-overview-page">Wizard overview page</h2>
+          <p class="govuk-body">
+            The overview page lists the pages in your wizard. Use it to open the editor,
+            add pages, reorder pages and delete pages you no longer need.
+          </p>
+          <h3 class="govuk-heading-m" id="renaming-a-wizard">Renaming a wizard</h3>
+          <p class="govuk-body">
+            Open the wizard settings from the overview page to change its name.
+            The name is for you and your team. Users of the prototype do not see it.
+          </p>
+          <h3 class="govuk-heading-m" id="share-link">Share link</h3>
+          <p class="govuk-body">
+            Use the share link to send a prototype to colleagues or research participants.
+            Anyone with the link can run the prototype.
+          </p>
+        </section>
+
+        <section aria-labelledby="page-editor">
+          <h2 class="govuk-heading-l" id="page-editor">Page editor</h2>
+          <p class="govuk-body">
+            The page editor has two panes. The left pane contains editing controls.
+            The right pane shows a live preview of the page as users will see it.
+          </p>
+          <h3 class="govuk-heading-m" id="page-controls">Page controls</h3>
+          <p class="govuk-body">
+            Page controls let you edit the page heading, caption, URL slug and back link. The
+            slug is generated automatically from the page title. You usually only need to
+            change it when a button or <a class="govuk-link" href="#branch-rules">branch rule</a>
+            links to a page that does not exist yet and is not the next page.
+          </p>
+        </section>
+
+        <section aria-labelledby="paragraphs">
+          <h2 class="govuk-heading-l" id="paragraphs">Paragraphs</h2>
+          <p class="govuk-body">
+            Use paragraphs for short blocks of body text. Keep each paragraph focused
+            on one idea.
+          </p>
+          <p class="govuk-body">
+            You can add links with Markdown, for example
+            <code class="govuk-code">[link text](https://example.com)</code>.
+            You can make text bold with double asterisks, for example
+            <code class="govuk-code">**important text**</code>.
+          </p>
+        </section>
+
+        <section aria-labelledby="shared-component-controls">
+          <h2 class="govuk-heading-l" id="shared-component-controls">Shared component controls</h2>
+          <p class="govuk-body">
+            Most components can be removed or moved up and down the page.
+            Moving a component changes the order users encounter the content.
+          </p>
+        </section>
+
+        <section aria-labelledby="buttons">
+          <h2 class="govuk-heading-l" id="buttons">Buttons</h2>
+          <p class="govuk-body">
+            A button usually sends users to the next page in the wizard. You can also
+            set a specific page slug in the button target.
+          </p>
+          <p class="govuk-body">
+            In builder mode, if the target slug does not exist, the app creates that page
+            when you follow the button. For conditional journeys, use
+            <a class="govuk-link" href="#branch-rules">branch rules</a>.
+          </p>
+        </section>
+
+        <section aria-labelledby="subheadings">
+          <h2 class="govuk-heading-l" id="subheadings">Subheadings</h2>
+          <p class="govuk-body">
+            Use subheadings to group related content within a page. Do not use them
+            where a new page would make the journey clearer.
+          </p>
+        </section>
+
+        <section aria-labelledby="lists">
+          <h2 class="govuk-heading-l" id="lists">Lists</h2>
+          <p class="govuk-body">
+            Use lists when several items belong together. Choose bullets for unordered
+            items and numbers when order matters.
+          </p>
+          <p class="govuk-body">
+            Each line becomes a list item. List items can include Markdown links.
+          </p>
+        </section>
+
+        <section aria-labelledby="text-inputs">
+          <h2 class="govuk-heading-l" id="text-inputs">Text inputs</h2>
+          <p class="govuk-body">
+            Use a text input when users need to type a short answer.
+          </p>
+          <p class="govuk-body">
+            Add a clear label and optional hint. You can use the page heading as the
+            label when the page asks one question.
+          </p>
+        </section>
+
+        <section aria-labelledby="radio-inputs">
+          <h2 class="govuk-heading-l" id="radio-inputs">Radio inputs</h2>
+          <p class="govuk-body">
+            Use radios when users must choose one option from a list. Enter each option
+            on a new line.
+          </p>
+          <p class="govuk-body">
+            Radios can be displayed inline for short choices. You can also add a text
+            divider when the options need a visual break.
+          </p>
+        </section>
+
+        <section aria-labelledby="checkbox-inputs">
+          <h2 class="govuk-heading-l" id="checkbox-inputs">Checkbox inputs</h2>
+          <p class="govuk-body">
+            Use checkboxes when users can choose more than one option. Enter each option
+            on a new line.
+          </p>
+          <p class="govuk-body">
+            Add a clear label and optional hint.
+          </p>
+        </section>
+
+        <section aria-labelledby="files">
+          <h2 class="govuk-heading-l" id="files">File upload and uploaded file</h2>
+          <p class="govuk-body">
+            Use file upload when a prototype needs to ask for a document or image.
+            Use uploaded file to show a file that has already been added to the prototype.
+          </p>
+        </section>
+
+        <section aria-labelledby="check-answers-table">
+          <h2 class="govuk-heading-l" id="check-answers-table">Check answers table</h2>
+          <p class="govuk-body">
+            Use a check answers table near the end of a journey so users can review
+            answers before continuing. In builder mode, placeholders are shown instead
+            of the answers. You can add more than one check answers table to a page.
+          </p>
+        </section>
+
+        <section aria-labelledby="branch-rules">
+          <h2 class="govuk-heading-l" id="branch-rules">Branch rules</h2>
+          <p class="govuk-body">
+            Branch rules send users to different pages based on their answers. Use them
+            when one button needs different destinations for different users.
+          </p>
+          <p class="govuk-body">
+            Add conditions to a branch rule to describe when it should run. If no rule
+            matches, the button falls back to its Go to page target or the next page
+            in the wizard.
+          </p>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
