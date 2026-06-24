@@ -11,7 +11,7 @@ RSpec.describe "Documentation", type: :request do
   it "has stable section anchors for deep links" do
     get documentation_path
 
-    expect(response.body).to include('id="creating-a-new-wizard"')
+    expect(response.body).to include('id="wizard-overview-page"')
     expect(response.body).to include('id="page-editor"')
     expect(response.body).to include('id="branch-rules"')
   end
