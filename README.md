@@ -58,43 +58,4 @@ bin/brakeman         # security static analysis
 
 The end-to-end journey from the project brief lives in
 `spec/system/building_a_wizard_spec.rb`.
-
-## Deployment
-
-Deployed with [Kamal](https://kamal-deploy.org). The live host, proxy host,
-and SSH user are supplied through environment variables / repository secrets
-so the public repository does not advertise production infrastructure. The
-image is built and pushed to GitHub Container Registry (`ghcr.io`).
-
-**Continuous deployment.** The `deploy` job in `.github/workflows/ci.yml`
-runs on every push to `main` (a direct push or a merged PR), but only after
-the scan/lint/test jobs pass. It builds the image and runs `kamal deploy`.
-Production sits behind HTTP Basic auth (the `basic_auth` key in Rails
-encrypted credentials) while it's open to invited testers; the `/up` health
-check is exempt.
-
-One-time setup — add these repository secrets (Settings → Secrets → Actions):
-
-- `RAILS_MASTER_KEY` — contents of `config/master.key`.
-- `SSH_PRIVATE_KEY` — a private key whose public half can SSH to the deploy
-  user.
-- `KAMAL_DEPLOY_HOST` — host or IP Kamal connects to over SSH.
-- `KAMAL_PROXY_HOST` — public hostname served by kamal-proxy and used in
-  generated mail links.
-- `KAMAL_SSH_USER` — SSH user for deploys.
-- `SSH_KNOWN_HOSTS` — the expected known-hosts line for the deploy host.
-
-The registry uses the workflow's `GITHUB_TOKEN` (no PAT needed).
-
-**Manual operations** (run locally; needs `KAMAL_DEPLOY_HOST` and
-`KAMAL_SSH_USER` set, SSH access, and the gh CLI logged in for the registry
-token):
-
-```sh
-bin/kamal deploy     # build + deploy by hand
-bin/kamal console    # Rails console on the server
-bin/kamal shell      # bash shell in the container
-bin/kamal logs       # tail application logs
-bin/kamal db         # sqlite dbconsole
-bin/db-backup        # stream a production DB snapshot to tmp/backups/
 ```
