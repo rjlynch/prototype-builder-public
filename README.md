@@ -9,6 +9,10 @@ If you're working in government and this looks useful to you I'm happy to jump
 on a call and discuss. Can't be used outside of government until I add non
 copyrighted css.
 
+Added some more functionality since the below demo was recorded. Point an llm
+at https://github.com/rjlynch/prototype-builder/blob/main/app/views/documentation/show.html.erb
+and ask it what the app can do.
+
 ## Demo
 
 https://github.com/user-attachments/assets/9076775d-f8b4-48ad-ad92-3bb845c6d635
