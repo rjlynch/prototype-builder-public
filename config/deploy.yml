@@ -1,3 +1,14 @@
+<%
+def env_or(name, fallback)
+  value = ENV[name].to_s.strip
+  value.empty? ? fallback : value
+end
+
+deploy_host = env_or("KAMAL_DEPLOY_HOST", "deploy.example.com")
+proxy_host = env_or("KAMAL_PROXY_HOST", "app.example.com")
+ssh_user = env_or("KAMAL_SSH_USER", "deploy")
+%>
+
 # Name of your application. Used to uniquely configure containers.
 service: govuk_prototype_builder
 
@@ -7,17 +18,15 @@ image: rjlynch/govuk_prototype_builder
 # Deploy to these servers.
 servers:
   web:
-    - 77.42.86.45
+    - <%= deploy_host %>
 
-# Enable SSL auto certification via Let's Encrypt. The shared kamal-proxy on
-# this host terminates TLS and routes by hostname, so multiple apps
-# (e.g. workout_tracker) can share ports 80/443.
+# Enable SSL auto certification via Let's Encrypt.
 #
 # Using an SSL proxy like this requires turning on config.assume_ssl and
 # config.force_ssl in production.rb (both enabled there).
 proxy:
   ssl: true
-  host: wizard.lynchsoftware.com
+  host: <%= proxy_host %>
 
 # Where you keep your container images.
 registry:
@@ -34,6 +43,8 @@ env:
   clear:
     # Run the Solid Queue Supervisor inside the web server's Puma process.
     SOLID_QUEUE_IN_PUMA: true
+    APP_HOST: <%= proxy_host %>
+    MAILER_FROM: noreply@<%= proxy_host %>
 
 # Aliases are triggered with "bin/kamal <alias>".
 # Database backups to your local machine run via `bin/db-backup` (see README).
@@ -55,6 +66,6 @@ asset_path: /rails/public/assets
 builder:
   arch: amd64
 
-# Deploy over SSH as root (matches the existing server setup).
+# Deploy over SSH as the user configured outside the public repository.
 ssh:
-  user: root
+  user: <%= ssh_user %>

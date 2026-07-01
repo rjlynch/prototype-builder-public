@@ -8,7 +8,8 @@
 # server's named docker volume into ./tmp/backups.
 set -euo pipefail
 
-HOST="77.42.86.45"
+HOST="${KAMAL_DEPLOY_HOST:?Set KAMAL_DEPLOY_HOST to the deployment host}"
+SSH_USER="${KAMAL_SSH_USER:-deploy}"
 VOLUME="govuk_prototype_builder_storage"
 TIMESTAMP="$(date +%Y%m%d-%H%M%S)"
 DEST_DIR="tmp/backups"
@@ -21,11 +22,11 @@ bin/kamal app exec --reuse \
   "sqlite3 storage/production.sqlite3 \".backup '/rails/storage/backup.sqlite3'\""
 
 echo "Streaming snapshot to ${DEST}..."
-ssh "root@${HOST}" \
+ssh "${SSH_USER}@${HOST}" \
   "docker run --rm -v ${VOLUME}:/v busybox cat /v/backup.sqlite3" > "${DEST}"
 
 echo "Removing snapshot from the server..."
-ssh "root@${HOST}" \
+ssh "${SSH_USER}@${HOST}" \
   "docker run --rm -v ${VOLUME}:/v busybox rm -f /v/backup.sqlite3"
 
 echo "Backup written to ${DEST}"
