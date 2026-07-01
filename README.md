@@ -1,3 +1,20 @@
+I built this as a vibe coding test case.
+Used mostly opus 4.8, with some gpt 5.5 when I hit useage limits.
+Didn't type a line of code myself though did review the PRs.
+
+Not sure if I'll keep working on this long term as there's other apps filling
+this nieche.
+
+If you're working in government and this looks useful to you I'm happy to jump
+on a call and discuss. Can't be used outside of government until I add non
+copyrighted css.
+
+## Demo
+
+https://github.com/user-attachments/assets/9076775d-f8b4-48ad-ad92-3bb845c6d635
+
+---
+
 # GOV.UK Prototype Builder
 
 A web UI that lets non-technical civil servants (policy staff, interaction
