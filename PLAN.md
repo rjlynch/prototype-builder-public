@@ -389,10 +389,10 @@ The backlog now lives in the issue tracker, not this file.
   needs was the kind of complexity that sank the Trix attempt). 96 specs green
   (helper + system); rubocop + brakeman clean. Follow-ups: a page/heading link
   picker, and textarea link highlighting.
-* 2026-06-16 — Deploy to Hetzner (issue #30). Kamal 2 deploy to the existing
-  `77.42.86.45` host (shared kamal-proxy with workout_tracker), TLS on
-  `wizard.lynchsoftware.com`. Switched the registry from the reference app's
-  server-local `localhost:5555` to `ghcr.io` so a GitHub runner can push —
+* 2026-06-16 — Deploy to Hetzner (issue #30). Kamal 2 deploy to the configured
+  `KAMAL_DEPLOY_HOST`, TLS on `KAMAL_PROXY_HOST`. Switched the registry from
+  the reference app's server-local `localhost:5555` to `ghcr.io` so a GitHub
+  runner can push —
   CD (`.github/workflows/deploy.yml`) builds and `kamal deploy`s on every push
   to main (covers both "push" and "merged PR" triggers). Production turns on
   `assume_ssl`/`force_ssl` (with `/up` excluded). The whole app sits behind
@@ -401,8 +401,8 @@ The backlog now lives in the issue tracker, not this file.
   invited testers; `/up` bypasses it as Rails::HealthController doesn't inherit
   ApplicationController. Aliases `console`/`shell`/`logs`/`db`; `bin/db-backup`
   streams a consistent sqlite snapshot to `tmp/backups`. One-time manual setup
-  (GitHub secrets `RAILS_MASTER_KEY` + `SSH_PRIVATE_KEY`) documented in README.
-  96 specs green; rubocop clean; production boot/eager-load verified.
+  for the GitHub deploy secrets is documented in README. 96 specs green;
+  rubocop clean; production boot/eager-load verified.
 * 2026-06-16 — Issue #58: email provider. Resend (`resend` gem) is the
   production mailer — `config.action_mailer.delivery_method = :resend` in
   production.rb, with the API key read from encrypted credentials
@@ -413,10 +413,9 @@ The backlog now lives in the issue tracker, not this file.
   `ConsoleMailDelivery` (registered as `:console` via `add_delivery_method`)
   writes the full message to `$stdout` and the log, so testers see mail in the
   server output with no inbox or external call. `ApplicationMailer`'s default
-  `from` moved off the generated `from@example.com` to
-  `noreply@wizard.lynchsoftware.com` (the domain verified with Resend — DNS
-  TXT/MX configured on Cloudflare; will need redoing on a future domain). 99
-  specs green; rubocop + brakeman clean; dev/prod mailer resolution verified.
+  `from` moved off the generated `from@example.com` to a configurable sender
+  address. 99 specs green; rubocop + brakeman clean; dev/prod mailer
+  resolution verified.
 * 2026-06-16 — Issue #32 (accounts), PR 1 of 3: account model + authorization,
   no sign in yet. New `Team` (the account), `User` (email_address + full_name,
   both encrypted at rest — email deterministic + downcase so it stays

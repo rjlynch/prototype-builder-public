@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ConsoleMailDelivery do
   let(:mail) do
     Mail.new do
-      from    "noreply@wizard.lynchsoftware.com"
+      from    "noreply@example.com"
       to      "tester@example.com"
       subject "Hello"
       body    "A test email"

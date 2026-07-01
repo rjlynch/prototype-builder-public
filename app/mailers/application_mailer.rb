@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "noreply@wizard.lynchsoftware.com"
+  default from: ENV.fetch("MAILER_FROM", "noreply@example.com")
   layout "mailer"
 end
