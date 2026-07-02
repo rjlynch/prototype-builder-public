@@ -10,7 +10,7 @@ on a call and discuss. Can't be used outside of government until I add non
 copyrighted css.
 
 Added some more functionality since the below demo was recorded. Point an llm
-at https://github.com/rjlynch/prototype-builder/blob/main/app/views/documentation/show.html.erb
+at https://github.com/rjlynch/prototype-builder-public/blob/main/app/views/documentation/show.html.erb
 and ask it what the app can do.
 
 ## Demo
