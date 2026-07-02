@@ -19,7 +19,7 @@ https://github.com/user-attachments/assets/9076775d-f8b4-48ad-ad92-3bb845c6d635
 
 ---
 
-# GOV.UK style Prototype Builder (not offical!)
+# GOV.UK style Prototype Builder (not official!)
 
 A web UI that lets non-technical civil servants (policy staff, interaction
 designers) prototype GOV.UK journeys — no prototype kit, no code, no hosting
