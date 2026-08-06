@@ -41,7 +41,7 @@ gem "thruster", require: false
 gem "image_processing", "~> 2.0"
 
 # Send transactional email via Resend in production [https://resend.com]
-gem "resend", "~> 1.3"
+gem "resend", "~> 1.7"
 
 # Minimal authorization via plain Ruby policy objects [https://github.com/varvet/pundit]
 gem "pundit", "~> 2.4"
